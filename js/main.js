@@ -38,51 +38,17 @@ Cube.prototype = {
 
     console.log(tr);
     
-    // document.styleSheets[0].cssRules[2].style.setProperty('--angle', '123');
-    // console.log(document.styleSheets[0].cssRules[2].style);
     var a = document.styleSheets[0].cssRules[count % 6 + 7].style.transform
     console.log(a);
-    // document.styleSheets[0].cssRules[count % 6 + 7].style.setProperty('--final', a);
-    // console.log(document.styleSheets[0].cssRules[count % 6 + 7].style);
+    console.log(count % 6);
+    if (count % 6 === 2) a = 'rotateX(-90deg) rotateY(0deg) rotateZ(-270deg)';
+    if (count % 6 === 3) a = 'rotateX(-180deg) rotateY(0deg) rotateZ(-270deg)';
+    if (count % 6 === 4) a = 'rotateX(-180deg) rotateY(-90deg) rotateZ(-270deg)';
+    
     var root = document.documentElement.style;
     root.setProperty('--angle', tr);
     root.setProperty('--final',a);
     dom.classList.add('space-rotate');
-    // dom.classList.add(`rotate-${count % 6 + 1}`);
-
-    // if(count%6 === 1){
-    //   dom.classList.add('rotate-2');
-    // }else if(count%6 === 2){
-    //   dom.classList.add('rotate-3');
-      
-    // }else if(count%6 === 3){
-    //   dom.classList.add('rotate-4');
-      
-    // }else if(count%6 === 4){
-    //   dom.classList.add('rotate-5');
-      
-    // }else if(count%6 === 5){
-    //   dom.classList.add('rotate-6');
-      
-    // }else if(count%6 === 0){
-    //   dom.classList.add('rotate-1'); 
-    // }
-
-    // console.log(dom);
-    // console.log(dom.hasAttribute('width'));
-    // console.log(e.target.id);
-    
-    // dom.classList.add("space-rotate");
-    // dom.classList.add("rotate-2");
-    // setTimeout(() => dom.classList.add("rotate-3"), 500);
-
-    // dom.classList.add("rotate-2");
-    // dom.classList.remove("rotateStart");
-    
-  },
-  touchStart: function(dom){
-    // dom.classList.add("rotateStart");  
-    // dom.classList.remove("rotateStop");
   }
 }
 
@@ -106,20 +72,19 @@ Buttons.prototype = {
 }
 // touch
 function _touchStartHandler(e) {
-  var cube = document.getElementsByClassName("space")[0];
-  var Cubie = new Cube(cube);
+ 
   var touchobj = e.changedTouches[0];
   startX      = touchobj.pageX;
 
-  if(flag === 0){
-    Cubie.touchStop(cube, e);
-    stop();
+  // if(flag === 0){
+  //   Cubie.touchStop(cube, e);
+  //   stop();
    
-    flag = 1;
-  } else {
-    Cubie.touchStart(cube);
-    flag = 0;
-  }
+  //   flag = 1;
+  // } else {
+  //   Cubie.touchStart(cube);
+  //   flag = 0;
+  // }
 }
 
 function _touchMoveHandler(e) {
@@ -131,16 +96,18 @@ if (e.cancelable) {
 }
 
 function _touchEndHandler(e) {
+  var cube = document.getElementsByClassName("space")[0];
+  var Cubie = new Cube(cube);
   var touchobj = e.changedTouches[0];
   if ( startX !== null && startX !== touchobj.pageX ) {
     swipeDirection = touchobj.pageX < startX ? TURN_LEFT : TURN_RIGHT;
-    currentIndex = swipeDirection === TURN_LEFT ? _nextIndex(currentIndex, -1) : _nextIndex(currentIndex, 1);
+    swipeDirection === TURN_LEFT ? Cubie.touchStop(cube,e) : Cubie.touchStop(cube,e);
     startX = null;
   }
 }
 
 //next box
-function _nextIndex(currentIndex, number) {
+function _next() {
   var GroupCnt = document.getElementsByClassName("box").length;
   var remainder = (currentIndex - number) % GroupCnt;
 
