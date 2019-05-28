@@ -25,21 +25,44 @@ function Cube(cube){
 
 Cube.prototype = {
   touchStop: function(dom, e){
-    dom.classList.add("rotateStop");
-    
-    if(count%6 === 1){
-      dom.classList.add('rotate','rotate-2');
-    }else if(count%6 === 2){
-      dom.classList.add('rotate','rotate-3');
-    }else if(count%6 === 3){
-      dom.classList.add('rotate', 'rotate-4');
-    }else if(count%6 === 4){
-      dom.classList.add('rotate','rotate-5');
-    }else if(count%6 === 5){
-      dom.classList.add('rotate','rotate-6');
-    }else if(count%6 === 0){
-      dom.classList.add('rotate','rotate-1');
-    }
+    // console.log(document.styleSheets[0].cssRules[3]);
+   console.log(document.styleSheets[0].cssRules[2].style.animation);
+    var el = document.getElementsByClassName("space")[0];
+    var st = getComputedStyle(el);
+    var tr = st.getPropertyValue("-webkit-transform") ||
+         st.getPropertyValue("-moz-transform") ||
+         st.getPropertyValue("-ms-transform") ||
+         st.getPropertyValue("-o-transform") ||
+         st.getPropertyValue("transform") ||
+         "Either no transform set, or browser doesn't do getComputedStyle";
+
+    console.log(tr);
+    document.styleSheets[0].cssRules[2].style.setProperty('--angle', tr);
+    var a = document.styleSheets[0].cssRules[count % 6 + 7].style.transform
+    console.log(a);
+    document.styleSheets[0].cssRules[count % 6 + 7].style.setProperty('--final', a);
+
+    dom.classList.add('space-rotate');
+    // dom.classList.add(`rotate-${count % 6 + 1}`);
+
+    // if(count%6 === 1){
+    //   dom.classList.add('rotate-2');
+    // }else if(count%6 === 2){
+    //   dom.classList.add('rotate-3');
+      
+    // }else if(count%6 === 3){
+    //   dom.classList.add('rotate-4');
+      
+    // }else if(count%6 === 4){
+    //   dom.classList.add('rotate-5');
+      
+    // }else if(count%6 === 5){
+    //   dom.classList.add('rotate-6');
+      
+    // }else if(count%6 === 0){
+    //   dom.classList.add('rotate-1'); 
+    // }
+
     // console.log(dom);
     // console.log(dom.hasAttribute('width'));
     // console.log(e.target.id);
