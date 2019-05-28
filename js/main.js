@@ -37,11 +37,16 @@ Cube.prototype = {
          "Either no transform set, or browser doesn't do getComputedStyle";
 
     console.log(tr);
-    document.styleSheets[0].cssRules[2].style.setProperty('--angle', tr);
+    
+    // document.styleSheets[0].cssRules[2].style.setProperty('--angle', '123');
+    // console.log(document.styleSheets[0].cssRules[2].style);
     var a = document.styleSheets[0].cssRules[count % 6 + 7].style.transform
     console.log(a);
-    document.styleSheets[0].cssRules[count % 6 + 7].style.setProperty('--final', a);
-
+    // document.styleSheets[0].cssRules[count % 6 + 7].style.setProperty('--final', a);
+    // console.log(document.styleSheets[0].cssRules[count % 6 + 7].style);
+    var root = document.documentElement.style;
+    root.setProperty('--angle', tr);
+    root.setProperty('--final',a);
     dom.classList.add('space-rotate');
     // dom.classList.add(`rotate-${count % 6 + 1}`);
 

@@ -30,6 +30,7 @@ body {
 
 .space-rotate {
   animation: rotate 1s linear; 
+  animation-fill-mode: forwards;
 }
 
 @keyframes rotate {
