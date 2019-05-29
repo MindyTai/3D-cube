@@ -101,9 +101,6 @@ body {
 .rotate-3{
   animation: 3s ease-out;
   transform: rotateX(-90deg) rotateY(0deg) rotateZ(90deg);
-  /* transition-property: transform;
-  transition-duration: 3s;
-  transition-timing-function: ease-out; */
 }
 .rotate-4{
   animation:3s ease-out;

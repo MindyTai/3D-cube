@@ -38,7 +38,7 @@ Cube.prototype = {
 
     console.log(tr);
     
-    var a = document.styleSheets[0].cssRules[count % 6 + 9].style.transform;
+    var a = document.styleSheets[0].cssRules[count % 6 + 10].style.transform;
     console.log(a);
     console.log(count % 6);
     if (count % 6 === 2) a = 'rotateX(-90deg) rotateY(0deg) rotateZ(-270deg)';
@@ -51,21 +51,21 @@ Cube.prototype = {
     dom.classList.add('space-rotate');
     dom.classList.remove('rotate');
   },
-  stop: function(dom){
-    dom.classList.add("rotateStop");
-  }
+  // stop: function(dom){
+  //   dom.classList.add("rotateStop");
+  // }
 }
 
 // touch
 function _touchStartHandler(e) {
-  var cube = document.getElementsByClassName("space")[0];
-  var Cubie = new Cube(cube);
+  // var cube = document.getElementsByClassName("space")[0];
+  // var Cubie = new Cube(cube);
   var touchobj = e.changedTouches[0];
   startX      = touchobj.pageX;
 
-  if(flag === 0){
-    Cubie.stop(cube);
-  }
+  // if(flag === 0){
+  //   Cubie.stop(cube);
+  // }
 }
 
 function _touchMoveHandler(e) {
