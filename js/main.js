@@ -50,14 +50,22 @@ Cube.prototype = {
     root.setProperty('--final',a);
     dom.classList.add('space-rotate');
     dom.classList.remove('rotate');
+  },
+  stop: function(dom){
+    dom.classList.add("rotateStop");
   }
 }
 
 // touch
 function _touchStartHandler(e) {
- 
+  var cube = document.getElementsByClassName("space")[0];
+  var Cubie = new Cube(cube);
   var touchobj = e.changedTouches[0];
   startX      = touchobj.pageX;
+
+  if(flag === 0){
+    Cubie.stop(cube);
+  }
 }
 
 function _touchMoveHandler(e) {
@@ -81,10 +89,7 @@ function _touchEndHandler(e) {
 
 //next box
 function _next() {
-  var GroupCnt = document.getElementsByClassName("box").length;
-  var remainder = (currentIndex - number) % GroupCnt;
 
-  return remainder < 0 ? remainder + GroupCnt : remainder;
 }
 
 function _init(){
