@@ -9,7 +9,7 @@ var count = 0;
 
 var counter = function(){
   count = count + 1;
-  console.log(count);
+  // console.log(count);
 }
 
 var detect = setInterval(counter, 1000);
@@ -38,7 +38,7 @@ Cube.prototype = {
 
     console.log(tr);
     
-    var a = document.styleSheets[0].cssRules[count % 6 + 7].style.transform
+    var a = document.styleSheets[0].cssRules[count % 6 + 9].style.transform;
     console.log(a);
     console.log(count % 6);
     if (count % 6 === 2) a = 'rotateX(-90deg) rotateY(0deg) rotateZ(-270deg)';
@@ -75,16 +75,6 @@ function _touchStartHandler(e) {
  
   var touchobj = e.changedTouches[0];
   startX      = touchobj.pageX;
-
-  // if(flag === 0){
-  //   Cubie.touchStop(cube, e);
-  //   stop();
-   
-  //   flag = 1;
-  // } else {
-  //   Cubie.touchStart(cube);
-  //   flag = 0;
-  // }
 }
 
 function _touchMoveHandler(e) {
@@ -101,7 +91,7 @@ function _touchEndHandler(e) {
   var touchobj = e.changedTouches[0];
   if ( startX !== null && startX !== touchobj.pageX ) {
     swipeDirection = touchobj.pageX < startX ? TURN_LEFT : TURN_RIGHT;
-    swipeDirection === TURN_LEFT ? Cubie.touchStop(cube,e) : Cubie.touchStop(cube,e);
+    swipeDirection === TURN_LEFT ? Cubie.touchStop(cube) : Cubie.touchStop(cube);
     startX = null;
   }
 }

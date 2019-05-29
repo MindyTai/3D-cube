@@ -7,6 +7,17 @@ body {
   padding: 0;
 }
 
+.videoBg{
+  overflow: hidden;
+  background-size: contain;
+}
+.video{
+  position: absolute;
+  /* top: -300px; */
+  left: 0px;
+  top: -150px;
+}
+
 .camera {
   width: 100%;
   height: 100vh;
