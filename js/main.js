@@ -1,6 +1,7 @@
 'use strict'
 
 var startX = null;
+var startY = null;
 var flag = 0;
 var TURN_LEFT = 0;
 var TURN_RIGHT = 1;
@@ -17,7 +18,6 @@ var keyframeF = 'rotateX(-180deg) rotateY(-90deg) rotateZ(180deg)';
 
 var counter = function(){
   count = count + 1;
-  // console.log(count);
 }
 
 var detect = setInterval(counter, 1000);
@@ -33,8 +33,7 @@ function Cube(cube){
 
 Cube.prototype = {
   turnRight: function(dom, e){
-    // console.log(document.styleSheets[0].cssRules[3]);
-   console.log(document.styleSheets[0].cssRules[2].style.animation);
+    console.log(document.styleSheets[0].cssRules[2].style.animation);
     var el = document.getElementsByClassName("space")[0];
     var st = getComputedStyle(el);
     var tr = st.getPropertyValue("-webkit-transform") ||
@@ -51,7 +50,6 @@ Cube.prototype = {
 
     if(id === '1'){
       keyframe = keyframeF;
-      
     }else if(id === '2'){
       keyframe = keyframeA;
     }else if(id === '3'){
@@ -63,36 +61,56 @@ Cube.prototype = {
     }else if(id === '6'){
       keyframe = keyframeA;
     }
-   
-    // var a = document.styleSheets[0].cssRules[count % 6 + 10].style.transform;
-    // console.log(a);
-    // console.log(count % 6);
-    // if (count % 6 === 2) a = 'rotateX(-90deg) rotateY(0deg) rotateZ(-270deg)';
-    // if (count % 6 === 3) a = 'rotateX(-180deg) rotateY(0deg) rotateZ(-270deg)';
-    // if (count % 6 === 4) a = 'rotateX(-180deg) rotateY(0deg) rotateZ(-270deg)';
     
     var root = document.documentElement.style;
     root.setProperty('--angle', tr);
     root.setProperty('--final', keyframe);
     
     dom.classList.add('space-rotate');
-    dom.classList.remove('rotate');
+ 
   },
-  // stop: function(dom){
-  //   dom.classList.add("rotateStop");
-  // }
+ turnLeft: function(dom,e){
+
+  var el = document.getElementsByClassName("space")[0];
+  var st = getComputedStyle(el);
+  var tr = st.getPropertyValue("-webkit-transform") ||
+       st.getPropertyValue("-moz-transform") ||
+       st.getPropertyValue("-ms-transform") ||
+       st.getPropertyValue("-o-transform") ||
+       st.getPropertyValue("transform") ||
+       "Either no transform set, or browser doesn't do getComputedStyle";
+
+  console.log(tr);
+  var id = e.target.id;
+  var keyframe;
+
+  if(id === '1'){
+    keyframe = keyframeB;
+  }else if(id === '2'){
+    keyframe = keyframeC;
+  }else if(id === '3'){
+    keyframe = keyframeD;
+  }else if(id === '4'){
+    keyframe = keyframeE;
+  }else if(id === '5'){
+    keyframe = keyframeF;
+  }else if(id === '6'){
+    keyframe = keyframeA;
+  }
+
+  var root = document.documentElement.style;
+  root.setProperty('--angle', tr);
+  root.setProperty('--final', keyframe);
+  
+  dom.classList.add('space-rotate');
+ }
 }
 
 // touch
 function _touchStartHandler(e) {
-  // var cube = document.getElementsByClassName("space")[0];
-  // var Cubie = new Cube(cube);
   var touchobj = e.changedTouches[0];
   startX      = touchobj.pageX;
-
-  // if(flag === 0){
-  //   Cubie.stop(cube);
-  // }
+  startY      = touchobj.pageY;
 }
 
 function _touchMoveHandler(e) {
@@ -104,34 +122,22 @@ if (e.cancelable) {
 }
 
 function _touchEndHandler(e) {
+  console.log(startY);
   var cube = document.getElementsByClassName("space")[0];
   var Cubie = new Cube(cube);
   var touchobj = e.changedTouches[0];
   if ( startX !== null && startX !== touchobj.pageX ) {
-    swipeDirection = touchobj.pageX > startX ? TURN_LEFT : TURN_RIGHT;
-    swipeDirection === TURN_LEFT ? Cubie.turnRight(cube,e) : Cubie.turnRight(cube,e);
+    swipeDirection = touchobj.pageX > startX ? TURN_RIGHT : TURN_LEFT;
+    swipeDirection === TURN_LEFT ? Cubie.turnLeft(cube,e) : Cubie.turnRight(cube,e);
     startX = null;
   }
-  
+  // else if( startY !== null && startY !== touchobj.pageY ){
+  //   swipeDirection = touchobj.pageY > startY ? TURN_RIGHT : TURN_RIGHT;
+  //   swipeDirection == TURN_RIGHT ? Cubie.turnRight(cube,e) : Cubie.turnRight(cube,e);
+  //   startY = null;
+  // }
+ 
 }
-
-//click => stop immediately
-document.getElementsByClassName("space")[0].addEventListener('click', function(){
-  document.getElementsByClassName("space")[0].classList.add("rotateStop");
-  if(flag === 0){
-    flag = 1;
-  }
-  console.log(flag);
-  if(flag === 1 && document.getElementsByClassName("space")[0].classList.contains("rotateStop")){
-    document.getElementsByClassName("space")[0].addEventListener('click',function(){
-      document.getElementsByClassName("space")[0].classList.remove("rotateStop");
-    })
-    flag = 0;
-  }
-
-  console.log(flag);
-});
-
 
 
 function _init(){

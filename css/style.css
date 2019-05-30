@@ -35,7 +35,7 @@ body {
 
   position: relative;
   margin: auto;
-  
+  z-index: 2;
   top: 440px;
   left: -145px; 
 }
@@ -55,6 +55,10 @@ body {
 .space-rotate {
   animation: rotate 1s linear; 
   animation-fill-mode: forwards;
+}
+
+.rotate {
+  animation: none;
 }
 
 @keyframes rotate {
