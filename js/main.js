@@ -103,7 +103,21 @@ Cube.prototype = {
   root.setProperty('--final', keyframe);
   
   dom.classList.add('space-rotate');
- }
+ },
+  rotateA: function(dom){
+    var x = dom.clientHeight;
+    dom.classList.add("rotate-b"); 
+  },
+  rotateB: function(dom){
+    var x = dom.clientHeight;
+    dom.classList.remove("rotate-a");
+    dom.classList.add("rotate-c");
+  },
+  rotateC: function(dom){
+    var x = dom.clientHeight;
+    dom.classList.remove("rotate-b");
+    dom.classList.add("rotate-d");
+  }
 }
 
 // touch
@@ -142,10 +156,24 @@ function _touchEndHandler(e) {
 
 function _init(){
   var cube = document.getElementsByClassName("space")[0];
- 
+  var Cubie = new Cube(cube);
+
   cube.addEventListener('touchstart', _touchStartHandler);
   cube.addEventListener('touchmove', function(e){ e.preventDefault() });
   cube.addEventListener('touchend', _touchEndHandler);
+
+  Cubie.rotateA(cube);
+  cube.addEventListener("transitionend", function(){
+    console.log(cube.classList);
+    if(cube.classList.contains("rotate-a")){
+      console.log(2222)
+      Cubie.rotateB(cube);  
+      
+    }else if(cube.classList.contains("rotate-b")){
+        console.log(1111)
+        Cubie.rotateC(cube);
+    }
+  });
 }
 
 _init();
