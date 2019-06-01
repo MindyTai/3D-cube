@@ -12,6 +12,7 @@
     "es5"
   ],
   "rules": {
+    "prefer-destructuring": "off",
     "func-names": "off",
     "no-var": "off",
     "vars-on-top": "off",
@@ -24,7 +25,7 @@
     "class-methods-use-this": "off",
     "prettier/prettier": ["error", {
       "singleQuote": true,
-      "trailingComma": "all",
+      "trailingComma": "none",
       "arrowParens": "always"
     }]
   }

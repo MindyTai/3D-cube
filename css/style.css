@@ -51,38 +51,44 @@ body {
   transition-property: transform;
 }
 
+.transition {
+  transition: transform 1s linear;
+}
+
 .rotate-a-1 {
   transform:  rotateX(-180deg) rotateY(-180deg) rotateZ(180deg);
-  transition: transform 1s linear;
 }
 
 .rotate-a {
   transform:  rotateX(0deg) rotateY(0deg) rotateZ(0deg);
 }
 
+.rotate-reverse-a-1 {
+  transform:  rotateX(-180deg) rotateY(-180deg) rotateZ(180deg);
+}
+
+.rotate-reverse-a {
+  transform:  rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+}
+
 .rotate-b {
   transform:  rotateX(-90deg) rotateY(0deg) rotateZ(0deg);
-  transition: transform 1s linear;
 }
 
 .rotate-c {
   transform: rotateX(-90deg) rotateY(0deg) rotateZ(90deg);
-  transition: transform 1s linear;
 }
 
 .rotate-d {
   transform: rotateX(-180deg) rotateY(0deg) rotateZ(90deg);
-  transition: transform 1s linear;
 }
 
 .rotate-e {
   transform: rotateX(-180deg) rotateY(-90deg) rotateZ(90deg);
-  transition: transform 1s linear;
 }
 
 .rotate-f {
   transform: rotateX(-180deg) rotateY(-90deg) rotateZ(180deg);
-  transition: transform 1s linear;
 }
 
 .space div {
