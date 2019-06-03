@@ -61,9 +61,57 @@ var DEGREE = {
   }
 };
 
+var CORRECT_SIDE = {
+  A: {
+    B: {
+      t_x: 450,
+      t_y: 150,
+      t_z: 150,
+      r_x: 0,
+      r_y: 90,
+      r_z: 0
+    },
+    C: {
+      t_x: -150,
+      t_y: 150,
+      t_z: 150,
+      r_x: -90,
+      r_y: -90,
+      r_z: -90
+    },
+    E: {
+      t_x: 150,
+      t_y: 450,
+      t_z: 150,
+      r_x: -90,
+      r_y: 0,
+      r_z: 0
+    },
+    F: {
+      t_x: 450,
+      t_y: 150,
+      t_z: -150,
+      r_x: 0,
+      r_y: 180,
+      r_z: 270
+    }
+  },
+  B: {}
+};
+
 function nextSide(side, degreeX, degreeY, degreeZ) {
   return `rotateX(${DEGREE[side].X + degreeX}deg) rotateY(${DEGREE[side].Y +
     degreeY}deg) rotateZ(${DEGREE[side].Z + degreeZ}deg)`;
+}
+
+function correctSide(side) {
+  return `translateX(${CORRECT_SIDE[side].t_x}px) translateY(${
+    CORRECT_SIDE[side].t_y
+  }px) translateZ(${CORRECT_SIDE[side].t_z}px) rotateX(${
+    CORRECT_SIDE[side].r_x
+  }deg) rotateY(${CORRECT_SIDE[side].r_y}deg) rotateZ(${
+    CORRECT_SIDE[side].r_z
+  }deg)`;
 }
 
 var startX;
@@ -83,95 +131,33 @@ function Cube(dom) {
 Cube.prototype = {
   detect() {
     if (this.dom.classList.contains('rotate-b')) {
-      this.rotateBtoC(this.dom);
+      this.rotate('B', 'C');
     } else if (this.dom.classList.contains('rotate-c')) {
-      this.rotateCtoD(this.dom);
+      this.rotate('C', 'D');
     } else if (this.dom.classList.contains('rotate-d')) {
-      this.rotateDtoE(this.dom);
+      this.rotate('D', 'E');
     } else if (this.dom.classList.contains('rotate-e')) {
-      this.rotateEtoF(this.dom);
+      this.rotate('E', 'F');
     } else if (this.dom.classList.contains('rotate-f')) {
-      this.rotateFtoX(this.dom);
+      this.rotate('F', 'A-1');
+      this.rotation = ROTATION.FtoX;
     } else if (this.dom.classList.contains('rotate-a-1')) {
-      this.rotateXtoA(this.dom);
-      this.rotateAtoB(this.dom);
+      this.rotate('A-1', 'A');
+      this.rotation = ROTATION.FtoX;
+      this.dom.classList.remove('transition');
+      this.rotate('A', 'B');
     }
     console.log(this.rotation);
   },
-  rotate(from, to, doTrans) {},
-  rotateAtoB() {
+  correctSide() {},
+  rotate(from, to) {
     var x = this.dom.clientHeight;
-    this.rotation = ROTATION.AtoB;
+    this.rotation = ROTATION[`${from}to${to}`];
     this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-a');
-    this.dom.classList.add('rotate-b');
-  },
-  rotateBtoA() {
-    var x = this.dom.clientHeight;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-b');
-    this.dom.classList.add('rotate-a');
-  },
-  rotateBtoC() {
-    var x = this.dom.clientHeight;
-    this.rotation = ROTATION.BtoC;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-b');
-    this.dom.classList.add('rotate-c');
-    this.side = 'B';
-  },
-  rotateCtoB() {
-    var x = this.dom.clientHeight;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-c');
-    this.dom.classList.add('rotate-b');
-  },
-  rotateCtoD() {
-    var x = this.dom.clientHeight;
-    this.rotation = ROTATION.CtoD;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-c');
-    this.dom.classList.add('rotate-d');
-  },
-  rotateDtoC() {
-    var x = this.dom.clientHeight;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-d');
-    this.dom.classList.add('rotate-c');
-  },
-  rotateDtoE() {
-    var x = this.dom.clientHeight;
-    this.rotation = ROTATION.DtoE;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-d');
-    this.dom.classList.add('rotate-e');
-    this.side = 'D';
-  },
-  rotateEtoD() {
-    var x = this.dom.clientHeight;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-e');
-    this.dom.classList.add('rotate-d');
-  },
-  rotateEtoF() {
-    var x = this.dom.clientHeight;
-    this.rotation = ROTATION.EtoF;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-e');
-    this.dom.classList.add('rotate-f');
-  },
-  rotateFtoE() {
-    var x = this.dom.clientHeight;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-f');
-    this.dom.classList.add('rotate-e');
-  },
-  rotateFtoX() {
-    var x = this.dom.clientHeight;
-    this.rotation = ROTATION.FtoX;
-    this.dom.classList.add('transition');
-    this.dom.classList.remove('rotate-f');
-    this.dom.classList.add('rotate-a-1');
+    this.dom.classList.remove(`rotate-${from}`.toLowerCase());
+    this.dom.classList.add(`rotate-${to}`.toLowerCase());
+    console.log(`from${from}`);
+    console.log(`to${to}`);
   },
   rotateXtoF() {
     var x = this.dom.clientHeight;
@@ -196,7 +182,8 @@ Cube.prototype = {
 
 var cubeDom = document.getElementsByClassName('space')[0];
 var cube = new Cube(cubeDom);
-cube.rotateAtoB();
+// cube.rotateAtoB();
+cube.rotate('A', 'B');
 
 // touch
 function _touchStartHandler(e) {
@@ -247,21 +234,21 @@ function _touchEndHandler(e) {
     if (cube.state === 'INIT') {
       if (swipeDirection === DIRECTION.UP) {
         if (cube.rotation === 'AtoB') {
-          cube.rotateBtoA();
+          cube.rotate('B', 'A');
           cube.state = 'ACTIVE';
           cube.side = 'A';
           cube.dom.removeEventListener('transitionend', cube.detect);
           return;
         }
         if (cube.rotation === 'CtoD') {
-          cube.rotateDtoC();
+          cube.rotate('D', 'C');
           cube.state = 'ACTIVE';
           cube.side = 'C';
           cube.dom.removeEventListener('transitionend', cube.detect);
           return;
         }
         if (cube.rotation === 'EtoF') {
-          cube.rotateFtoE();
+          cube.rotate('F', 'E');
           cube.state = 'ACTIVE';
           cube.side = 'E';
           cube.dom.removeEventListener('transitionend', cube.detect);
@@ -278,14 +265,14 @@ function _touchEndHandler(e) {
           return;
         }
         if (cube.rotation === 'CtoD') {
-          cube.rotateCtoD();
+          cube.rotate('C', 'D');
           cube.state = 'ACTIVE';
           cube.side = 'D';
           cube.dom.removeEventListener('transitionend', cube.detect);
           return;
         }
         if (cube.rotation === 'EtoF') {
-          cube.rotateEtoF();
+          cube.rotate('E', 'F');
           cube.state = 'ACTIVE';
           cube.side = 'F';
           cube.dom.removeEventListener('transitionend', cube.detect);
@@ -295,22 +282,25 @@ function _touchEndHandler(e) {
       // swipe right
       if (swipeDirection === DIRECTION.RIGHT) {
         if (cube.rotation === 'BtoC') {
-          cube.rotateBtoC();
+          // cube.rotateBtoC();
+          cube.rotate('B', 'C');
           cube.state = 'ACTIVE';
           cube.side = 'C';
           cube.dom.removeEventListener('transitionend', cube.detect);
           return;
         }
         if (cube.rotation === 'DtoE') {
-          cube.rotateDtoE();
+          cube.rotate('D', 'E');
           cube.state = 'ACTIVE';
           cube.side = 'E';
           cube.dom.removeEventListener('transitionend', cube.detect);
           return;
         }
         if (cube.rotation === 'FtoX') {
-          cube.rotateFtoX();
-          cube.rotateXtoA();
+          // cube.rotateFtoX();
+          cube.rotate('F', 'A-1');
+          // cube.rotateXtoA();
+          cube.rotate('A-1', 'A');
           cube.state = 'ACTIVE';
           cube.side = 'A';
           cube.dom.removeEventListener('transitionend', cube.detect);
@@ -320,14 +310,14 @@ function _touchEndHandler(e) {
       // swipe left
       if (swipeDirection === DIRECTION.LEFT) {
         if (cube.rotation === 'BtoC') {
-          cube.rotateCtoB();
+          cube.rotate('C', 'B');
           cube.state = 'ACTIVE';
           cube.side = 'B';
           cube.dom.removeEventListener('transitionend', cube.detect);
           return;
         }
         if (cube.rotation === 'DtoE') {
-          cube.rotateEtoD();
+          cube.rotate('E', 'D');
           cube.state = 'ACTIVE';
           cube.side = 'D';
           cube.dom.removeEventListener('transitionend', cube.detect);
@@ -347,6 +337,11 @@ function _touchEndHandler(e) {
     if (cube.state === 'ACTIVE') {
       console.log(cube.side);
       if (cube.side === 'A') {
+        cube.dom.classList.remove('transition');
+        console.log(cube.dom.style.transform);
+        cube.dom.style.transform = nextSide('A', 0, 0, 0);
+        console.log(cube.dom.style.transform);
+        var x = cube.dom.clientHeight;
         if (swipeDirection === DIRECTION.UP) {
           cube.dom.classList.remove('rotate-a');
           cube.dom.style.transform = nextSide('A', 90, 0, 0);
@@ -369,6 +364,11 @@ function _touchEndHandler(e) {
           cube.side = 'C';
         }
       } else if (cube.side === 'B') {
+        cube.dom.classList.remove('transition');
+        console.log(cube.dom.style.transform);
+        cube.dom.style.transform = nextSide('B', 0, 0, 0);
+        console.log(cube.dom.style.transform);
+        var x = cube.dom.clientHeight;
         if (swipeDirection === DIRECTION.UP) {
           cube.dom.classList.remove('rotate-b');
           cube.dom.style.transform = nextSide('B', 90, 0, 0);
@@ -383,7 +383,7 @@ function _touchEndHandler(e) {
           cube.dom.classList.remove('rotate-b');
           cube.dom.style.transform = nextSide('B', 0, 0, 90);
           cube.dom.classList.add('transition');
-          cube.side = 'E';
+          cube.side = 'C';
         } else if (swipeDirection === DIRECTION.LEFT) {
           cube.dom.classList.remove('rotate-b');
           cube.dom.style.transform = nextSide('B', 0, 0, -90);
@@ -391,6 +391,12 @@ function _touchEndHandler(e) {
           cube.side = 'F';
         }
       } else if (cube.side === 'C') {
+        console.log('aaaaaaaaaaa');
+        cube.dom.classList.remove('transition');
+        console.log(cube.dom.style.transform);
+        cube.dom.style.transform = nextSide('C', 0, 0, 0);
+        console.log(cube.dom.style.transform);
+        var x = cube.dom.clientHeight;
         if (swipeDirection === DIRECTION.UP) {
           cube.dom.classList.remove('rotate-c');
           cube.dom.style.transform = nextSide('C', 90, 0, 0);
@@ -403,96 +409,92 @@ function _touchEndHandler(e) {
           cube.side = 'D';
         } else if (swipeDirection === DIRECTION.LEFT) {
           cube.dom.classList.remove('rotate-c');
-          cube.dom.classList.add('transform');
-          if (
-            cube.dom.style.transform ===
-            'rotateX(0deg) rotateY(90deg) rotateZ(0deg)'
-          ) {
-            console.log('hiiiii');
-            cube.dom.style.transform = nextSide('C', 90, 0, -90);
-            cube.side = 'A';
-          } else {
-            cube.dom.style.transform = nextSide('C', 0, 0, -90);
-            cube.side = 'B';
-          }
+          cube.dom.classList.add('transition');
+          cube.dom.style.transform = nextSide('C', 0, 0, -90);
+          cube.side = 'B';
         } else if (swipeDirection === DIRECTION.RIGHT) {
           cube.dom.classList.remove('rotate-c');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('C', 0, 0, 90);
           cube.side = 'E';
         }
       } else if (cube.side === 'D') {
+        console.log('ddddd');
+        cube.dom.classList.remove('transition');
+        console.log(cube.dom.style.transform);
+        cube.dom.style.transform = nextSide('D', 0, 0, 0);
+        console.log(cube.dom.style.transform);
+        var x = cube.dom.clientHeight;
         if (swipeDirection === DIRECTION.UP) {
           cube.dom.classList.remove('rotate-d');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('D', 90, 0, 0);
           cube.side = 'C';
         } else if (swipeDirection === DIRECTION.DOWN) {
           cube.dom.classList.remove('rotate-d');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('D', -90, 0, 0);
           cube.side = 'F';
         } else if (swipeDirection === DIRECTION.LEFT) {
           cube.dom.classList.remove('rotate-d');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('D', 0, 90, 0);
           cube.side = 'B';
         } else if (swipeDirection === DIRECTION.RIGHT) {
           cube.dom.classList.remove('rotate-d');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('D', 0, -90, 0);
           cube.side = 'E';
         }
       } else if (cube.side === 'E') {
+        console.log('eeee');
+        cube.dom.classList.remove('transition');
+        console.log(cube.dom.style.transform);
+        cube.dom.style.transform = nextSide('E', 0, 0, 0);
+        console.log(cube.dom.style.transform);
+        var x = cube.dom.clientHeight;
         if (swipeDirection === DIRECTION.UP) {
           cube.dom.classList.remove('rotate-e');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('E', 90, 0, 0);
           cube.side = 'C';
         } else if (swipeDirection === DIRECTION.DOWN) {
           cube.dom.classList.remove('rotate-e');
-          cube.dom.classList.add('transform');
-          if (cube.dom.style.transform) {
-            cube.dom.style.transform = nextSide('E', 180, 90, -90);
-            cube.side = 'A';
-          } else {
-            cube.dom.style.transform = nextSide('E', -90, 0, 0);
-            cube.side = 'F';
-          }
+          cube.dom.classList.add('transition');
+          cube.dom.style.transform = nextSide('E', -90, 0, 0);
+          cube.side = 'F';
         } else if (swipeDirection === DIRECTION.LEFT) {
           cube.dom.classList.remove('rotate-e');
-          cube.dom.classList.add('transform');
-
-          if (
-            cube.dom.style.transform ===
-            'rotateX(-90deg) rotateY(0deg) rotateZ(-90deg)'
-          ) {
-            cube.dom.style.transform = nextSide('E', 0, 0, 0);
-            cube.side = 'E';
-          } else {
-            cube.dom.style.transform = nextSide('E', 0, 90, 0);
-            cube.side = 'D';
-          }
+          cube.dom.classList.add('transition');
+          cube.dom.style.transform = nextSide('E', 0, 90, 0);
+          cube.side = 'D';
         } else if (swipeDirection === DIRECTION.RIGHT) {
           cube.dom.classList.remove('rotate-e');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('E', 0, -90, 0);
           cube.side = 'A';
         }
       } else if (cube.side === 'F') {
+        cube.dom.classList.remove('transition');
+        console.log(cube.dom.style.transform);
+        cube.dom.style.transform = nextSide('F', 0, 0, 0);
+        console.log(cube.dom.style.transform);
+        var x = cube.dom.clientHeight;
         if (swipeDirection === DIRECTION.UP) {
           cube.dom.classList.remove('rotate-f');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('F', 90, 0, 0);
           cube.side = 'E';
+          console.log(cube.dom.style.transform);
         } else if (swipeDirection === DIRECTION.DOWN) {
           cube.dom.classList.remove('rotate-f');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           cube.dom.style.transform = nextSide('F', -90, 0, 0);
           cube.side = 'B';
+          console.log(cube.dom.style.transform);
         } else if (swipeDirection === DIRECTION.RIGHT) {
           cube.dom.classList.remove('rotate-f');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
           if (
             cube.dom.style.transform ===
             'rotateX(0deg) rotateY(-90deg) rotateZ(0deg)'
@@ -511,7 +513,7 @@ function _touchEndHandler(e) {
           }
         } else if (swipeDirection === DIRECTION.LEFT) {
           cube.dom.classList.remove('rotate-f');
-          cube.dom.classList.add('transform');
+          cube.dom.classList.add('transition');
 
           if (
             cube.dom.style.transform ===
