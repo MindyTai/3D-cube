@@ -1,10 +1,11 @@
+"use strict";
+
 var DIRECTION = {
   LEFT: 'LEFT',
   RIGHT: 'RIGHT',
   UP: 'UP',
   DOWN: 'DOWN'
 };
-
 var SIDE = {
   A: 'A',
   B: 'B',
@@ -13,7 +14,6 @@ var SIDE = {
   E: 'E',
   F: 'F'
 };
-
 var ROTATION = {
   AtoB: 'AtoB',
   BtoC: 'BtoC',
@@ -23,12 +23,10 @@ var ROTATION = {
   FtoX: 'FtoX',
   BtoG: 'BtoG'
 };
-
 var STATE = {
   INIT: 'INIT',
   ACTIVE: 'ACTIVE'
 };
-
 var DEGREE = {
   A: {
     X: 0,
@@ -69,8 +67,7 @@ var DEGREE = {
 };
 
 function nextSide(side, degreeX, degreeY, degreeZ) {
-  return `rotateX(${DEGREE[side].X + degreeX}deg) rotateY(${DEGREE[side].Y +
-    degreeY}deg) rotateZ(${DEGREE[side].Z + degreeZ}deg)`;
+  return "rotateX(".concat(DEGREE[side].X + degreeX, "deg) rotateY(").concat(DEGREE[side].Y + degreeY, "deg) rotateZ(").concat(DEGREE[side].Z + degreeZ, "deg)");
 }
 
 var startX;
@@ -84,13 +81,12 @@ function Cube(dom) {
   this.degree = DEGREE.SIDE_A;
   this.rotation = ROTATION.AtoB;
   this.topLeftSteps = this.topLeftSteps.bind(this);
-  this.dom.addEventListener('transitionend', this.topLeftSteps);
-  // this.vertHoriLoop = this.vertHoriLoop.bind(this);
+  this.dom.addEventListener('transitionend', this.topLeftSteps); // this.vertHoriLoop = this.vertHoriLoop.bind(this);
   // this.dom.addEventListener('transitionend', this.vertHoriLoop);
 }
 
 Cube.prototype = {
-  topLeftSteps() {
+  topLeftSteps: function topLeftSteps() {
     if (this.dom.classList.contains('rotate-b')) {
       this.rotate('B', 'C');
     } else if (this.dom.classList.contains('rotate-c')) {
@@ -108,29 +104,28 @@ Cube.prototype = {
       this.dom.classList.remove('transition');
       this.rotate('A', 'B');
     }
+
     console.log(this.rotation);
   },
-  vertHoriLoop() {
+  vertHoriLoop: function vertHoriLoop() {
     if (this.dom.classList.contains('rotate-b')) {
       this.rotate('B', 'G');
     } else if (this.dom.classList.contains('rotate-g')) {
       this.rotate('G', 'H');
     }
   },
-  rotate(from, to) {
+  rotate: function rotate(from, to) {
     var x = this.dom.clientHeight;
-    this.rotation = ROTATION[`${from}to${to}`];
+    this.rotation = ROTATION["".concat(from, "to").concat(to)];
     this.dom.classList.add('transition');
-    this.dom.classList.remove(`rotate-${from}`.toLowerCase());
-    this.dom.classList.add(`rotate-${to}`.toLowerCase());
-    console.log(`from${from}`);
-    console.log(`to${to}`);
+    this.dom.classList.remove("rotate-".concat(from).toLowerCase());
+    this.dom.classList.add("rotate-".concat(to).toLowerCase());
+    console.log("from".concat(from));
+    console.log("to".concat(to));
   }
 };
-
 var cubeDom = document.getElementsByClassName('space')[0];
 var cube = new Cube(cubeDom);
-
 cube.rotate('A', 'B');
 
 function swipe(from, to) {
@@ -145,9 +140,9 @@ function swipeAfterAction(classname, side, x, y, z, sideNext) {
   cube.dom.style.transform = nextSide(side, x, y, z);
   cube.dom.classList.add('transition');
   cube.side = sideNext;
-}
+} // touch
 
-// touch
+
 function _touchStartHandler(e) {
   var touchobj = e.changedTouches[0];
   startX = touchobj.pageX;
@@ -156,6 +151,7 @@ function _touchStartHandler(e) {
 
 function _touchMoveHandler(e) {
   e.stopPropagation();
+
   if (e.cancelable) {
     e.preventDefault();
   } else return false;
@@ -164,105 +160,101 @@ function _touchMoveHandler(e) {
 function _touchEndHandler(e) {
   var touchobj = e.changedTouches[0];
 
-  if (
-    startX != null &&
-    startX !== touchobj.pageX &&
-    startY != null &&
-    startY !== touchobj.pageY
-  ) {
+  if (startX != null && startX !== touchobj.pageX && startY != null && startY !== touchobj.pageY) {
     // swipe down
-    if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY > startY
-    ) {
+    if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY > startY) {
       swipeDirection = DIRECTION.DOWN;
-    } else if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY < startY
-    ) {
+    } else if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY < startY) {
       swipeDirection = DIRECTION.UP;
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX > startX
-    ) {
+    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX > startX) {
       swipeDirection = DIRECTION.RIGHT;
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX < startX
-    ) {
+    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX < startX) {
       swipeDirection = DIRECTION.LEFT;
-    }
+    } // swipe down
 
-    // swipe down
+
     if (cube.state === 'INIT') {
       if (swipeDirection === DIRECTION.UP) {
         if (cube.rotation === 'AtoB') {
           swipe('B', 'A');
           return;
         }
+
         if (cube.rotation === 'CtoD') {
           swipe('D', 'C');
           return;
         }
+
         if (cube.rotation === 'EtoF') {
           swipe('F', 'E');
           return;
         }
+
         if (cube.rotation === 'BtoG') {
           swipe('G', 'B');
           cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
           return;
         }
-        if (cube.rotation === '') {
-        }
-      }
-      // swipe up
+
+        if (cube.rotation === '') {}
+      } // swipe up
+
+
       if (swipeDirection === DIRECTION.DOWN) {
         if (cube.rotation === 'AtoB') {
           swipe('A', 'B');
           return;
         }
+
         if (cube.rotation === 'CtoD') {
           swipe('C', 'D');
           return;
         }
+
         if (cube.rotation === 'EtoF') {
           swipe('E', 'F');
           return;
         }
+
         if (cube.rotation === 'BtoG') {
           swipe('B', 'G');
           cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
           return;
         }
-      }
-      // swipe right
+      } // swipe right
+
+
       if (swipeDirection === DIRECTION.RIGHT) {
         if (cube.rotation === 'BtoC') {
           swipe('B', 'C');
           return;
         }
+
         if (cube.rotation === 'DtoE') {
           swipe('D', 'E');
           return;
         }
+
         if (cube.rotation === 'FtoX') {
           cube.rotate('F', 'A-1');
           swipe('A-1', 'A');
           cube.dom.classList.remove('transition');
           return;
         }
-      }
-      // swipe left
+      } // swipe left
+
+
       if (swipeDirection === DIRECTION.LEFT) {
         if (cube.rotation === 'BtoC') {
           swipe('C', 'B');
           return;
         }
+
         if (cube.rotation === 'DtoE') {
           swipe('E', 'D');
           return;
         }
+
         if (cube.rotation === 'FtoX') {
           cube.rotate('A', 'A-1');
           swipe('A-1', 'F');
@@ -274,6 +266,7 @@ function _touchEndHandler(e) {
 
     if (cube.state === 'ACTIVE') {
       console.log(cube.side);
+
       if (cube.side === 'A') {
         cube.dom.classList.remove('transition');
         cube.dom.style.transform = nextSide('A', 0, 0, 0);
@@ -373,7 +366,8 @@ function _touchEndHandler(e) {
           swipeAfterAction('rotate-g', 'G', 0, -90, 0, 'C');
         }
       }
-      console.log(`2:${cube.side}`);
+
+      console.log("2:".concat(cube.side));
     }
 
     startX = null;
