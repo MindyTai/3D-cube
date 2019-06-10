@@ -1,5 +1,11 @@
 "use strict";
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 var States = [{
   // A
   side: {
@@ -43,23 +49,23 @@ var States = [{
   },
   action: {
     left: {
-      x: 90,
-      y: 0,
-      z: 0
-    },
-    right: {
-      x: -90,
-      y: 0,
-      z: 0
-    },
-    up: {
       x: 0,
       y: -90,
       z: 0
     },
-    down: {
+    right: {
       x: 0,
       y: 90,
+      z: 0
+    },
+    up: {
+      x: 90,
+      y: 0,
+      z: 0
+    },
+    down: {
+      x: -90,
+      y: 0,
       z: 0
     }
   }
@@ -139,12 +145,12 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     right: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     up: {
       x: 90,
@@ -168,24 +174,24 @@ var States = [{
   },
   action: {
     left: {
-      x: -90,
-      y: 0,
+      x: 0,
+      y: -90,
       z: 0
     },
     right: {
-      x: 90,
-      y: -90,
+      x: 0,
+      y: 90,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     down: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     }
   }
 }, {
@@ -201,12 +207,12 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     right: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     up: {
       x: 90,
@@ -242,12 +248,12 @@ var States = [{
     up: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     down: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     }
   }
 }, // C
@@ -324,23 +330,23 @@ var States = [{
   },
   action: {
     left: {
-      x: -90,
-      y: 0,
-      z: 0
-    },
-    right: {
-      x: 90,
-      y: 0,
-      z: 0
-    },
-    up: {
       x: 0,
       y: 90,
       z: 0
     },
-    down: {
+    right: {
       x: 0,
       y: -90,
+      z: 0
+    },
+    up: {
+      x: 90,
+      y: 0,
+      z: 0
+    },
+    down: {
+      x: -90,
+      y: 0,
       z: 0
     }
   }
@@ -389,12 +395,12 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     right: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     up: {
       x: 90,
@@ -418,24 +424,24 @@ var States = [{
   },
   action: {
     left: {
-      x: -90,
-      y: 0,
+      x: 0,
+      y: 90,
       z: 0
     },
     right: {
+      x: 0,
+      y: -90,
+      z: 0
+    },
+    up: {
       x: 90,
       y: 0,
       z: 0
     },
-    up: {
-      x: 0,
-      y: 0,
-      z: 90
-    },
     down: {
-      x: 0,
+      x: -90,
       y: 0,
-      z: -90
+      z: 0
     }
   }
 }, {
@@ -451,12 +457,12 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     right: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     up: {
       x: 90,
@@ -492,12 +498,12 @@ var States = [{
     up: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     down: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     }
   }
 }, // E
@@ -544,22 +550,22 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: 0,
-      z: 90
-    },
-    right: {
-      x: 0,
-      y: 0,
-      z: -90
-    },
-    up: {
-      x: 0,
       y: -90,
       z: 0
     },
-    down: {
+    right: {
       x: 0,
       y: 90,
+      z: 0
+    },
+    up: {
+      x: -90,
+      y: 0,
+      z: 0
+    },
+    down: {
+      x: 90,
+      y: 0,
       z: 0
     }
   }
@@ -574,24 +580,24 @@ var States = [{
   },
   action: {
     left: {
-      x: 0,
-      y: -90,
+      x: -90,
+      y: 0,
       z: 0
     },
     right: {
-      x: 0,
-      y: 90,
+      x: 90,
+      y: 0,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     down: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     }
   }
 }, {
@@ -607,12 +613,12 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     right: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     up: {
       x: 0,
@@ -649,12 +655,12 @@ var States = [{
     up: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     down: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     }
   }
 }, {
@@ -711,12 +717,12 @@ var States = [{
     up: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     down: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     }
   }
 }, {
@@ -732,21 +738,21 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: 90
+      z: -90
     },
     right: {
       x: 0,
       y: 0,
-      z: -90
+      z: 90
     },
     up: {
-      x: 0,
-      y: 90,
+      x: 90,
+      y: 0,
       z: 0
     },
     down: {
-      x: 0,
-      y: -90,
+      x: -90,
+      y: 0,
       z: 0
     }
   }
@@ -760,102 +766,151 @@ var DIRECTION = {
   UP: 'up',
   DOWN: 'down'
 };
+var STATE = {
+  INIT: 'INIT',
+  ACTIVE: 'ACTIVE'
+};
 
-function Cube(dom) {
-  this.stateIdx = 0;
-  this.side = 'A';
-  this.lastSide = undefined;
-  this.lastRotation = undefined;
-  this.dom = dom;
-  this.transform = {
-    x: 0,
-    y: 0,
-    z: 0
-  };
-}
+var Cube =
+/*#__PURE__*/
+function () {
+  function Cube(dom) {
+    _classCallCheck(this, Cube);
 
-Cube.prototype = {
-  getDegree: function getDegree(index, rotation) {
-    this.transform.x = States[index].action[rotation].x + this.transform.x;
-    this.transform.y = States[index].action[rotation].y + this.transform.y;
-    this.transform.z = States[index].action[rotation].z + this.transform.z;
-    return "rotateX(".concat(this.transform.x, "deg) rotateY(").concat(this.transform.y, "deg) rotateZ(").concat(this.transform.z, "deg)");
-  },
-  findIndex: function findIndex() {
-    console.log(this.side, this.lastSide);
+    this.stateIdx = 0;
+    this.side = 'A';
+    this.lastSide = undefined;
+    this.lastRotation = undefined;
+    this.dom = dom;
+    this.state = STATE.INIT; // this.vertHoriLoop = this.vertHoriLoop.bind(this);
 
-    for (var i = 0; i < 24; i += 1) {
-      if (this.side === States[i].side.front && this.lastSide === States[i].side[this.lastRotation]) {
-        this.stateIdx = i;
-        return;
+    this.topLeftSteps = this.topLeftSteps.bind(this); // this.dom.addEventListener('transitionend', this.vertHoriLoop);
+
+    this.dom.addEventListener('transitionend', this.topLeftSteps);
+    this.flag = 0;
+    this.transform = {
+      x: 0,
+      y: 0,
+      z: 0
+    };
+  }
+
+  _createClass(Cube, [{
+    key: "getDegree",
+    value: function getDegree(index, rotation) {
+      this.transform.x = States[index].action[rotation].x + this.transform.x;
+      this.transform.y = States[index].action[rotation].y + this.transform.y;
+      this.transform.z = States[index].action[rotation].z + this.transform.z;
+      return "rotateX(".concat(this.transform.x, "deg) rotateY(").concat(this.transform.y, "deg) rotateZ(").concat(this.transform.z, "deg)");
+    }
+  }, {
+    key: "findIndex",
+    value: function findIndex() {
+      console.log(this.lastSide, this.side);
+
+      for (var i = 0; i < 24; i += 1) {
+        if (this.side === States[i].side.front && this.lastSide === States[i].side[this.lastRotation]) {
+          this.stateIdx = i;
+          console.log(this.stateIdx);
+          return;
+        }
+      }
+
+      console.log('gg');
+    }
+  }, {
+    key: "forceRender",
+    value: function forceRender() {
+      return this.dom.clientHeight;
+    }
+  }, {
+    key: "nextSide",
+    value: function nextSide(direction, lastDirection) {
+      this.forceRender();
+      this.dom.classList.add('transition'); // 現在是哪一面
+
+      this.lastSide = this.side; // 轉幾度過去
+
+      this.dom.style.transform = this.getDegree(this.stateIdx, direction); // 下一面是誰
+
+      this.side = States[this.stateIdx].side[lastDirection]; // 更新 stateIdx/side/lastrotation/lastside
+
+      this.lastRotation = direction;
+      this.findIndex();
+    }
+  }, {
+    key: "rotate",
+    value: function rotate(direction) {
+      if (direction === DIRECTION.LEFT) {
+        this.nextSide('left', 'right');
+      }
+
+      if (direction === DIRECTION.RIGHT) {
+        this.nextSide('right', 'left');
+      }
+
+      if (direction === DIRECTION.UP) {
+        this.nextSide('up', 'down');
+      }
+
+      if (direction === DIRECTION.DOWN) {
+        this.nextSide('down', 'up');
       }
     }
+  }, {
+    key: "topLeftSteps",
+    value: function topLeftSteps() {
+      var self = this;
 
-    console.log('gg');
-  },
-  forceRender: function forceRender() {
-    return this.dom.clientHeight;
-  },
-  rotate: function rotate(direction) {
-    if (direction === DIRECTION.LEFT) {
-      this.forceRender();
-      this.dom.classList.add('transition'); // 現在是哪一面
+      if (this.side === 'A') {
+        self.rotate('down');
+      } else if (this.side === 'B') {
+        self.rotate('right');
+      } else if (this.side === 'F') {
+        self.rotate('down');
+      } else if (this.side === 'C') {
+        self.rotate('right');
+      } else if (this.side === 'D') {
+        self.rotate('down');
+      } // else if (this.side === 'E') {
+      //   self.rotate('right');
+      // }
 
-      this.lastSide = this.side; // 轉幾度過去
-
-      this.dom.style.transform = this.getDegree(this.stateIdx, 'left'); // 下一面是誰
-
-      this.side = States[this.stateIdx].side.right; // 更新 stateIdx/side/lastrotation/lastside
-
-      this.lastRotation = 'left';
-      this.findIndex();
     }
+  }, {
+    key: "vertHoriLoop",
+    value: function vertHoriLoop() {
+      var self = this;
 
-    if (direction === DIRECTION.RIGHT) {
-      this.forceRender();
-      this.dom.classList.add('transition'); // 現在是哪一面
-
-      this.lastSide = this.side; // 轉幾度過去
-
-      this.dom.style.transform = this.getDegree(this.stateIdx, 'right'); // 下一面是誰
-
-      this.side = States[this.stateIdx].side.left; // 更新 stateIdx/side/lastrotation/lastside
-
-      this.lastRotation = 'right';
-      this.findIndex();
+      if (this.side === 'A' && this.flag === 0) {
+        self.rotate('down');
+      } else if (this.side === 'B' && this.flag === 0) {
+        self.rotate('down');
+      } else if (this.side === 'C' && this.flag === 0) {
+        self.rotate('down');
+      } else if (this.side === 'D' && this.flag === 0) {
+        self.rotate('down');
+        this.flag = 1;
+      } else if (this.side === 'A' && this.flag === 1) {
+        self.rotate('left');
+      } else if (this.side === 'E' && this.flag === 1) {
+        self.rotate('left');
+      } else if (this.side === 'C' && this.flag === 1) {
+        self.rotate('left');
+      } else if (this.side === 'F' && this.flag === 1) {
+        self.rotate('left');
+        this.flag = 0;
+      }
     }
+  }]);
 
-    if (direction === DIRECTION.UP) {
-      this.forceRender();
-      this.dom.classList.add('transition'); // 現在是哪一面
+  return Cube;
+}();
 
-      this.lastSide = this.side; // 轉幾度過去
-
-      this.dom.style.transform = this.getDegree(this.stateIdx, 'up'); // 下一面是誰
-
-      this.side = States[this.stateIdx].side.down; // 更新 stateIdx/side/lastrotation/lastside
-
-      this.lastRotation = 'up';
-      this.findIndex();
-    }
-
-    if (direction === DIRECTION.DOWN) {
-      this.forceRender();
-      this.dom.classList.add('transition'); // 現在是哪一面
-
-      this.lastSide = this.side; // 轉幾度過去
-
-      this.dom.style.transform = this.getDegree(this.stateIdx, 'down'); // 下一面是誰
-
-      this.side = States[this.stateIdx].side.top; // 更新 stateIdx/side/lastrotation/lastside
-
-      this.lastRotation = 'down';
-      this.findIndex();
-    }
-  }
-};
 var cubeDom = document.getElementsByClassName('space')[0];
-var cube = new Cube(cubeDom); // touch
+var cube = new Cube(cubeDom); // cube.vertHoriLoop();
+
+cube.topLeftSteps(); // touch
 
 function _touchStartHandler(e) {
   var touchobj = e.changedTouches[0];
@@ -888,6 +943,14 @@ function _touchEndHandler(e) {
     } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX < startX) {
       swipeDirection = DIRECTION.LEFT;
       cube.rotate(DIRECTION.LEFT);
+    }
+  } // INIT
+
+
+  if (cube.state === 'INIT') {
+    if (swipeDirection === DIRECTION.UP) {
+      cube.state = 'ACTIVE';
+      cube.rotate('up');
     }
   }
 }

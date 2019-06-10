@@ -20,8 +20,7 @@ var ROTATION = {
   CtoD: 'CtoD',
   DtoE: 'DtoE',
   EtoF: 'EtoF',
-  FtoX: 'FtoX',
-  BtoG: 'BtoG'
+  FtoX: 'FtoX'
 };
 var STATE = {
   INIT: 'INIT',
@@ -195,8 +194,6 @@ function _touchEndHandler(e) {
           cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
           return;
         }
-
-        if (cube.rotation === '') {}
       } // swipe up
 
 
