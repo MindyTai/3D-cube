@@ -19,21 +19,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -50,21 +50,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -81,21 +81,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     right: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     up: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     },
     down: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     }
@@ -111,23 +111,23 @@ var States = [{
   },
   action: {
     left: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     },
     right: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     up: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     down: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     }
   }
@@ -145,20 +145,20 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     right: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -175,23 +175,23 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     down: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     }
   }
 }, {
@@ -207,20 +207,20 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     right: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -236,24 +236,24 @@ var States = [{
   },
   action: {
     left: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     right: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     down: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     }
   }
 }, // C
@@ -268,23 +268,23 @@ var States = [{
   },
   action: {
     left: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     right: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     },
     up: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     down: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     }
   }
@@ -300,21 +300,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -331,21 +331,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     right: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -362,21 +362,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -395,20 +395,20 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     right: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -425,21 +425,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     right: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -457,20 +457,20 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     right: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -486,24 +486,24 @@ var States = [{
   },
   action: {
     left: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     right: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     down: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     }
   }
 }, // E
@@ -519,23 +519,23 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     down: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     }
   }
 }, {
@@ -550,21 +550,21 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     },
     down: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     }
@@ -580,24 +580,24 @@ var States = [{
   },
   action: {
     left: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     },
     right: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     down: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     }
   }
 }, {
@@ -613,21 +613,21 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     right: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     up: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     down: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     }
   }
@@ -644,23 +644,23 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     down: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     }
   }
 }, {
@@ -676,21 +676,21 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     right: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     up: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     down: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     }
   }
@@ -706,23 +706,23 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -90,
+      y: -1,
       z: 0
     },
     right: {
       x: 0,
-      y: 90,
+      y: 1,
       z: 0
     },
     up: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     down: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     }
   }
 }, {
@@ -738,20 +738,20 @@ var States = [{
     left: {
       x: 0,
       y: 0,
-      z: -90
+      z: -1
     },
     right: {
       x: 0,
       y: 0,
-      z: 90
+      z: 1
     },
     up: {
-      x: 90,
+      x: 1,
       y: 0,
       z: 0
     },
     down: {
-      x: -90,
+      x: -1,
       y: 0,
       z: 0
     }
@@ -785,23 +785,20 @@ function () {
     this.state = STATE.INIT;
     this.vertHoriLoop = this.vertHoriLoop.bind(this); // this.topLeftSteps = this.topLeftSteps.bind(this);
 
+    this.dom.style.transform = '';
     this.dom.addEventListener('transitionend', this.vertHoriLoop); // this.dom.addEventListener('transitionend', this.topLeftSteps);
 
     this.flag = 0;
-    this.transform = {
-      x: 0,
-      y: 0,
-      z: 0
-    };
   }
 
   _createClass(Cube, [{
     key: "getDegree",
     value: function getDegree(index, rotation) {
-      this.transform.x = States[index].action[rotation].x + this.transform.x;
-      this.transform.y = States[index].action[rotation].y + this.transform.y;
-      this.transform.z = States[index].action[rotation].z + this.transform.z;
-      return "rotateX(".concat(this.transform.x, "deg) rotateY(").concat(this.transform.y, "deg) rotateZ(").concat(this.transform.z, "deg)");
+      var _States$index$action$ = States[index].action[rotation],
+          x = _States$index$action$.x,
+          y = _States$index$action$.y,
+          z = _States$index$action$.z;
+      return "rotate3d(".concat(x, ",").concat(y, ",").concat(z, ",90deg)");
     }
   }, {
     key: "findIndex",
@@ -831,7 +828,8 @@ function () {
 
       this.lastSide = this.side; // 轉幾度過去
 
-      this.dom.style.transform = this.getDegree(this.stateIdx, direction); // 下一面是誰
+      this.dom.style.transform = this.dom.style.transform.concat(' ', this.getDegree(this.stateIdx, direction));
+      console.log(this.dom.style.transform.concat(' ', this.getDegree(this.stateIdx, direction))); // 下一面是誰
 
       this.side = States[this.stateIdx].side[lastDirection]; // 更新 stateIdx/side/lastrotation/lastside
 

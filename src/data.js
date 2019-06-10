@@ -10,10 +10,10 @@ const States = [
       back: 'C'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -26,10 +26,10 @@ const States = [
       down: 'F'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -42,10 +42,10 @@ const States = [
       down: 'B'
     },
     action: {
-      left: { x: 0, y: 90, z: 0 },
-      right: { x: 0, y: -90, z: 0 },
-      up: { x: -90, y: 0, z: 0 },
-      down: { x: 90, y: 0, z: 0 }
+      left: { x: 0, y: 1, z: 0 },
+      right: { x: 0, y: -1, z: 0 },
+      up: { x: -1, y: 0, z: 0 },
+      down: { x: 1, y: 0, z: 0 }
     }
   },
   {
@@ -58,10 +58,10 @@ const States = [
       down: 'E'
     },
     action: {
-      left: { x: -90, y: 0, z: 0 },
-      right: { x: 90, y: 0, z: 0 },
-      up: { x: 0, y: -90, z: 0 },
-      down: { x: 0, y: 90, z: 0 }
+      left: { x: -1, y: 0, z: 0 },
+      right: { x: 1, y: 0, z: 0 },
+      up: { x: 0, y: -1, z: 0 },
+      down: { x: 0, y: 1, z: 0 }
     }
   }, // B
   {
@@ -74,10 +74,10 @@ const States = [
       down: 'A'
     },
     action: {
-      left: { x: 0, y: 0, z: -90 },
-      right: { x: 0, y: 0, z: 90 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: 0, z: -1 },
+      right: { x: 0, y: 0, z: 1 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -90,10 +90,10 @@ const States = [
       down: 'F'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 0, y: 0, z: 90 },
-      down: { x: 0, y: 0, z: -90 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 0, y: 0, z: 1 },
+      down: { x: 0, y: 0, z: -1 }
     }
   },
   {
@@ -106,10 +106,10 @@ const States = [
       down: 'C'
     },
     action: {
-      left: { x: 0, y: 0, z: 90 },
-      right: { x: 0, y: 0, z: -90 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: 0, z: 1 },
+      right: { x: 0, y: 0, z: -1 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -122,10 +122,10 @@ const States = [
       down: 'E'
     },
     action: {
-      left: { x: 90, y: 0, z: 0 },
-      right: { x: -90, y: 0, z: 0 },
-      up: { x: 0, y: 0, z: -90 },
-      down: { x: 0, y: 0, z: 90 }
+      left: { x: 1, y: 0, z: 0 },
+      right: { x: -1, y: 0, z: 0 },
+      up: { x: 0, y: 0, z: -1 },
+      down: { x: 0, y: 0, z: 1 }
     }
   }, // C
   {
@@ -138,10 +138,10 @@ const States = [
       down: 'E'
     },
     action: {
-      left: { x: 90, y: 0, z: 0 },
-      right: { x: -90, y: 0, z: 0 },
-      up: { x: 0, y: -90, z: 0 },
-      down: { x: 0, y: 90, z: 0 }
+      left: { x: 1, y: 0, z: 0 },
+      right: { x: -1, y: 0, z: 0 },
+      up: { x: 0, y: -1, z: 0 },
+      down: { x: 0, y: 1, z: 0 }
     }
   },
   {
@@ -154,10 +154,10 @@ const States = [
       down: 'D'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -170,10 +170,10 @@ const States = [
       down: 'F'
     },
     action: {
-      left: { x: 0, y: 90, z: 0 },
-      right: { x: 0, y: -90, z: 0 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: 1, z: 0 },
+      right: { x: 0, y: -1, z: 0 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -186,10 +186,10 @@ const States = [
       down: 'B'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   // D
@@ -203,10 +203,10 @@ const States = [
       down: 'C'
     },
     action: {
-      left: { x: 0, y: 0, z: 90 },
-      right: { x: 0, y: 0, z: -90 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: 0, z: 1 },
+      right: { x: 0, y: 0, z: -1 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -219,10 +219,10 @@ const States = [
       down: 'F'
     },
     action: {
-      left: { x: 0, y: 90, z: 0 },
-      right: { x: 0, y: -90, z: 0 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: 1, z: 0 },
+      right: { x: 0, y: -1, z: 0 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -235,10 +235,10 @@ const States = [
       down: 'A'
     },
     action: {
-      left: { x: 0, y: 0, z: -90 },
-      right: { x: 0, y: 0, z: 90 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: 0, z: -1 },
+      right: { x: 0, y: 0, z: 1 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   },
   {
@@ -251,10 +251,10 @@ const States = [
       down: 'E'
     },
     action: {
-      left: { x: 90, y: 0, z: 0 },
-      right: { x: -90, y: 0, z: 0 },
-      up: { x: 0, y: 0, z: 90 },
-      down: { x: 0, y: 0, z: -90 }
+      left: { x: 1, y: 0, z: 0 },
+      right: { x: -1, y: 0, z: 0 },
+      up: { x: 0, y: 0, z: 1 },
+      down: { x: 0, y: 0, z: -1 }
     }
   }, // E
   {
@@ -267,10 +267,10 @@ const States = [
       down: 'D'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 0, y: 0, z: 90 },
-      down: { x: 0, y: 0, z: -90 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 0, y: 0, z: 1 },
+      down: { x: 0, y: 0, z: -1 }
     }
   },
   {
@@ -283,10 +283,10 @@ const States = [
       down: 'A'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: -90, y: 0, z: 0 },
-      down: { x: 90, y: 0, z: 0 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: -1, y: 0, z: 0 },
+      down: { x: 1, y: 0, z: 0 }
     }
   },
   {
@@ -299,10 +299,10 @@ const States = [
       down: 'B'
     },
     action: {
-      left: { x: -90, y: 0, z: 0 },
-      right: { x: 90, y: 0, z: 0 },
-      up: { x: 0, y: 0, z: 90 },
-      down: { x: 0, y: 0, z: -90 }
+      left: { x: -1, y: 0, z: 0 },
+      right: { x: 1, y: 0, z: 0 },
+      up: { x: 0, y: 0, z: 1 },
+      down: { x: 0, y: 0, z: -1 }
     }
   },
   {
@@ -315,10 +315,10 @@ const States = [
       down: 'C'
     },
     action: {
-      left: { x: 0, y: 0, z: 90 },
-      right: { x: 0, y: 0, z: -90 },
-      up: { x: 0, y: 90, z: 0 },
-      down: { x: 0, y: -90, z: 0 }
+      left: { x: 0, y: 0, z: 1 },
+      right: { x: 0, y: 0, z: -1 },
+      up: { x: 0, y: 1, z: 0 },
+      down: { x: 0, y: -1, z: 0 }
     }
   }, // F
   {
@@ -331,10 +331,10 @@ const States = [
       down: 'D'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 0, y: 0, z: 90 },
-      down: { x: 0, y: 0, z: -90 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 0, y: 0, z: 1 },
+      down: { x: 0, y: 0, z: -1 }
     }
   },
   {
@@ -347,10 +347,10 @@ const States = [
       down: 'C'
     },
     action: {
-      left: { x: 0, y: 0, z: 90 },
-      right: { x: 0, y: 0, z: -90 },
-      up: { x: 0, y: -90, z: 0 },
-      down: { x: 0, y: 90, z: 0 }
+      left: { x: 0, y: 0, z: 1 },
+      right: { x: 0, y: 0, z: -1 },
+      up: { x: 0, y: -1, z: 0 },
+      down: { x: 0, y: 1, z: 0 }
     }
   },
   {
@@ -363,10 +363,10 @@ const States = [
       down: 'B'
     },
     action: {
-      left: { x: 0, y: -90, z: 0 },
-      right: { x: 0, y: 90, z: 0 },
-      up: { x: 0, y: 0, z: -90 },
-      down: { x: 0, y: 0, z: 90 }
+      left: { x: 0, y: -1, z: 0 },
+      right: { x: 0, y: 1, z: 0 },
+      up: { x: 0, y: 0, z: -1 },
+      down: { x: 0, y: 0, z: 1 }
     }
   },
   {
@@ -379,10 +379,10 @@ const States = [
       down: 'A'
     },
     action: {
-      left: { x: 0, y: 0, z: -90 },
-      right: { x: 0, y: 0, z: 90 },
-      up: { x: 90, y: 0, z: 0 },
-      down: { x: -90, y: 0, z: 0 }
+      left: { x: 0, y: 0, z: -1 },
+      right: { x: 0, y: 0, z: 1 },
+      up: { x: 1, y: 0, z: 0 },
+      down: { x: -1, y: 0, z: 0 }
     }
   }
 ];
@@ -413,23 +413,15 @@ class Cube {
     this.state = STATE.INIT;
     this.vertHoriLoop = this.vertHoriLoop.bind(this);
     // this.topLeftSteps = this.topLeftSteps.bind(this);
+    this.dom.style.transform = '';
     this.dom.addEventListener('transitionend', this.vertHoriLoop);
     // this.dom.addEventListener('transitionend', this.topLeftSteps);
     this.flag = 0;
-    this.transform = {
-      x: 0,
-      y: 0,
-      z: 0
-    };
   }
 
   getDegree(index, rotation) {
-    this.transform.x = States[index].action[rotation].x + this.transform.x;
-    this.transform.y = States[index].action[rotation].y + this.transform.y;
-    this.transform.z = States[index].action[rotation].z + this.transform.z;
-    return `rotateX(${this.transform.x}deg) rotateY(${
-      this.transform.y
-    }deg) rotateZ(${this.transform.z}deg)`;
+    const { x, y, z } = States[index].action[rotation];
+    return `rotate3d(${x},${y},${z},90deg)`;
   }
 
   findIndex() {
@@ -457,7 +449,16 @@ class Cube {
     // 現在是哪一面
     this.lastSide = this.side;
     // 轉幾度過去
-    this.dom.style.transform = this.getDegree(this.stateIdx, direction);
+    this.dom.style.transform = this.dom.style.transform.concat(
+      ' ',
+      this.getDegree(this.stateIdx, direction)
+    );
+    console.log(
+      this.dom.style.transform.concat(
+        ' ',
+        this.getDegree(this.stateIdx, direction)
+      )
+    );
     // 下一面是誰
     this.side = States[this.stateIdx].side[lastDirection];
     // 更新 stateIdx/side/lastrotation/lastside
