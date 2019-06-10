@@ -782,11 +782,11 @@ function () {
     this.lastSide = undefined;
     this.lastRotation = undefined;
     this.dom = dom;
-    this.state = STATE.INIT; // this.vertHoriLoop = this.vertHoriLoop.bind(this);
+    this.state = STATE.INIT;
+    this.vertHoriLoop = this.vertHoriLoop.bind(this); // this.topLeftSteps = this.topLeftSteps.bind(this);
 
-    this.topLeftSteps = this.topLeftSteps.bind(this); // this.dom.addEventListener('transitionend', this.vertHoriLoop);
+    this.dom.addEventListener('transitionend', this.vertHoriLoop); // this.dom.addEventListener('transitionend', this.topLeftSteps);
 
-    this.dom.addEventListener('transitionend', this.topLeftSteps);
     this.flag = 0;
     this.transform = {
       x: 0,
@@ -836,6 +836,7 @@ function () {
       this.side = States[this.stateIdx].side[lastDirection]; // 更新 stateIdx/side/lastrotation/lastside
 
       this.lastRotation = direction;
+      console.log("lastRoation".concat(direction));
       this.findIndex();
     }
   }, {
@@ -860,18 +861,16 @@ function () {
   }, {
     key: "topLeftSteps",
     value: function topLeftSteps() {
-      var self = this;
-
       if (this.side === 'A') {
-        self.rotate('down');
+        this.rotate('down');
       } else if (this.side === 'B') {
-        self.rotate('right');
+        this.rotate('right');
       } else if (this.side === 'F') {
-        self.rotate('down');
+        this.rotate('down');
       } else if (this.side === 'C') {
-        self.rotate('right');
+        this.rotate('right');
       } else if (this.side === 'D') {
-        self.rotate('down');
+        this.rotate('down');
       } // else if (this.side === 'E') {
       //   self.rotate('right');
       // }
@@ -880,25 +879,23 @@ function () {
   }, {
     key: "vertHoriLoop",
     value: function vertHoriLoop() {
-      var self = this;
-
       if (this.side === 'A' && this.flag === 0) {
-        self.rotate('down');
+        this.rotate('down');
       } else if (this.side === 'B' && this.flag === 0) {
-        self.rotate('down');
+        this.rotate('down');
       } else if (this.side === 'C' && this.flag === 0) {
-        self.rotate('down');
+        this.rotate('down');
       } else if (this.side === 'D' && this.flag === 0) {
-        self.rotate('down');
+        this.rotate('down');
         this.flag = 1;
       } else if (this.side === 'A' && this.flag === 1) {
-        self.rotate('left');
+        this.rotate('left');
       } else if (this.side === 'E' && this.flag === 1) {
-        self.rotate('left');
+        this.rotate('left');
       } else if (this.side === 'C' && this.flag === 1) {
-        self.rotate('left');
+        this.rotate('left');
       } else if (this.side === 'F' && this.flag === 1) {
-        self.rotate('left');
+        this.rotate('left');
         this.flag = 0;
       }
     }
@@ -908,9 +905,9 @@ function () {
 }();
 
 var cubeDom = document.getElementsByClassName('space')[0];
-var cube = new Cube(cubeDom); // cube.vertHoriLoop();
-
-cube.topLeftSteps(); // touch
+var cube = new Cube(cubeDom);
+cube.vertHoriLoop(); // cube.topLeftSteps();
+// touch
 
 function _touchStartHandler(e) {
   var touchobj = e.changedTouches[0];
@@ -926,7 +923,7 @@ function _touchMoveHandler(e) {
   } else return false;
 }
 
-function _touchEndHandler(e) {
+function _activeStateTouchEndHandler(e) {
   var touchobj = e.changedTouches[0];
 
   if (startX != null && startX !== touchobj.pageX && startY != null && startY !== touchobj.pageY) {
@@ -944,21 +941,108 @@ function _touchEndHandler(e) {
       swipeDirection = DIRECTION.LEFT;
       cube.rotate(DIRECTION.LEFT);
     }
-  } // INIT
+  }
+}
 
+function _topLeftStepsTouchEndHandler(e) {
+  var touchobj = e.changedTouches[0];
 
-  if (cube.state === 'INIT') {
+  if (startX != null && startX !== touchobj.pageX && startY != null && startY !== touchobj.pageY) {
+    if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY > startY) {
+      swipeDirection = DIRECTION.DOWN; // cube.rotate(DIRECTION.DOWN);
+    } else if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY < startY) {
+      swipeDirection = DIRECTION.UP; // cube.rotate(DIRECTION.UP);
+    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX > startX) {
+      swipeDirection = DIRECTION.RIGHT; // cube.rotate(DIRECTION.RIGHT);
+    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX < startX) {
+      swipeDirection = DIRECTION.LEFT; // cube.rotate(DIRECTION.LEFT);
+    }
+  }
+
+  console.log(swipeDirection);
+  console.log("aa".concat(cube.lastRotation)); // INIT
+
+  if (cube.lastRotation === 'down') {
     if (swipeDirection === DIRECTION.UP) {
       cube.state = 'ACTIVE';
       cube.rotate('up');
+      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
+    } else if ([DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(swipeDirection)) {
+      cube.state = 'ACTIVE';
+      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
     }
+  } else if (cube.lastRotation === 'right') {
+    if (swipeDirection === DIRECTION.LEFT) {
+      cube.state = 'ACTIVE';
+      cube.rotate('left');
+      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
+    } else if ([DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(swipeDirection)) {
+      cube.state = 'ACTIVE';
+      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
+    }
+  }
+
+  if (cube.state === 'ACTIVE') {
+    cubeDom.removeEventListener('transitionend', cube.topLeftSteps);
+    cubeDom.addEventListener('touchend', _activeStateTouchEndHandler);
+  }
+}
+
+function _vertHoriLoopTouchEndHandler(e) {
+  var touchobj = e.changedTouches[0];
+
+  if (startX != null && startX !== touchobj.pageX && startY != null && startY !== touchobj.pageY) {
+    // swipe down
+    if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY > startY) {
+      swipeDirection = DIRECTION.DOWN;
+    } else if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY < startY) {
+      swipeDirection = DIRECTION.UP;
+    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX > startX) {
+      swipeDirection = DIRECTION.RIGHT;
+    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX < startX) {
+      swipeDirection = DIRECTION.LEFT;
+    }
+  } // INIT
+
+
+  if (cube.lastRotation === 'down') {
+    if (swipeDirection === DIRECTION.UP) {
+      cube.state = 'ACTIVE';
+      cube.rotate('up');
+      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
+    } else if ([DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(swipeDirection)) {
+      cube.state = 'ACTIVE';
+      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop); // STOP ANIMATION
+    }
+  } else if (cube.lastRotation === 'left') {
+    if (swipeDirection === DIRECTION.RIGHT) {
+      cube.state = 'ACTIVE';
+      cube.rotate('right');
+      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
+    } else if ([DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(swipeDirection)) {
+      cube.state = 'ACTIVE';
+      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop); // STOP ANIMATION
+    }
+  }
+
+  console.log(cube.state);
+
+  if (cube.state === 'ACTIVE') {
+    console.log(cube.state); // cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
+
+    cubeDom.removeEventListener('transitionend', cube.vertHoriLoop);
+    cubeDom.addEventListener('touchend', _activeStateTouchEndHandler);
   }
 }
 
 function _init() {
   cubeDom.addEventListener('touchstart', _touchStartHandler);
   cubeDom.addEventListener('touchmove', _touchMoveHandler);
-  cubeDom.addEventListener('touchend', _touchEndHandler);
+
+  if (cube.state === 'INIT') {
+    // cubeDom.addEventListener('touchend', _topLeftStepsTouchEndHandler);
+    cubeDom.addEventListener('touchend', _vertHoriLoopTouchEndHandler);
+  }
 }
 
 _init();
