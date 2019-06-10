@@ -1,4 +1,4 @@
-var States = [
+const States = [
   {
     // A
     side: {
@@ -387,18 +387,18 @@ var States = [
   }
 ];
 
-var startX;
-var startY;
-var swipeDirection;
+let startX;
+let startY;
+let swipeDirection;
 
-var DIRECTION = {
+const DIRECTION = {
   LEFT: 'left',
   RIGHT: 'right',
   UP: 'up',
   DOWN: 'down'
 };
 
-var STATE = {
+const STATE = {
   INIT: 'INIT',
   ACTIVE: 'ACTIVE'
 };
@@ -434,7 +434,7 @@ class Cube {
 
   findIndex() {
     console.log(this.lastSide, this.side);
-    for (var i = 0; i < 24; i += 1) {
+    for (let i = 0; i < 24; i += 1) {
       if (
         this.side === States[i].side.front &&
         this.lastSide === States[i].side[this.lastRotation]
@@ -481,7 +481,7 @@ class Cube {
   }
 
   topLeftSteps() {
-    var self = this;
+    const self = this;
     if (this.side === 'A') {
       self.rotate('down');
     } else if (this.side === 'B') {
@@ -499,7 +499,7 @@ class Cube {
   }
 
   vertHoriLoop() {
-    var self = this;
+    const self = this;
     if (this.side === 'A' && this.flag === 0) {
       self.rotate('down');
     } else if (this.side === 'B' && this.flag === 0) {
@@ -522,14 +522,14 @@ class Cube {
   }
 }
 
-var cubeDom = document.getElementsByClassName('space')[0];
-var cube = new Cube(cubeDom);
+const cubeDom = document.getElementsByClassName('space')[0];
+const cube = new Cube(cubeDom);
 
 // cube.vertHoriLoop();
 cube.topLeftSteps();
 // touch
 function _touchStartHandler(e) {
-  var touchobj = e.changedTouches[0];
+  const touchobj = e.changedTouches[0];
   startX = touchobj.pageX;
   startY = touchobj.pageY;
 }
@@ -542,7 +542,7 @@ function _touchMoveHandler(e) {
 }
 
 function _touchEndHandler(e) {
-  var touchobj = e.changedTouches[0];
+  const touchobj = e.changedTouches[0];
   if (
     startX != null &&
     startX !== touchobj.pageX &&
