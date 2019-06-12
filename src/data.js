@@ -419,13 +419,20 @@ class Cube {
     this.dom.addEventListener('transitionend', this.topLeftSteps);
     this.dom.addEventListener('mouseleave', this.mouseLeave);
     this.dom.addEventListener('mouseenter', this.mouseEnter);
+    document.addEventListener('mouseup', this.topLeftStepsMouseUpHandler);
     this.dom.addEventListener('mousedown', (e) => {
       this.dom.removeEventListener('mouseenter', this.mouseEnter);
       this.dom.removeEventListener('mouseleave', this.mouseLeave);
       this.startX = e.clientX;
       this.startY = e.clientY;
+
+      console.log(this.nextVal);
+      const transformValue = window
+        .getComputedStyle(this.dom)
+        .getPropertyValue('transform');
+
+      this.dom.style.transform = transformValue;
     });
-    // this.dom.addEventListener('mouseup', this.);
     this.dom.addEventListener('mousemove', (e) => {
       e.stopPropagation();
       if (e.cancelable) {
@@ -533,12 +540,85 @@ class Cube {
     }
   };
 
-  activeStateMouseUpHandler = (e) => {
+  topLeftStepsMouseUpHandler = (e) => {
     if (
       this.startX != null &&
-      this.startX !== e.movementX &&
+      this.startX !== e.clientX &&
       this.startY != null &&
-      this.startY !== e.movementY
+      this.startY !== e.clientY
+    ) {
+      if (
+        Math.abs(e.clientY - this.startY) > Math.abs(e.clientX - this.startX) &&
+        e.clientY > this.startY
+      ) {
+        this.swipeDirection = DIRECTION.DOWN;
+      } else if (
+        Math.abs(e.clientY - this.startY) > Math.abs(e.clientX - this.startX) &&
+        e.clientY < this.startY
+      ) {
+        this.swipeDirection = DIRECTION.UP;
+      } else if (
+        Math.abs(e.clientY - this.startY) < Math.abs(e.clientX - this.startX) &&
+        e.clientX > this.startX
+      ) {
+        this.swipeDirection = DIRECTION.RIGHT;
+      } else if (
+        Math.abs(e.clientY - this.startY) < Math.abs(e.clientX - this.startX) &&
+        e.clientX < this.startX
+      ) {
+        this.swipeDirection = DIRECTION.LEFT;
+      }
+    }
+
+    if (this.lastRotation === 'down') {
+      console.log(this.nextVal);
+      if (this.swipeDirection === DIRECTION.UP) {
+        this.state = 'ACTIVE';
+        // this.rotate('up');
+
+        this.dom.removeEventListener('transitionend', this.topLeftSteps);
+      } else if (
+        [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
+          this.swipeDirection
+        )
+      ) {
+        this.dom.style.transform = this.nextVal;
+        this.dom.classList.add('transition');
+        console.log(this.swipeDirection);
+        this.state = 'ACTIVE';
+        // this.rotate('down');
+        this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
+      }
+    } else if (this.lastRotation === 'right') {
+      if (this.swipeDirection === DIRECTION.LEFT) {
+        this.state = 'ACTIVE';
+        this.rotate('left');
+        this.dom.removeEventListener('transitionend', this.topLeftSteps);
+      } else if (
+        [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(
+          this.swipeDirection
+        )
+      ) {
+        this.state = 'ACTIVE';
+        this.rotate('right');
+        this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
+      }
+    }
+
+    if (this.state === 'ACTIVE') {
+      this.dom.removeEventListener('transitionend', this.topLeftSteps);
+      document.removeEventListener('mouseup', this.topLeftStepsMouseUpHandler);
+      document.addEventListener('mouseup', this.activeStateMouseUpHandler);
+    }
+  };
+
+  activeStateMouseUpHandler = (e) => {
+    console.log('mouseup');
+    if (
+      this.startX != null &&
+      this.startX !== e.clientX &&
+      this.startY != null &&
+      this.startY !== e.clientY
     ) {
       if (
         Math.abs(e.clientY - this.startY) > Math.abs(e.clientX - this.startX) &&
