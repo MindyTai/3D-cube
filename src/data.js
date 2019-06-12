@@ -387,10 +387,6 @@ const States = [
   }
 ];
 
-let startX;
-let startY;
-let swipeDirection;
-
 const DIRECTION = {
   LEFT: 'left',
   RIGHT: 'right',
@@ -411,20 +407,43 @@ class Cube {
     this.lastRotation = undefined;
     this.dom = dom;
     this.state = STATE.INIT;
-    // this.vertHoriLoop = this.vertHoriLoop.bind(this);
     this.topLeftSteps = this.topLeftSteps.bind(this);
     this.dom.style.transform = '';
     // this.dom.addEventListener('transitionend', this.vertHoriLoop);
-    this.dom.addEventListener('transitionend', this.topLeftSteps);
     this.flag = 0;
+    this.mouseFlag = 0;
+    this.nextVal = undefined;
+    this.startX = undefined;
+    this.startY = undefined;
+    this.swipeDirection = undefined;
+    this.dom.addEventListener('transitionend', this.topLeftSteps);
+    this.dom.addEventListener('mouseleave', this.mouseLeave);
+    this.dom.addEventListener('mouseenter', this.mouseEnter);
+    this.dom.addEventListener('mousedown', (e) => {
+      this.dom.removeEventListener('mouseenter', this.mouseEnter);
+      this.dom.removeEventListener('mouseleave', this.mouseLeave);
+      this.startX = e.clientX;
+      this.startY = e.clientY;
+    });
+    // this.dom.addEventListener('mouseup', this.);
+    this.dom.addEventListener('mousemove', (e) => {
+      e.stopPropagation();
+      if (e.cancelable) {
+        e.preventDefault();
+      } else return false;
+    });
+
+    this.dom.addEventListener('touchstart', this.touchStartHandler);
+    this.dom.addEventListener('touchmove', this.touchMoveHandler);
+    this.dom.addEventListener('touchend', this.topLeftStepsTouchEndHandler);
   }
 
-  getDegree(index, rotation) {
+  getDegree = (index, rotation) => {
     const { x, y, z } = States[index].action[rotation];
     return `rotate3d(${x},${y},${z},90deg)`;
-  }
+  };
 
-  findIndex() {
+  findIndex = () => {
     // console.log(this.lastSide, this.side);
     for (let i = 0; i < 24; i += 1) {
       if (
@@ -437,13 +456,13 @@ class Cube {
       }
     }
     console.log('gg');
-  }
+  };
 
-  forceRender() {
+  forceRender = () => {
     return this.dom.clientHeight;
-  }
+  };
 
-  nextSide(direction, lastDirection) {
+  nextSide = (direction, lastDirection) => {
     this.forceRender();
     this.dom.classList.add('transition');
     // 現在是哪一面
@@ -458,9 +477,9 @@ class Cube {
     // 更新 stateIdx/side/lastrotation/lastside
     this.lastRotation = direction;
     this.findIndex();
-  }
+  };
 
-  rotate(direction) {
+  rotate = (direction) => {
     if (direction === DIRECTION.LEFT) {
       this.nextSide('left', 'right');
     }
@@ -473,9 +492,9 @@ class Cube {
     if (direction === DIRECTION.DOWN) {
       this.nextSide('down', 'up');
     }
-  }
+  };
 
-  topLeftSteps() {
+  topLeftSteps = () => {
     console.log(this.side);
     if (this.side === 'A') {
       this.rotate('down');
@@ -490,9 +509,9 @@ class Cube {
     } else if (this.side === 'E') {
       this.rotate('right');
     }
-  }
+  };
 
-  vertHoriLoop() {
+  vertHoriLoop = () => {
     if (this.side === 'A' && this.flag === 0) {
       this.rotate('down');
     } else if (this.side === 'B' && this.flag === 0) {
@@ -512,349 +531,265 @@ class Cube {
       this.rotate('left');
       this.flag = 0;
     }
-  }
+  };
+
+  activeStateMouseUpHandler = (e) => {
+    if (
+      this.startX != null &&
+      this.startX !== e.movementX &&
+      this.startY != null &&
+      this.startY !== e.movementY
+    ) {
+      if (
+        Math.abs(e.clientY - this.startY) > Math.abs(e.clientX - this.startX) &&
+        e.clientY > this.startY
+      ) {
+        this.swipeDirection = DIRECTION.DOWN;
+        this.rotate(DIRECTION.DOWN);
+      } else if (
+        Math.abs(e.clientY - this.startY) > Math.abs(e.clientX - this.startX) &&
+        e.clientY < this.startY
+      ) {
+        this.swipeDirection = DIRECTION.UP;
+        this.rotate(DIRECTION.UP);
+      } else if (
+        Math.abs(e.clientY - this.startY) < Math.abs(e.clientX - this.startX) &&
+        e.clientX > this.startX
+      ) {
+        this.swipeDirection = DIRECTION.RIGHT;
+        this.rotate(DIRECTION.RIGHT);
+      } else if (
+        Math.abs(e.clientY - this.startY) < Math.abs(e.clientX - this.startX) &&
+        e.clientX < this.startX
+      ) {
+        this.swipeDirection = DIRECTION.LEFT;
+        this.rotate(DIRECTION.LEFT);
+      }
+    }
+  };
+
+  mouseLeave = () => {
+    if (this.mouseFlag === 0) {
+      this.dom.classList.add('transition');
+      this.dom.style.transform = this.nextVal;
+      // 因為transitionend,所以動畫繼續
+    }
+  };
+
+  mouseEnter = () => {
+    if (this.mouseFlag === 0) {
+      this.nextVal = this.dom.style.transform;
+      console.log(this.nextVal);
+      const transformValue = window
+        .getComputedStyle(this.dom)
+        .getPropertyValue('transform');
+
+      this.dom.style.transform = transformValue;
+      this.dom.classList.remove('transition');
+    }
+  };
+
+  touchStartHandler = (e) => {
+    const touchobj = e.changedTouches[0];
+    this.startX = touchobj.pageX;
+    this.startY = touchobj.pageY;
+  };
+
+  touchMoveHandler = (e) => {
+    e.stopPropagation();
+    if (e.cancelable) {
+      e.preventDefault();
+    } else return false;
+  };
+
+  activeStateTouchEndHandler = (e) => {
+    const touchobj = e.changedTouches[0];
+    if (
+      this.startX != null &&
+      this.startX !== touchobj.pageX &&
+      this.startY != null &&
+      this.startY !== touchobj.pageY
+    ) {
+      // swipe down
+      if (
+        Math.abs(touchobj.pageY - this.startY) >
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageY > this.startY
+      ) {
+        this.swipeDirection = DIRECTION.DOWN;
+        this.rotate(DIRECTION.DOWN);
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) >
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageY < this.startY
+      ) {
+        this.swipeDirection = DIRECTION.UP;
+        this.rotate(DIRECTION.UP);
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) <
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageX > this.startX
+      ) {
+        this.swipeDirection = DIRECTION.RIGHT;
+        this.rotate(DIRECTION.RIGHT);
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) <
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageX < this.startX
+      ) {
+        this.swipeDirection = DIRECTION.LEFT;
+        this.rotate(DIRECTION.LEFT);
+      }
+    }
+  };
+
+  topLeftStepsTouchEndHandler = (e) => {
+    const touchobj = e.changedTouches[0];
+    if (
+      this.startX != null &&
+      this.startX !== touchobj.pageX &&
+      this.startY != null &&
+      this.startY !== touchobj.pageY
+    ) {
+      if (
+        Math.abs(touchobj.pageY - this.startY) >
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageY > this.startY
+      ) {
+        this.swipeDirection = DIRECTION.DOWN;
+        // cube.rotate(DIRECTION.DOWN);
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) >
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageY < this.startY
+      ) {
+        this.swipeDirection = DIRECTION.UP;
+        // cube.rotate(DIRECTION.UP);
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) <
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageX > this.startX
+      ) {
+        this.swipeDirection = DIRECTION.RIGHT;
+        // cube.rotate(DIRECTION.RIGHT);
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) <
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageX < this.startX
+      ) {
+        this.swipeDirection = DIRECTION.LEFT;
+        // cube.rotate(DIRECTION.LEFT);
+      }
+    }
+    console.log(this);
+    // INIT
+    if (this.lastRotation === 'down') {
+      if (this.swipeDirection === DIRECTION.UP) {
+        this.state = 'ACTIVE';
+        this.rotate('up');
+        console.log(this.swipeDirection);
+        this.dom.removeEventListener('transitionend', this.topLeftSteps);
+      } else if (
+        [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
+          this.swipeDirection
+        )
+      ) {
+        this.state = 'ACTIVE';
+        this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
+      }
+    } else if (this.lastRotation === 'right') {
+      if (this.swipeDirection === DIRECTION.LEFT) {
+        this.state = 'ACTIVE';
+        this.rotate('left');
+        this.dom.removeEventListener('transitionend', this.topLeftSteps);
+      } else if (
+        [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(
+          this.swipeDirection
+        )
+      ) {
+        this.state = 'ACTIVE';
+        this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
+      }
+    }
+
+    if (this.state === 'ACTIVE') {
+      this.dom.removeEventListener('transitionend', this.topLeftSteps);
+      this.dom.addEventListener('touchend', this.activeStateTouchEndHandler);
+    }
+  };
+
+  vertHoriLoopTouchEndHandler = (e) => {
+    const touchobj = e.changedTouches[0];
+    if (
+      this.startX != null &&
+      this.startX !== touchobj.pageX &&
+      this.startY != null &&
+      this.startY !== touchobj.pageY
+    ) {
+      // swipe down
+      if (
+        Math.abs(touchobj.pageY - this.startY) >
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageY > this.startY
+      ) {
+        this.swipeDirection = DIRECTION.DOWN;
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) >
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageY < this.startY
+      ) {
+        this.swipeDirection = DIRECTION.UP;
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) <
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageX > this.startX
+      ) {
+        this.swipeDirection = DIRECTION.RIGHT;
+      } else if (
+        Math.abs(touchobj.pageY - this.startY) <
+          Math.abs(touchobj.pageX - this.startX) &&
+        touchobj.pageX < this.startX
+      ) {
+        this.swipeDirection = DIRECTION.LEFT;
+      }
+    }
+    // INIT
+    if (this.lastRotation === 'down') {
+      if (this.swipeDirection === DIRECTION.UP) {
+        this.state = 'ACTIVE';
+        this.rotate('up');
+        this.dom.removeEventListener('transitionend', this.vertHoriLoop);
+      } else if (
+        [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
+          this.swipeDirection
+        )
+      ) {
+        this.state = 'ACTIVE';
+        this.dom.removeEventListener('transitionend', this.vertHoriLoop); // STOP ANIMATION
+      }
+    } else if (this.lastRotation === 'left') {
+      if (this.swipeDirection === DIRECTION.RIGHT) {
+        this.state = 'ACTIVE';
+        this.rotate('right');
+        this.dom.removeEventListener('transitionend', this.vertHoriLoop);
+      } else if (
+        [DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(
+          this.swipeDirection
+        )
+      ) {
+        this.state = 'ACTIVE';
+        this.dom.removeEventListener('transitionend', this.vertHoriLoop); // STOP ANIMATION
+      }
+    }
+    if (this.state === 'ACTIVE') {
+      // cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
+      this.dom.removeEventListener('transitionend', this.vertHoriLoop);
+      this.dom.addEventListener('touchend', this.activeStateTouchEndHandler);
+    }
+  };
 }
 
 const cubeDom = document.getElementsByClassName('space')[0];
 const cube = new Cube(cubeDom);
 
 cube.vertHoriLoop();
-// cube.topLeftSteps();
-
-// mouse event
-let mouseFlag = 0;
-let nextVal;
-
-// mouse enter
-
-// mouse leave
-const mouseLeave = () => {
-  if (mouseFlag === 0) {
-    cubeDom.classList.add('transition');
-    cubeDom.style.transform = nextVal;
-    // 因為transitionend,所以動畫繼續
-  }
-};
-const mouseEnter = () => {
-  if (mouseFlag === 0) {
-    nextVal = cubeDom.style.transform;
-    console.log(nextVal);
-    const transformValue = window
-      .getComputedStyle(cubeDom)
-      .getPropertyValue('transform');
-    cubeDom.style.transform = transformValue;
-    cubeDom.classList.remove('transition');
-  }
-};
-cubeDom.addEventListener('mouseleave', mouseLeave);
-cubeDom.addEventListener('mouseenter', mouseEnter);
-function _activeStateMouseMoveEndHandler(e) {
-  if (
-    startX != null &&
-    startX !== e.movementX &&
-    startY != null &&
-    startY !== e.movementY
-  ) {
-    if (
-      Math.abs(e.movementY - startY) > Math.abs(e.movementX - startX) &&
-      e.movementY > startY
-    ) {
-      swipeDirection = DIRECTION.DOWN;
-      cube.rotate(DIRECTION.DOWN);
-    } else if (
-      Math.abs(e.movementY - startY) > Math.abs(e.movementX - startX) &&
-      e.movementY < startY
-    ) {
-      swipeDirection = DIRECTION.UP;
-      cube.rotate(DIRECTION.UP);
-    } else if (
-      Math.abs(e.movementY - startY) < Math.abs(e.movementX - startX) &&
-      e.movementX > startX
-    ) {
-      swipeDirection = DIRECTION.RIGHT;
-      cube.rotate(DIRECTION.RIGHT);
-    } else if (
-      Math.abs(e.movementY - startY) < Math.abs(e.movementX - startX) &&
-      e.movementX < startX
-    ) {
-      swipeDirection = DIRECTION.LEFT;
-      cube.rotate(DIRECTION.LEFT);
-    }
-  }
-}
-function _topLeftStepsMouseEndHandler(e) {}
-
-// mouse move
-cubeDom.addEventListener('mousedown', (e) => {
-  cubeDom.removeEventListener('mouseenter', mouseEnter);
-  cubeDom.removeEventListener('mouseleave', mouseLeave);
-  startX = e.clientX;
-  startY = e.clientY;
-});
-
-cubeDom.addEventListener('mouseup', (e) => {
-  console.log(startX);
-  if (
-    startX != null &&
-    startX !== e.clientX &&
-    startY != null &&
-    startY !== e.clientY
-  ) {
-    if (
-      Math.abs(e.clientY - startY) > Math.abs(e.clientX - startX) &&
-      e.clientY > startY
-    ) {
-      swipeDirection = DIRECTION.DOWN;
-      // cube.rotate(DIRECTION.DOWN);
-    } else if (
-      Math.abs(e.clientY - startY) > Math.abs(e.clientX - startX) &&
-      e.clientY < startY
-    ) {
-      swipeDirection = DIRECTION.UP;
-      // cube.rotate(DIRECTION.UP);
-    } else if (
-      Math.abs(e.clientY - startY) < Math.abs(e.clientX - startX) &&
-      e.clientX > startX
-    ) {
-      swipeDirection = DIRECTION.RIGHT;
-      // cube.rotate(DIRECTION.RIGHT);
-    } else if (
-      Math.abs(e.clientY - startY) < Math.abs(e.clientX - startX) &&
-      e.clientX < startX
-    ) {
-      swipeDirection = DIRECTION.LEFT;
-      // cube.rotate(DIRECTION.LEFT);
-    }
-    console.log(swipeDirection);
-  }
-
-  if (cube.lastRotation === 'down') {
-    if (swipeDirection === DIRECTION.UP) {
-      mouseFlag = 1;
-      cube.state = 'ACTIVE';
-      cube.rotate('up');
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-    } else if (
-      [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(swipeDirection)
-    ) {
-      mouseFlag = 1;
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
-    }
-  } else if (cube.lastRotation === 'right') {
-    if (swipeDirection === DIRECTION.LEFT) {
-      mouseFlag = 1;
-      cube.state = 'ACTIVE';
-      cube.rotate('left');
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-    } else if (
-      [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(swipeDirection)
-    ) {
-      mouseFlag = 1;
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
-    }
-  }
-
-  if (cube.state === 'ACTIVE') {
-    cubeDom.removeEventListener('transitionend', cube.topLeftSteps);
-    cubeDom.addEventListener('mouseup', _activeStateMouseMoveEndHandler);
-  }
-});
-
-cubeDom.addEventListener('mousemove', (e) => {
-  e.stopPropagation();
-  if (e.cancelable) {
-    e.preventDefault();
-  } else return false;
-});
-
-// touch
-function _touchStartHandler(e) {
-  const touchobj = e.changedTouches[0];
-  startX = touchobj.pageX;
-  startY = touchobj.pageY;
-}
-
-function _touchMoveHandler(e) {
-  e.stopPropagation();
-  if (e.cancelable) {
-    e.preventDefault();
-  } else return false;
-}
-
-function _activeStateTouchEndHandler(e) {
-  const touchobj = e.changedTouches[0];
-  if (
-    startX != null &&
-    startX !== touchobj.pageX &&
-    startY != null &&
-    startY !== touchobj.pageY
-  ) {
-    // swipe down
-    if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY > startY
-    ) {
-      swipeDirection = DIRECTION.DOWN;
-      cube.rotate(DIRECTION.DOWN);
-    } else if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY < startY
-    ) {
-      swipeDirection = DIRECTION.UP;
-      cube.rotate(DIRECTION.UP);
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX > startX
-    ) {
-      swipeDirection = DIRECTION.RIGHT;
-      cube.rotate(DIRECTION.RIGHT);
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX < startX
-    ) {
-      swipeDirection = DIRECTION.LEFT;
-      cube.rotate(DIRECTION.LEFT);
-    }
-  }
-}
-
-function _topLeftStepsTouchEndHandler(e) {
-  const touchobj = e.changedTouches[0];
-  if (
-    startX != null &&
-    startX !== touchobj.pageX &&
-    startY != null &&
-    startY !== touchobj.pageY
-  ) {
-    if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY > startY
-    ) {
-      swipeDirection = DIRECTION.DOWN;
-      // cube.rotate(DIRECTION.DOWN);
-    } else if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY < startY
-    ) {
-      swipeDirection = DIRECTION.UP;
-      // cube.rotate(DIRECTION.UP);
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX > startX
-    ) {
-      swipeDirection = DIRECTION.RIGHT;
-      // cube.rotate(DIRECTION.RIGHT);
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX < startX
-    ) {
-      swipeDirection = DIRECTION.LEFT;
-      // cube.rotate(DIRECTION.LEFT);
-    }
-  }
-  // INIT
-  if (cube.lastRotation === 'down') {
-    if (swipeDirection === DIRECTION.UP) {
-      cube.state = 'ACTIVE';
-      cube.rotate('up');
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-    } else if (
-      [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(swipeDirection)
-    ) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
-    }
-  } else if (cube.lastRotation === 'right') {
-    if (swipeDirection === DIRECTION.LEFT) {
-      cube.state = 'ACTIVE';
-      cube.rotate('left');
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-    } else if (
-      [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(swipeDirection)
-    ) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
-    }
-  }
-
-  if (cube.state === 'ACTIVE') {
-    cubeDom.removeEventListener('transitionend', cube.topLeftSteps);
-    cubeDom.addEventListener('touchend', _activeStateTouchEndHandler);
-  }
-}
-
-function _vertHoriLoopTouchEndHandler(e) {
-  const touchobj = e.changedTouches[0];
-  if (
-    startX != null &&
-    startX !== touchobj.pageX &&
-    startY != null &&
-    startY !== touchobj.pageY
-  ) {
-    // swipe down
-    if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY > startY
-    ) {
-      swipeDirection = DIRECTION.DOWN;
-    } else if (
-      Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageY < startY
-    ) {
-      swipeDirection = DIRECTION.UP;
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX > startX
-    ) {
-      swipeDirection = DIRECTION.RIGHT;
-    } else if (
-      Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) &&
-      touchobj.pageX < startX
-    ) {
-      swipeDirection = DIRECTION.LEFT;
-    }
-  }
-  // INIT
-  if (cube.lastRotation === 'down') {
-    if (swipeDirection === DIRECTION.UP) {
-      cube.state = 'ACTIVE';
-      cube.rotate('up');
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
-    } else if (
-      [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(swipeDirection)
-    ) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop); // STOP ANIMATION
-    }
-  } else if (cube.lastRotation === 'left') {
-    if (swipeDirection === DIRECTION.RIGHT) {
-      cube.state = 'ACTIVE';
-      cube.rotate('right');
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
-    } else if (
-      [DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(swipeDirection)
-    ) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop); // STOP ANIMATION
-    }
-  }
-  if (cube.state === 'ACTIVE') {
-    // cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-    cubeDom.removeEventListener('transitionend', cube.vertHoriLoop);
-    cubeDom.addEventListener('touchend', _activeStateTouchEndHandler);
-  }
-}
-
-function _init() {
-  cubeDom.addEventListener('touchstart', _touchStartHandler);
-  cubeDom.addEventListener('touchmove', _touchMoveHandler);
-
-  if (cube.state === 'INIT') {
-    cubeDom.addEventListener('touchend', _topLeftStepsTouchEndHandler);
-    // cubeDom.addEventListener('touchend', _vertHoriLoopTouchEndHandler);
-  }
-}
-
-_init();

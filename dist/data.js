@@ -2,9 +2,7 @@
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var States = [{
   // A
@@ -50,12 +48,12 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -1,
+      y: 1,
       z: 0
     },
     right: {
       x: 0,
-      y: 1,
+      y: -1,
       z: 0
     },
     up: {
@@ -174,13 +172,13 @@ var States = [{
   },
   action: {
     left: {
-      x: 0,
-      y: -1,
+      x: 1,
+      y: 0,
       z: 0
     },
     right: {
-      x: 0,
-      y: 1,
+      x: -1,
+      y: 0,
       z: 0
     },
     up: {
@@ -215,12 +213,12 @@ var States = [{
       z: -1
     },
     up: {
-      x: 1,
+      x: -1,
       y: 0,
       z: 0
     },
     down: {
-      x: -1,
+      x: 1,
       y: 0,
       z: 0
     }
@@ -236,12 +234,12 @@ var States = [{
   },
   action: {
     left: {
-      x: 1,
+      x: -1,
       y: 0,
       z: 0
     },
     right: {
-      x: -1,
+      x: 1,
       y: 0,
       z: 0
     },
@@ -268,12 +266,12 @@ var States = [{
   },
   action: {
     left: {
-      x: 1,
+      x: -1,
       y: 0,
       z: 0
     },
     right: {
-      x: -1,
+      x: 1,
       y: 0,
       z: 0
     },
@@ -309,12 +307,12 @@ var States = [{
       z: 0
     },
     up: {
-      x: 1,
+      x: -1,
       y: 0,
       z: 0
     },
     down: {
-      x: -1,
+      x: 1,
       y: 0,
       z: 0
     }
@@ -330,23 +328,23 @@ var States = [{
   },
   action: {
     left: {
-      x: 0,
-      y: 1,
-      z: 0
-    },
-    right: {
-      x: 0,
-      y: -1,
-      z: 0
-    },
-    up: {
       x: 1,
       y: 0,
       z: 0
     },
-    down: {
+    right: {
       x: -1,
       y: 0,
+      z: 0
+    },
+    up: {
+      x: 0,
+      y: 1,
+      z: 0
+    },
+    down: {
+      x: 0,
+      y: -1,
       z: 0
     }
   }
@@ -362,12 +360,12 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -1,
+      y: 1,
       z: 0
     },
     right: {
       x: 0,
-      y: 1,
+      y: -1,
       z: 0
     },
     up: {
@@ -424,24 +422,24 @@ var States = [{
   },
   action: {
     left: {
-      x: 0,
-      y: 1,
-      z: 0
-    },
-    right: {
-      x: 0,
-      y: -1,
-      z: 0
-    },
-    up: {
       x: 1,
       y: 0,
       z: 0
     },
-    down: {
+    right: {
       x: -1,
       y: 0,
       z: 0
+    },
+    up: {
+      x: 0,
+      y: 0,
+      z: -1
+    },
+    down: {
+      x: 0,
+      y: 0,
+      z: 1
     }
   }
 }, {
@@ -465,12 +463,12 @@ var States = [{
       z: 1
     },
     up: {
-      x: 1,
+      x: -1,
       y: 0,
       z: 0
     },
     down: {
-      x: -1,
+      x: 1,
       y: 0,
       z: 0
     }
@@ -486,12 +484,12 @@ var States = [{
   },
   action: {
     left: {
-      x: 1,
+      x: -1,
       y: 0,
       z: 0
     },
     right: {
-      x: -1,
+      x: 1,
       y: 0,
       z: 0
     },
@@ -530,12 +528,12 @@ var States = [{
     up: {
       x: 0,
       y: 0,
-      z: 1
+      z: -1
     },
     down: {
       x: 0,
       y: 0,
-      z: -1
+      z: 1
     }
   }
 }, {
@@ -550,22 +548,22 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -1,
-      z: 0
+      y: 0,
+      z: -1
     },
     right: {
       x: 0,
-      y: 1,
-      z: 0
+      y: 0,
+      z: 1
     },
     up: {
-      x: -1,
-      y: 0,
+      x: 0,
+      y: -1,
       z: 0
     },
     down: {
-      x: 1,
-      y: 0,
+      x: 0,
+      y: 1,
       z: 0
     }
   }
@@ -580,13 +578,13 @@ var States = [{
   },
   action: {
     left: {
-      x: -1,
-      y: 0,
+      x: 0,
+      y: 1,
       z: 0
     },
     right: {
-      x: 1,
-      y: 0,
+      x: 0,
+      y: -1,
       z: 0
     },
     up: {
@@ -706,12 +704,12 @@ var States = [{
   action: {
     left: {
       x: 0,
-      y: -1,
+      y: 1,
       z: 0
     },
     right: {
       x: 0,
-      y: 1,
+      y: -1,
       z: 0
     },
     up: {
@@ -746,20 +744,17 @@ var States = [{
       z: 1
     },
     up: {
-      x: 1,
-      y: 0,
+      x: 0,
+      y: -1,
       z: 0
     },
     down: {
-      x: -1,
-      y: 0,
+      x: 0,
+      y: 1,
       z: 0
     }
   }
 }];
-var startX;
-var startY;
-var swipeDirection;
 var DIRECTION = {
   LEFT: 'left',
   RIGHT: 'right',
@@ -771,276 +766,339 @@ var STATE = {
   ACTIVE: 'ACTIVE'
 };
 
-var Cube =
-/*#__PURE__*/
-function () {
-  function Cube(dom) {
-    _classCallCheck(this, Cube);
+var Cube = function Cube(dom) {
+  var _this = this;
 
-    this.stateIdx = 0;
-    this.side = 'A';
-    this.lastSide = undefined;
-    this.lastRotation = undefined;
-    this.dom = dom;
-    this.state = STATE.INIT;
-    this.vertHoriLoop = this.vertHoriLoop.bind(this); // this.topLeftSteps = this.topLeftSteps.bind(this);
+  _classCallCheck(this, Cube);
 
-    this.dom.style.transform = '';
-    this.dom.addEventListener('transitionend', this.vertHoriLoop); // this.dom.addEventListener('transitionend', this.topLeftSteps);
+  _defineProperty(this, "getDegree", function (index, rotation) {
+    var _States$index$action$ = States[index].action[rotation],
+        x = _States$index$action$.x,
+        y = _States$index$action$.y,
+        z = _States$index$action$.z;
+    return "rotate3d(".concat(x, ",").concat(y, ",").concat(z, ",90deg)");
+  });
 
-    this.flag = 0;
-  }
+  _defineProperty(this, "findIndex", function () {
+    // console.log(this.lastSide, this.side);
+    for (var i = 0; i < 24; i += 1) {
+      if (_this.side === States[i].side.front && _this.lastSide === States[i].side[_this.lastRotation]) {
+        _this.stateIdx = i; // console.log(this.stateIdx);
 
-  _createClass(Cube, [{
-    key: "getDegree",
-    value: function getDegree(index, rotation) {
-      var _States$index$action$ = States[index].action[rotation],
-          x = _States$index$action$.x,
-          y = _States$index$action$.y,
-          z = _States$index$action$.z;
-      return "rotate3d(".concat(x, ",").concat(y, ",").concat(z, ",90deg)");
-    }
-  }, {
-    key: "findIndex",
-    value: function findIndex() {
-      console.log(this.lastSide, this.side);
-
-      for (var i = 0; i < 24; i += 1) {
-        if (this.side === States[i].side.front && this.lastSide === States[i].side[this.lastRotation]) {
-          this.stateIdx = i;
-          console.log(this.stateIdx);
-          return;
-        }
-      }
-
-      console.log('gg');
-    }
-  }, {
-    key: "forceRender",
-    value: function forceRender() {
-      return this.dom.clientHeight;
-    }
-  }, {
-    key: "nextSide",
-    value: function nextSide(direction, lastDirection) {
-      this.forceRender();
-      this.dom.classList.add('transition'); // 現在是哪一面
-
-      this.lastSide = this.side; // 轉幾度過去
-
-      this.dom.style.transform = this.dom.style.transform.concat(' ', this.getDegree(this.stateIdx, direction));
-      console.log(this.dom.style.transform.concat(' ', this.getDegree(this.stateIdx, direction))); // 下一面是誰
-
-      this.side = States[this.stateIdx].side[lastDirection]; // 更新 stateIdx/side/lastrotation/lastside
-
-      this.lastRotation = direction;
-      console.log("lastRoation".concat(direction));
-      this.findIndex();
-    }
-  }, {
-    key: "rotate",
-    value: function rotate(direction) {
-      if (direction === DIRECTION.LEFT) {
-        this.nextSide('left', 'right');
-      }
-
-      if (direction === DIRECTION.RIGHT) {
-        this.nextSide('right', 'left');
-      }
-
-      if (direction === DIRECTION.UP) {
-        this.nextSide('up', 'down');
-      }
-
-      if (direction === DIRECTION.DOWN) {
-        this.nextSide('down', 'up');
+        return;
       }
     }
-  }, {
-    key: "topLeftSteps",
-    value: function topLeftSteps() {
-      if (this.side === 'A') {
-        this.rotate('down');
-      } else if (this.side === 'B') {
-        this.rotate('right');
-      } else if (this.side === 'F') {
-        this.rotate('down');
-      } else if (this.side === 'C') {
-        this.rotate('right');
-      } else if (this.side === 'D') {
-        this.rotate('down');
-      } // else if (this.side === 'E') {
-      //   self.rotate('right');
-      // }
 
+    console.log('gg');
+  });
+
+  _defineProperty(this, "forceRender", function () {
+    return _this.dom.clientHeight;
+  });
+
+  _defineProperty(this, "nextSide", function (direction, lastDirection) {
+    _this.forceRender();
+
+    _this.dom.classList.add('transition'); // 現在是哪一面
+
+
+    _this.lastSide = _this.side; // 轉幾度過去
+
+    _this.dom.style.transform = _this.dom.style.transform.concat(' ', _this.getDegree(_this.stateIdx, direction)); // 下一面是誰
+
+    _this.side = States[_this.stateIdx].side[lastDirection]; // 更新 stateIdx/side/lastrotation/lastside
+
+    _this.lastRotation = direction;
+
+    _this.findIndex();
+  });
+
+  _defineProperty(this, "rotate", function (direction) {
+    if (direction === DIRECTION.LEFT) {
+      _this.nextSide('left', 'right');
     }
-  }, {
-    key: "vertHoriLoop",
-    value: function vertHoriLoop() {
-      if (this.side === 'A' && this.flag === 0) {
-        this.rotate('down');
-      } else if (this.side === 'B' && this.flag === 0) {
-        this.rotate('down');
-      } else if (this.side === 'C' && this.flag === 0) {
-        this.rotate('down');
-      } else if (this.side === 'D' && this.flag === 0) {
-        this.rotate('down');
-        this.flag = 1;
-      } else if (this.side === 'A' && this.flag === 1) {
-        this.rotate('left');
-      } else if (this.side === 'E' && this.flag === 1) {
-        this.rotate('left');
-      } else if (this.side === 'C' && this.flag === 1) {
-        this.rotate('left');
-      } else if (this.side === 'F' && this.flag === 1) {
-        this.rotate('left');
-        this.flag = 0;
+
+    if (direction === DIRECTION.RIGHT) {
+      _this.nextSide('right', 'left');
+    }
+
+    if (direction === DIRECTION.UP) {
+      _this.nextSide('up', 'down');
+    }
+
+    if (direction === DIRECTION.DOWN) {
+      _this.nextSide('down', 'up');
+    }
+  });
+
+  _defineProperty(this, "topLeftSteps", function () {
+    console.log(_this.side);
+
+    if (_this.side === 'A') {
+      _this.rotate('down');
+    } else if (_this.side === 'B') {
+      _this.rotate('right');
+    } else if (_this.side === 'F') {
+      _this.rotate('down');
+    } else if (_this.side === 'C') {
+      _this.rotate('right');
+    } else if (_this.side === 'D') {
+      _this.rotate('down');
+    } else if (_this.side === 'E') {
+      _this.rotate('right');
+    }
+  });
+
+  _defineProperty(this, "vertHoriLoop", function () {
+    if (_this.side === 'A' && _this.flag === 0) {
+      _this.rotate('down');
+    } else if (_this.side === 'B' && _this.flag === 0) {
+      _this.rotate('down');
+    } else if (_this.side === 'C' && _this.flag === 0) {
+      _this.rotate('down');
+    } else if (_this.side === 'D' && _this.flag === 0) {
+      _this.rotate('down');
+
+      _this.flag = 1;
+    } else if (_this.side === 'A' && _this.flag === 1) {
+      _this.rotate('left');
+    } else if (_this.side === 'E' && _this.flag === 1) {
+      _this.rotate('left');
+    } else if (_this.side === 'C' && _this.flag === 1) {
+      _this.rotate('left');
+    } else if (_this.side === 'F' && _this.flag === 1) {
+      _this.rotate('left');
+
+      _this.flag = 0;
+    }
+  });
+
+  _defineProperty(this, "activeStateMouseUpHandler", function (e) {
+    if (_this.startX != null && _this.startX !== e.movementX && _this.startY != null && _this.startY !== e.movementY) {
+      if (Math.abs(e.clientY - _this.startY) > Math.abs(e.clientX - _this.startX) && e.clientY > _this.startY) {
+        _this.swipeDirection = DIRECTION.DOWN;
+
+        _this.rotate(DIRECTION.DOWN);
+      } else if (Math.abs(e.clientY - _this.startY) > Math.abs(e.clientX - _this.startX) && e.clientY < _this.startY) {
+        _this.swipeDirection = DIRECTION.UP;
+
+        _this.rotate(DIRECTION.UP);
+      } else if (Math.abs(e.clientY - _this.startY) < Math.abs(e.clientX - _this.startX) && e.clientX > _this.startX) {
+        _this.swipeDirection = DIRECTION.RIGHT;
+
+        _this.rotate(DIRECTION.RIGHT);
+      } else if (Math.abs(e.clientY - _this.startY) < Math.abs(e.clientX - _this.startX) && e.clientX < _this.startX) {
+        _this.swipeDirection = DIRECTION.LEFT;
+
+        _this.rotate(DIRECTION.LEFT);
       }
     }
-  }]);
+  });
 
-  return Cube;
-}();
+  _defineProperty(this, "mouseLeave", function () {
+    if (_this.mouseFlag === 0) {
+      _this.dom.classList.add('transition');
+
+      _this.dom.style.transform = _this.nextVal; // 因為transitionend,所以動畫繼續
+    }
+  });
+
+  _defineProperty(this, "mouseEnter", function () {
+    if (_this.mouseFlag === 0) {
+      _this.nextVal = _this.dom.style.transform;
+      console.log(_this.nextVal);
+      var transformValue = window.getComputedStyle(_this.dom).getPropertyValue('transform');
+      _this.dom.style.transform = transformValue;
+
+      _this.dom.classList.remove('transition');
+    }
+  });
+
+  _defineProperty(this, "touchStartHandler", function (e) {
+    var touchobj = e.changedTouches[0];
+    _this.startX = touchobj.pageX;
+    _this.startY = touchobj.pageY;
+  });
+
+  _defineProperty(this, "touchMoveHandler", function (e) {
+    e.stopPropagation();
+
+    if (e.cancelable) {
+      e.preventDefault();
+    } else return false;
+  });
+
+  _defineProperty(this, "activeStateTouchEndHandler", function (e) {
+    var touchobj = e.changedTouches[0];
+
+    if (_this.startX != null && _this.startX !== touchobj.pageX && _this.startY != null && _this.startY !== touchobj.pageY) {
+      // swipe down
+      if (Math.abs(touchobj.pageY - _this.startY) > Math.abs(touchobj.pageX - _this.startX) && touchobj.pageY > _this.startY) {
+        _this.swipeDirection = DIRECTION.DOWN;
+
+        _this.rotate(DIRECTION.DOWN);
+      } else if (Math.abs(touchobj.pageY - _this.startY) > Math.abs(touchobj.pageX - _this.startX) && touchobj.pageY < _this.startY) {
+        _this.swipeDirection = DIRECTION.UP;
+
+        _this.rotate(DIRECTION.UP);
+      } else if (Math.abs(touchobj.pageY - _this.startY) < Math.abs(touchobj.pageX - _this.startX) && touchobj.pageX > _this.startX) {
+        _this.swipeDirection = DIRECTION.RIGHT;
+
+        _this.rotate(DIRECTION.RIGHT);
+      } else if (Math.abs(touchobj.pageY - _this.startY) < Math.abs(touchobj.pageX - _this.startX) && touchobj.pageX < _this.startX) {
+        _this.swipeDirection = DIRECTION.LEFT;
+
+        _this.rotate(DIRECTION.LEFT);
+      }
+    }
+  });
+
+  _defineProperty(this, "topLeftStepsTouchEndHandler", function (e) {
+    var touchobj = e.changedTouches[0];
+
+    if (_this.startX != null && _this.startX !== touchobj.pageX && _this.startY != null && _this.startY !== touchobj.pageY) {
+      if (Math.abs(touchobj.pageY - _this.startY) > Math.abs(touchobj.pageX - _this.startX) && touchobj.pageY > _this.startY) {
+        _this.swipeDirection = DIRECTION.DOWN; // cube.rotate(DIRECTION.DOWN);
+      } else if (Math.abs(touchobj.pageY - _this.startY) > Math.abs(touchobj.pageX - _this.startX) && touchobj.pageY < _this.startY) {
+        _this.swipeDirection = DIRECTION.UP; // cube.rotate(DIRECTION.UP);
+      } else if (Math.abs(touchobj.pageY - _this.startY) < Math.abs(touchobj.pageX - _this.startX) && touchobj.pageX > _this.startX) {
+        _this.swipeDirection = DIRECTION.RIGHT; // cube.rotate(DIRECTION.RIGHT);
+      } else if (Math.abs(touchobj.pageY - _this.startY) < Math.abs(touchobj.pageX - _this.startX) && touchobj.pageX < _this.startX) {
+        _this.swipeDirection = DIRECTION.LEFT; // cube.rotate(DIRECTION.LEFT);
+      }
+    }
+
+    console.log(_this); // INIT
+
+    if (_this.lastRotation === 'down') {
+      if (_this.swipeDirection === DIRECTION.UP) {
+        _this.state = 'ACTIVE';
+
+        _this.rotate('up');
+
+        console.log(_this.swipeDirection);
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps);
+      } else if ([DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(_this.swipeDirection)) {
+        _this.state = 'ACTIVE';
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps); // STOP ANIMATION
+
+      }
+    } else if (_this.lastRotation === 'right') {
+      if (_this.swipeDirection === DIRECTION.LEFT) {
+        _this.state = 'ACTIVE';
+
+        _this.rotate('left');
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps);
+      } else if ([DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(_this.swipeDirection)) {
+        _this.state = 'ACTIVE';
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps); // STOP ANIMATION
+
+      }
+    }
+
+    if (_this.state === 'ACTIVE') {
+      _this.dom.removeEventListener('transitionend', _this.topLeftSteps);
+
+      _this.dom.addEventListener('touchend', _this.activeStateTouchEndHandler);
+    }
+  });
+
+  _defineProperty(this, "vertHoriLoopTouchEndHandler", function (e) {
+    var touchobj = e.changedTouches[0];
+
+    if (_this.startX != null && _this.startX !== touchobj.pageX && _this.startY != null && _this.startY !== touchobj.pageY) {
+      // swipe down
+      if (Math.abs(touchobj.pageY - _this.startY) > Math.abs(touchobj.pageX - _this.startX) && touchobj.pageY > _this.startY) {
+        _this.swipeDirection = DIRECTION.DOWN;
+      } else if (Math.abs(touchobj.pageY - _this.startY) > Math.abs(touchobj.pageX - _this.startX) && touchobj.pageY < _this.startY) {
+        _this.swipeDirection = DIRECTION.UP;
+      } else if (Math.abs(touchobj.pageY - _this.startY) < Math.abs(touchobj.pageX - _this.startX) && touchobj.pageX > _this.startX) {
+        _this.swipeDirection = DIRECTION.RIGHT;
+      } else if (Math.abs(touchobj.pageY - _this.startY) < Math.abs(touchobj.pageX - _this.startX) && touchobj.pageX < _this.startX) {
+        _this.swipeDirection = DIRECTION.LEFT;
+      }
+    } // INIT
+
+
+    if (_this.lastRotation === 'down') {
+      if (_this.swipeDirection === DIRECTION.UP) {
+        _this.state = 'ACTIVE';
+
+        _this.rotate('up');
+
+        _this.dom.removeEventListener('transitionend', _this.vertHoriLoop);
+      } else if ([DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(_this.swipeDirection)) {
+        _this.state = 'ACTIVE';
+
+        _this.dom.removeEventListener('transitionend', _this.vertHoriLoop); // STOP ANIMATION
+
+      }
+    } else if (_this.lastRotation === 'left') {
+      if (_this.swipeDirection === DIRECTION.RIGHT) {
+        _this.state = 'ACTIVE';
+
+        _this.rotate('right');
+
+        _this.dom.removeEventListener('transitionend', _this.vertHoriLoop);
+      } else if ([DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(_this.swipeDirection)) {
+        _this.state = 'ACTIVE';
+
+        _this.dom.removeEventListener('transitionend', _this.vertHoriLoop); // STOP ANIMATION
+
+      }
+    }
+
+    if (_this.state === 'ACTIVE') {
+      // cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
+      _this.dom.removeEventListener('transitionend', _this.vertHoriLoop);
+
+      _this.dom.addEventListener('touchend', _this.activeStateTouchEndHandler);
+    }
+  });
+
+  this.stateIdx = 0;
+  this.side = 'A';
+  this.lastSide = undefined;
+  this.lastRotation = undefined;
+  this.dom = dom;
+  this.state = STATE.INIT;
+  this.topLeftSteps = this.topLeftSteps.bind(this);
+  this.dom.style.transform = ''; // this.dom.addEventListener('transitionend', this.vertHoriLoop);
+
+  this.flag = 0;
+  this.mouseFlag = 0;
+  this.nextVal = undefined;
+  this.startX = undefined;
+  this.startY = undefined;
+  this.swipeDirection = undefined;
+  this.dom.addEventListener('transitionend', this.topLeftSteps);
+  this.dom.addEventListener('mouseleave', this.mouseLeave);
+  this.dom.addEventListener('mouseenter', this.mouseEnter);
+  this.dom.addEventListener('mousedown', function (e) {
+    _this.dom.removeEventListener('mouseenter', _this.mouseEnter);
+
+    _this.dom.removeEventListener('mouseleave', _this.mouseLeave);
+
+    _this.startX = e.clientX;
+    _this.startY = e.clientY;
+  }); // this.dom.addEventListener('mouseup', this.);
+
+  this.dom.addEventListener('mousemove', function (e) {
+    e.stopPropagation();
+
+    if (e.cancelable) {
+      e.preventDefault();
+    } else return false;
+  });
+  this.dom.addEventListener('touchstart', this.touchStartHandler);
+  this.dom.addEventListener('touchmove', this.touchMoveHandler);
+  this.dom.addEventListener('touchend', this.topLeftStepsTouchEndHandler);
+};
 
 var cubeDom = document.getElementsByClassName('space')[0];
 var cube = new Cube(cubeDom);
-cube.vertHoriLoop(); // cube.topLeftSteps();
-// touch
-
-function _touchStartHandler(e) {
-  var touchobj = e.changedTouches[0];
-  startX = touchobj.pageX;
-  startY = touchobj.pageY;
-}
-
-function _touchMoveHandler(e) {
-  e.stopPropagation();
-
-  if (e.cancelable) {
-    e.preventDefault();
-  } else return false;
-}
-
-function _activeStateTouchEndHandler(e) {
-  var touchobj = e.changedTouches[0];
-
-  if (startX != null && startX !== touchobj.pageX && startY != null && startY !== touchobj.pageY) {
-    // swipe down
-    if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY > startY) {
-      swipeDirection = DIRECTION.DOWN;
-      cube.rotate(DIRECTION.DOWN);
-    } else if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY < startY) {
-      swipeDirection = DIRECTION.UP;
-      cube.rotate(DIRECTION.UP);
-    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX > startX) {
-      swipeDirection = DIRECTION.RIGHT;
-      cube.rotate(DIRECTION.RIGHT);
-    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX < startX) {
-      swipeDirection = DIRECTION.LEFT;
-      cube.rotate(DIRECTION.LEFT);
-    }
-  }
-}
-
-function _topLeftStepsTouchEndHandler(e) {
-  var touchobj = e.changedTouches[0];
-
-  if (startX != null && startX !== touchobj.pageX && startY != null && startY !== touchobj.pageY) {
-    if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY > startY) {
-      swipeDirection = DIRECTION.DOWN; // cube.rotate(DIRECTION.DOWN);
-    } else if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY < startY) {
-      swipeDirection = DIRECTION.UP; // cube.rotate(DIRECTION.UP);
-    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX > startX) {
-      swipeDirection = DIRECTION.RIGHT; // cube.rotate(DIRECTION.RIGHT);
-    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX < startX) {
-      swipeDirection = DIRECTION.LEFT; // cube.rotate(DIRECTION.LEFT);
-    }
-  }
-
-  console.log(swipeDirection);
-  console.log("aa".concat(cube.lastRotation)); // INIT
-
-  if (cube.lastRotation === 'down') {
-    if (swipeDirection === DIRECTION.UP) {
-      cube.state = 'ACTIVE';
-      cube.rotate('up');
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-    } else if ([DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(swipeDirection)) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
-    }
-  } else if (cube.lastRotation === 'right') {
-    if (swipeDirection === DIRECTION.LEFT) {
-      cube.state = 'ACTIVE';
-      cube.rotate('left');
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-    } else if ([DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(swipeDirection)) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.topLeftSteps); // STOP ANIMATION
-    }
-  }
-
-  if (cube.state === 'ACTIVE') {
-    cubeDom.removeEventListener('transitionend', cube.topLeftSteps);
-    cubeDom.addEventListener('touchend', _activeStateTouchEndHandler);
-  }
-}
-
-function _vertHoriLoopTouchEndHandler(e) {
-  var touchobj = e.changedTouches[0];
-
-  if (startX != null && startX !== touchobj.pageX && startY != null && startY !== touchobj.pageY) {
-    // swipe down
-    if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY > startY) {
-      swipeDirection = DIRECTION.DOWN;
-    } else if (Math.abs(touchobj.pageY - startY) > Math.abs(touchobj.pageX - startX) && touchobj.pageY < startY) {
-      swipeDirection = DIRECTION.UP;
-    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX > startX) {
-      swipeDirection = DIRECTION.RIGHT;
-    } else if (Math.abs(touchobj.pageY - startY) < Math.abs(touchobj.pageX - startX) && touchobj.pageX < startX) {
-      swipeDirection = DIRECTION.LEFT;
-    }
-  } // INIT
-
-
-  if (cube.lastRotation === 'down') {
-    if (swipeDirection === DIRECTION.UP) {
-      cube.state = 'ACTIVE';
-      cube.rotate('up');
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
-    } else if ([DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(swipeDirection)) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop); // STOP ANIMATION
-    }
-  } else if (cube.lastRotation === 'left') {
-    if (swipeDirection === DIRECTION.RIGHT) {
-      cube.state = 'ACTIVE';
-      cube.rotate('right');
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop);
-    } else if ([DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(swipeDirection)) {
-      cube.state = 'ACTIVE';
-      cube.dom.removeEventListener('transitionend', cube.vertHoriLoop); // STOP ANIMATION
-    }
-  }
-
-  console.log(cube.state);
-
-  if (cube.state === 'ACTIVE') {
-    console.log(cube.state); // cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
-
-    cubeDom.removeEventListener('transitionend', cube.vertHoriLoop);
-    cubeDom.addEventListener('touchend', _activeStateTouchEndHandler);
-  }
-}
-
-function _init() {
-  cubeDom.addEventListener('touchstart', _touchStartHandler);
-  cubeDom.addEventListener('touchmove', _touchMoveHandler);
-
-  if (cube.state === 'INIT') {
-    // cubeDom.addEventListener('touchend', _topLeftStepsTouchEndHandler);
-    cubeDom.addEventListener('touchend', _vertHoriLoopTouchEndHandler);
-  }
-}
-
-_init();
+cube.vertHoriLoop();
