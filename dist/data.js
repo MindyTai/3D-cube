@@ -832,20 +832,75 @@ var Cube = function Cube(dom) {
   });
 
   _defineProperty(this, "topLeftSteps", function () {
-    console.log(_this.side);
+    console.log(_this.transformValArray);
 
     if (_this.side === 'A') {
       _this.rotate('down');
+
+      _this.transformVal = _this.dom.style.transform;
+
+      _this.transformValArray.push(_this.transformVal);
+
+      _this.turn += 1;
+      console.log(_this.transformValArray);
+      console.log(_this.transformVal);
+      console.log(_this.turn);
+      console.log('appppppppppplw');
     } else if (_this.side === 'B') {
       _this.rotate('right');
+
+      _this.transformVal = _this.dom.style.transform;
+
+      _this.transformValArray.push(_this.transformVal);
+
+      console.log(_this.transformValArray);
+      console.log(_this.transformVal);
+      _this.turn += 1;
+      console.log(_this.turn);
     } else if (_this.side === 'F') {
       _this.rotate('down');
+
+      _this.transformVal = _this.dom.style.transform;
+
+      _this.transformValArray.push(_this.transformVal);
+
+      console.log(_this.transformVal);
+      console.log(_this.transformValArray);
+      _this.turn += 1;
+      console.log(_this.turn);
     } else if (_this.side === 'C') {
       _this.rotate('right');
+
+      _this.transformVal = _this.dom.style.transform;
+
+      _this.transformValArray.push(_this.transformVal);
+
+      console.log(_this.transformVal);
+      console.log(_this.transformValArray);
+      _this.turn += 1;
+      console.log(_this.turn);
     } else if (_this.side === 'D') {
       _this.rotate('down');
+
+      _this.transformVal = _this.dom.style.transform;
+
+      _this.transformValArray.push(_this.transformVal);
+
+      console.log(_this.transformVal);
+      console.log(_this.transformValArray);
+      _this.turn += 1;
+      console.log(_this.turn);
     } else if (_this.side === 'E') {
       _this.rotate('right');
+
+      _this.transformVal = _this.dom.style.transform;
+
+      _this.transformValArray.push(_this.transformVal);
+
+      console.log(_this.transformVal);
+      console.log(_this.transformValArray);
+      _this.turn += 1;
+      console.log(_this.turn);
     }
   });
 
@@ -873,8 +928,78 @@ var Cube = function Cube(dom) {
     }
   });
 
+  _defineProperty(this, "topLeftStepsMouseUpHandler", function (e) {
+    if (_this.startX != null && _this.startX !== e.clientX && _this.startY != null && _this.startY !== e.clientY) {
+      if (Math.abs(e.clientY - _this.startY) > Math.abs(e.clientX - _this.startX) && e.clientY > _this.startY) {
+        _this.swipeDirection = DIRECTION.DOWN;
+      } else if (Math.abs(e.clientY - _this.startY) > Math.abs(e.clientX - _this.startX) && e.clientY < _this.startY) {
+        _this.swipeDirection = DIRECTION.UP;
+      } else if (Math.abs(e.clientY - _this.startY) < Math.abs(e.clientX - _this.startX) && e.clientX > _this.startX) {
+        _this.swipeDirection = DIRECTION.RIGHT;
+      } else if (Math.abs(e.clientY - _this.startY) < Math.abs(e.clientX - _this.startX) && e.clientX < _this.startX) {
+        _this.swipeDirection = DIRECTION.LEFT;
+      }
+    }
+
+    if (_this.lastRotation === 'down') {
+      console.log(_this.nextVal);
+
+      if (_this.swipeDirection === DIRECTION.UP) {
+        _this.state = 'ACTIVE';
+        _this.dom.style.transform = _this.transformValArray[_this.turn - 1];
+
+        _this.dom.classList.add('transition');
+
+        console.log(_this.turn); // this.rotate('up');
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps);
+      } else if ([DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(_this.swipeDirection)) {
+        _this.dom.style.transform = _this.nextVal;
+
+        _this.dom.classList.add('transition');
+
+        console.log(_this.swipeDirection);
+        _this.state = 'ACTIVE'; // this.rotate('down');
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps); // STOP ANIMATION
+
+      }
+    } else if (_this.lastRotation === 'right') {
+      if (_this.swipeDirection === DIRECTION.LEFT) {
+        _this.state = 'ACTIVE'; // this.rotate('left');
+
+        _this.dom.style.transform = _this.transformValArray[_this.turn - 2];
+
+        _this.dom.classList.add('transition');
+
+        console.log("right".concat(_this.turn));
+        console.log(_this.transformValArray[_this.turn]);
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps);
+      } else if ([DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(_this.swipeDirection)) {
+        _this.state = 'ACTIVE';
+        _this.dom.style.transform = _this.nextVal;
+
+        _this.dom.classList.add('transition'); // this.rotate('right');
+
+
+        _this.dom.removeEventListener('transitionend', _this.topLeftSteps); // STOP ANIMATION
+
+      }
+    }
+
+    if (_this.state === 'ACTIVE') {
+      _this.dom.removeEventListener('transitionend', _this.topLeftSteps);
+
+      document.removeEventListener('mouseup', _this.topLeftStepsMouseUpHandler);
+      document.addEventListener('mouseup', _this.activeStateMouseUpHandler);
+    }
+  });
+
   _defineProperty(this, "activeStateMouseUpHandler", function (e) {
-    if (_this.startX != null && _this.startX !== e.movementX && _this.startY != null && _this.startY !== e.movementY) {
+    console.log('mouseup');
+
+    if (_this.startX != null && _this.startX !== e.clientX && _this.startY != null && _this.startY !== e.clientY) {
       if (Math.abs(e.clientY - _this.startY) > Math.abs(e.clientX - _this.startX) && e.clientY > _this.startY) {
         _this.swipeDirection = DIRECTION.DOWN;
 
@@ -912,6 +1037,26 @@ var Cube = function Cube(dom) {
 
       _this.dom.classList.remove('transition');
     }
+  });
+
+  _defineProperty(this, "mouseDown", function (e) {
+    _this.dom.removeEventListener('mouseenter', _this.mouseEnter);
+
+    _this.dom.removeEventListener('mouseleave', _this.mouseLeave);
+
+    _this.startX = e.clientX;
+    _this.startY = e.clientY;
+    console.log(_this.nextVal);
+    var transformValue = window.getComputedStyle(_this.dom).getPropertyValue('transform');
+    _this.dom.style.transform = transformValue;
+  });
+
+  _defineProperty(this, "mouseMove", function (e) {
+    e.stopPropagation();
+
+    if (e.cancelable) {
+      e.preventDefault();
+    } else return false;
   });
 
   _defineProperty(this, "touchStartHandler", function (e) {
@@ -1067,38 +1212,39 @@ var Cube = function Cube(dom) {
   this.dom = dom;
   this.state = STATE.INIT;
   this.topLeftSteps = this.topLeftSteps.bind(this);
-  this.dom.style.transform = ''; // this.dom.addEventListener('transitionend', this.vertHoriLoop);
-
+  this.dom.style.transform = '';
   this.flag = 0;
   this.mouseFlag = 0;
   this.nextVal = undefined;
   this.startX = undefined;
   this.startY = undefined;
   this.swipeDirection = undefined;
+  this.transformValArray = ['rotate3d(0, 0, 0, 90deg)'];
+  this.transformVal = 'rotate3d(0, 0, 0, 90deg)';
+  this.turn = 0;
+  this.isTouchEventSupported = 'ontouchstart' in window;
+  this.downEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
+  this.moveEvent = this.isTouchEventSupported ? 'touchmove' : 'mousemove';
+  this.upEvent = this.isTouchEventSupported ? 'touchend' : 'mouseup';
+  this.mouseDownFuc = this.mouseDown;
+  this.mouseMoveFuc = this.mouseMove;
+  this.mouseUpFuc = this.topLeftStepsMouseUpHandler;
+  this.touchStartFunc = this.touchStartHandler;
+  this.touchMoveFunc = this.touchMoveHandler;
+  this.touchEndFunc = this.topLeftStepsTouchEndHandler;
+  this.downFuc = this.isTouchEventSupported ? this.touchStartFunc : this.mouseDown;
+  this.moveFunc = this.isTouchEventSupported ? this.touchMoveFunc : this.mouseMoveFuc;
+  this.upFunc = this.isTouchEventSupported ? this.touchEndFunc : this.mouseUpFuc; // this.dom.addEventListener('transitionend', this.vertHoriLoop);
+
   this.dom.addEventListener('transitionend', this.topLeftSteps);
+  this.dom.addEventListener(this.downEvent, this.downFuc);
+  this.dom.addEventListener(this.moveEvent, this.moveFunc);
+  this.dom.addEventListener('touchend', this.topLeftStepsTouchEndHandler);
+  document.addEventListener('mouseup', this.topLeftStepsMouseUpHandler);
   this.dom.addEventListener('mouseleave', this.mouseLeave);
   this.dom.addEventListener('mouseenter', this.mouseEnter);
-  this.dom.addEventListener('mousedown', function (e) {
-    _this.dom.removeEventListener('mouseenter', _this.mouseEnter);
-
-    _this.dom.removeEventListener('mouseleave', _this.mouseLeave);
-
-    _this.startX = e.clientX;
-    _this.startY = e.clientY;
-  }); // this.dom.addEventListener('mouseup', this.);
-
-  this.dom.addEventListener('mousemove', function (e) {
-    e.stopPropagation();
-
-    if (e.cancelable) {
-      e.preventDefault();
-    } else return false;
-  });
-  this.dom.addEventListener('touchstart', this.touchStartHandler);
-  this.dom.addEventListener('touchmove', this.touchMoveHandler);
-  this.dom.addEventListener('touchend', this.topLeftStepsTouchEndHandler);
 };
 
 var cubeDom = document.getElementsByClassName('space')[0];
 var cube = new Cube(cubeDom);
-cube.vertHoriLoop();
+cube.topLeftSteps();
