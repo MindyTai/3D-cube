@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  perspective: 3000px;
 }
 
 .videoBg{
@@ -18,8 +19,6 @@ body {
   width: 100%;
   height: 100vh;
   background-color: black;
-  perspective: 800px;
-  perspective-origin: center center;
   position: absolute;
 }
 .icon {
@@ -60,6 +59,10 @@ body {
   line-height: 300px;
   color: black;
   font-size: 120px;
+}
+
+.box {
+  transform-style: preserve-3d;
 }
 
 .box1 {
