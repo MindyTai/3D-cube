@@ -1,6 +1,7 @@
-const States = [
+var States = [
   {
     // A
+    id: '1',
     side: {
       front: 'A',
       up: 'B',
@@ -17,6 +18,7 @@ const States = [
     }
   },
   {
+    id: '2',
     side: {
       front: 'A',
       left: 'B',
@@ -26,13 +28,14 @@ const States = [
       down: 'F'
     },
     action: {
-      left: { x: 0, y: 1, z: 0 },
-      right: { x: 0, y: -1, z: 0 },
-      up: { x: 1, y: 0, z: 0 },
-      down: { x: -1, y: 0, z: 0 }
+      left: { x: 1, y: 0, z: 0 },
+      right: { x: -1, y: 0, z: 0 },
+      up: { x: 0, y: 1, z: 0 },
+      down: { x: 0, y: -1, z: 0 }
     }
   },
   {
+    id: '3',
     side: {
       front: 'A',
       left: 'E',
@@ -49,6 +52,7 @@ const States = [
     }
   },
   {
+    id: '4',
     side: {
       front: 'A',
       left: 'D',
@@ -65,6 +69,7 @@ const States = [
     }
   }, // B
   {
+    id: '5',
     side: {
       front: 'B',
       left: 'F',
@@ -81,6 +86,7 @@ const States = [
     }
   },
   {
+    id: '6',
     side: {
       front: 'B',
       left: 'C',
@@ -97,6 +103,7 @@ const States = [
     }
   },
   {
+    id: '7',
     side: {
       front: 'B',
       left: 'E',
@@ -113,6 +120,7 @@ const States = [
     }
   },
   {
+    id: '8',
     side: {
       front: 'B',
       left: 'A',
@@ -129,6 +137,7 @@ const States = [
     }
   }, // C
   {
+    id: '9',
     side: {
       front: 'C',
       left: 'B',
@@ -140,11 +149,12 @@ const States = [
     action: {
       left: { x: -1, y: 0, z: 0 },
       right: { x: 1, y: 0, z: 0 },
-      up: { x: 0, y: -1, z: 0 },
-      down: { x: 0, y: 1, z: 0 }
+      up: { x: 0, y: 1, z: 0 },
+      down: { x: 0, y: -1, z: 0 }
     }
   },
   {
+    id: '10',
     side: {
       front: 'C',
       left: 'E',
@@ -161,6 +171,7 @@ const States = [
     }
   },
   {
+    id: '11',
     side: {
       front: 'C',
       left: 'D',
@@ -172,11 +183,12 @@ const States = [
     action: {
       left: { x: 1, y: 0, z: 0 },
       right: { x: -1, y: 0, z: 0 },
-      up: { x: 0, y: 1, z: 0 },
-      down: { x: 0, y: -1, z: 0 }
+      up: { x: 0, y: -1, z: 0 },
+      down: { x: 0, y: 1, z: 0 }
     }
   },
   {
+    id: '12',
     side: {
       front: 'C',
       left: 'F',
@@ -194,6 +206,7 @@ const States = [
   },
   // D
   {
+    id: '13',
     side: {
       front: 'D',
       left: 'F',
@@ -210,6 +223,7 @@ const States = [
     }
   },
   {
+    id: '14',
     side: {
       front: 'D',
       left: 'A',
@@ -226,6 +240,7 @@ const States = [
     }
   },
   {
+    id: '15',
     side: {
       front: 'D',
       left: 'E',
@@ -242,6 +257,7 @@ const States = [
     }
   },
   {
+    id: '16',
     side: {
       front: 'D',
       left: 'C',
@@ -258,6 +274,7 @@ const States = [
     }
   }, // E
   {
+    id: '17',
     side: {
       front: 'E',
       left: 'A',
@@ -274,6 +291,7 @@ const States = [
     }
   },
   {
+    id: '18',
     side: {
       front: 'E',
       left: 'B',
@@ -285,11 +303,12 @@ const States = [
     action: {
       left: { x: 0, y: 0, z: -1 },
       right: { x: 0, y: 0, z: 1 },
-      up: { x: 0, y: -1, z: 0 },
-      down: { x: 0, y: 1, z: 0 }
+      up: { x: 0, y: 1, z: 0 },
+      down: { x: 0, y: -1, z: 0 }
     }
   },
   {
+    id: '19',
     side: {
       front: 'E',
       left: 'C',
@@ -306,6 +325,7 @@ const States = [
     }
   },
   {
+    id: '20',
     side: {
       front: 'E',
       left: 'D',
@@ -317,11 +337,12 @@ const States = [
     action: {
       left: { x: 0, y: 0, z: 1 },
       right: { x: 0, y: 0, z: -1 },
-      up: { x: 0, y: 1, z: 0 },
-      down: { x: 0, y: -1, z: 0 }
+      up: { x: 0, y: -1, z: 0 },
+      down: { x: 0, y: 1, z: 0 }
     }
   }, // F
   {
+    id: '21',
     side: {
       front: 'F',
       left: 'C',
@@ -338,6 +359,7 @@ const States = [
     }
   },
   {
+    id: '22',
     side: {
       front: 'F',
       left: 'B',
@@ -349,11 +371,12 @@ const States = [
     action: {
       left: { x: 0, y: 0, z: 1 },
       right: { x: 0, y: 0, z: -1 },
-      up: { x: 0, y: -1, z: 0 },
-      down: { x: 0, y: 1, z: 0 }
+      up: { x: 0, y: 1, z: 0 },
+      down: { x: 0, y: -1, z: 0 }
     }
   },
   {
+    id: '23',
     side: {
       front: 'F',
       left: 'A',
@@ -370,6 +393,7 @@ const States = [
     }
   },
   {
+    id: '24',
     side: {
       front: 'F',
       left: 'D',
@@ -387,14 +411,14 @@ const States = [
   }
 ];
 
-const DIRECTION = {
+var DIRECTION = {
   LEFT: 'left',
   RIGHT: 'right',
   UP: 'up',
   DOWN: 'down'
 };
 
-const STATE = {
+var STATE = {
   INIT: 'INIT',
   ACTIVE: 'ACTIVE'
 };
@@ -422,8 +446,8 @@ function Cube(dom) {
   this.isTouchEventSupported = 'ontouchstart' in window;
 
   // mouse event
-  this.mouseDownHandler = this.mouseDown;
-  this.mouseMoveHandler = this.mouseMove;
+  // this.mouseDownHandler = this.mouseDownHandler;
+  // this.mouseMoveHandler = this.mouseMoveHandler;
   this.mouseUpHandler = this.topLeftStepsMouseUpHandler;
   this.vertHoriLoopMouseUpHandler = this.vertHoriLoopMouseUpHandler;
   // touch event
@@ -438,7 +462,7 @@ function Cube(dom) {
   // choose handler
   this.downHandler = this.isTouchEventSupported
     ? this.touchStartHandler
-    : this.mouseDown;
+    : this.mouseDownHandler;
   this.moveHandler = this.isTouchEventSupported
     ? this.touchMoveHandler
     : this.mouseMoveHandler;
@@ -472,16 +496,20 @@ function Cube(dom) {
   this.dom.addEventListener(this.moveEvent, this.moveHandler);
   this.dom.addEventListener(this.upEvent, this.topLeftStepsUpHandler);
   // this.dom.addEventListener(this.upEvent, this.vertHoriLoopUpHandler);
-  this.dom.addEventListener('mouseleave', this.mouseLeave);
-  this.dom.addEventListener('mouseenter', this.mouseEnter);
+  if (!this.isTouchEventSupported) {
+    this.dom.addEventListener('mouseleave', this.mouseLeave);
+    this.dom.addEventListener('mouseenter', this.mouseEnter);
+  }
 }
 
 Cube.prototype = {
   getDegree(index, rotation) {
+    console.log(index + 1, rotation);
+    console.log(States[index].action[rotation]);
     var x = States[index].action[rotation].x;
     var y = States[index].action[rotation].y;
     var z = States[index].action[rotation].z;
-    return `rotate3d(${x},${y},${z},90deg)`;
+    return 'rotate3d(' + x + ',' + y + ',' + z + ',90deg)';
   },
 
   findIndex() {
@@ -491,7 +519,7 @@ Cube.prototype = {
         this.lastSide === States[i].side[this.lastRotation]
       ) {
         this.stateIdx = i;
-        // console.log(this.stateIdx);
+        console.log(this.stateIdx + 1);
         return;
       }
     }
@@ -804,7 +832,7 @@ Cube.prototype = {
   mouseEnter() {
     if (this.mouseFlag === 0) {
       this.nextVal = this.dom.style.transform;
-      const transformValue = window
+      var transformValue = window
         .getComputedStyle(this.dom)
         .getPropertyValue('transform');
 
@@ -813,20 +841,20 @@ Cube.prototype = {
     }
   },
 
-  mouseDown(e) {
+  mouseDownHandler(e) {
     this.dom.removeEventListener('mouseenter', this.mouseEnter);
     this.dom.removeEventListener('mouseleave', this.mouseLeave);
     this.startX = e.clientX;
     this.startY = e.clientY;
 
-    const transformValue = window
+    var transformValue = window
       .getComputedStyle(this.dom)
       .getPropertyValue('transform');
 
     this.dom.style.transform = transformValue;
   },
 
-  mouseMove(e) {
+  mouseMoveHandler(e) {
     e.stopPropagation();
     if (e.cancelable) {
       e.preventDefault();
@@ -834,9 +862,10 @@ Cube.prototype = {
   },
 
   touchStartHandler(e) {
-    const touchobj = e.changedTouches[0];
+    var touchobj = e.changedTouches[0];
     this.startX = touchobj.pageX;
     this.startY = touchobj.pageY;
+    console.log('侯');
   },
 
   touchMoveHandler(e) {
@@ -844,10 +873,11 @@ Cube.prototype = {
     if (e.cancelable) {
       e.preventDefault();
     } else return false;
+    console.log('仲');
   },
 
   activeStateTouchEndHandler(e) {
-    const touchobj = e.changedTouches[0];
+    var touchobj = e.changedTouches[0];
     if (
       this.startX != null &&
       this.startX !== touchobj.pageX &&
@@ -888,7 +918,8 @@ Cube.prototype = {
   },
 
   topLeftStepsTouchEndHandler(e) {
-    const touchobj = e.changedTouches[0];
+    console.log('威');
+    var touchobj = e.changedTouches[0];
     if (
       this.startX != null &&
       this.startX !== touchobj.pageX &&
@@ -901,6 +932,7 @@ Cube.prototype = {
         touchobj.pageY > this.startY
       ) {
         this.swipeDirection = DIRECTION.DOWN;
+        console.log('威');
         // cube.rotate(DIRECTION.DOWN);
       } else if (
         Math.abs(touchobj.pageY - this.startY) >
@@ -908,6 +940,7 @@ Cube.prototype = {
         touchobj.pageY < this.startY
       ) {
         this.swipeDirection = DIRECTION.UP;
+        console.log('威');
         // cube.rotate(DIRECTION.UP);
       } else if (
         Math.abs(touchobj.pageY - this.startY) <
@@ -915,6 +948,7 @@ Cube.prototype = {
         touchobj.pageX > this.startX
       ) {
         this.swipeDirection = DIRECTION.RIGHT;
+        console.log('威');
         // cube.rotate(DIRECTION.RIGHT);
       } else if (
         Math.abs(touchobj.pageY - this.startY) <
@@ -922,6 +956,7 @@ Cube.prototype = {
         touchobj.pageX < this.startX
       ) {
         this.swipeDirection = DIRECTION.LEFT;
+        console.log('威');
         // cube.rotate(DIRECTION.LEFT);
       }
     }
@@ -931,6 +966,7 @@ Cube.prototype = {
         this.state = STATE.ACTIVE;
         this.rotate('up');
         this.dom.removeEventListener('transitionend', this.topLeftSteps);
+        console.log('威');
       } else if (
         [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
           this.swipeDirection
@@ -938,12 +974,14 @@ Cube.prototype = {
       ) {
         this.state = STATE.ACTIVE;
         this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
+        console.log('威');
       }
     } else if (this.lastRotation === 'right') {
       if (this.swipeDirection === DIRECTION.LEFT) {
         this.state = STATE.ACTIVE;
         this.rotate('left');
         this.dom.removeEventListener('transitionend', this.topLeftSteps);
+        console.log('威');
       } else if (
         [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(
           this.swipeDirection
@@ -951,17 +989,21 @@ Cube.prototype = {
       ) {
         this.state = STATE.ACTIVE;
         this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
+        console.log('威');
       }
     }
 
     if (this.state === STATE.ACTIVE) {
       this.dom.removeEventListener('transitionend', this.topLeftSteps);
       this.dom.addEventListener('touchend', this.activeStateTouchEndHandler);
+      console.log('威');
+    } else {
+      console.log('87');
     }
   },
 
   vertHoriLoopTouchEndHandler(e) {
-    const touchobj = e.changedTouches[0];
+    var touchobj = e.changedTouches[0];
     if (
       this.startX != null &&
       this.startX !== touchobj.pageX &&
@@ -1031,8 +1073,11 @@ Cube.prototype = {
   }
 };
 
-const cubeDom = document.getElementsByClassName('space')[0];
-const cube = new Cube(cubeDom);
+var cubeDom = document.getElementsByClassName('space')[0];
+var cube = new Cube(cubeDom);
 
 cube.topLeftSteps();
 // cube.vertHoriLoop();
+
+console.log('ontouchend' in window);
+console.log('onmouseup' in window);

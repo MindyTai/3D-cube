@@ -1,7 +1,6 @@
 body {
   margin: 0;
   padding: 0;
-  perspective: 3000px;
 }
 
 .videoBg{
@@ -20,13 +19,13 @@ body {
   height: 100vh;
   background-color: black;
   position: absolute;
+  perspective: 800px;
 }
 .icon {
   background-image: url(https://trello-attachments.s3.amazonaws.com/5ceb8c5d12d1522c0ef32fcb/40x40/c7137fc299d108e8892f630d402d92d2/icon-for-six-side.gif);
   background-repeat: no-repeat;
   height: 40px;
   width: 40px;
-
   position: relative;
   margin: auto;
   z-index: 2;
@@ -43,6 +42,7 @@ body {
   margin: auto;
   /* animation: HorizontalRotate 6s linear infinite; */
   transition-property: transform;
+ 
 }
 
 .transition {
