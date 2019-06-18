@@ -450,14 +450,14 @@ function Cube(dom) {
   this.dom.addEventListener('transitionend', this.vertHoriLoop);
 
   // choose event
-  this.downEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
+  this.startEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
   this.moveEvent = this.isTouchEventSupported ? 'touchmove' : 'mousemove';
-  this.upEvent = this.isTouchEventSupported ? 'touchend' : 'mouseup';
+  this.endEvent = this.isTouchEventSupported ? 'touchend' : 'mouseup';
 
   // mouseup, touchend event
   this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
   this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
-  if (this.upEvent === 'mouseup') {
+  if (this.endEvent === 'mouseup') {
     document.addEventListener('mouseup', this.topLeftStepsEndHandler);
     // document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
   } else {
@@ -467,7 +467,7 @@ function Cube(dom) {
 
   // mousedown, touchstart event
   this.startHandler = this.startHandler.bind(this);
-  this.dom.addEventListener(this.downEvent, this.startHandler);
+  this.dom.addEventListener(this.startEvent, this.startHandler);
 
   // mousemove, touchmove event
   this.moveHandler = this.moveHandler.bind(this);
@@ -749,12 +749,8 @@ Cube.prototype = {
 
     if (this.state === STATE.ACTIVE) {
       this.dom.removeEventListener('transitionend', this.topLeftSteps);
-      if (touchobj) {
-        this.dom.addEventListener('touchend', this.activeStateEndHandler);
-      } else {
-        this.dom.removeEventListener('mouseup', this.topLeftStepsEndHandler);
-        this.dom.addEventListener('mouseup', this.activeStateEndHandler);
-      }
+      this.dom.removeEventListener(this.endEvent, this.topLeftStepsEndHandler);
+      this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
     }
   },
 
@@ -840,12 +836,8 @@ Cube.prototype = {
     }
     if (this.state === STATE.ACTIVE) {
       this.dom.removeEventListener('transitionend', this.vertHoriLoop);
-      if (touchobj) {
-        this.dom.addEventListener('touchend', this.activeStateEndHandler);
-      } else {
-        this.dom.removeEventListener('mouseup', this.vertHoriLoopEndHandler);
-        this.dom.addEventListener('mouseup', this.activeStateEndHandler);
-      }
+      this.dom.removeEventListener(this.endEvent, this.vertHoriLoopEndHandler);
+      this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
     }
   },
 
