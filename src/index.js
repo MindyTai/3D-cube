@@ -457,8 +457,13 @@ function Cube(dom) {
   // mouseup, touchend event
   this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
   this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
-  this.dom.addEventListener(this.upEvent, this.topLeftStepsEndHandler);
-  // this.dom.addEventListener(this.upEvent, this.vertHoriLoopEndHandler);
+  if (this.upEvent === 'mouseup') {
+    document.addEventListener('mouseup', this.topLeftStepsEndHandler);
+    // document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
+  } else {
+    this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
+    // this.dom.addEventListener('touchend', this.vertHoriLoopEndHandler);
+  }
 
   // mousedown, touchstart event
   this.startHandler = this.startHandler.bind(this);
@@ -501,7 +506,6 @@ Cube.prototype = {
         return;
       }
     }
-    console.log('gg');
   },
 
   forceRender() {
@@ -679,25 +683,21 @@ Cube.prototype = {
         endY > this.startY
       ) {
         this.swipeDirection = DIRECTION.DOWN;
-        // cube.rotate(DIRECTION.DOWN);
       } else if (
         Math.abs(endY - this.startY) > Math.abs(endX - this.startX) &&
         endY < this.startY
       ) {
         this.swipeDirection = DIRECTION.UP;
-        // cube.rotate(DIRECTION.UP);
       } else if (
         Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
         endX > this.startX
       ) {
         this.swipeDirection = DIRECTION.RIGHT;
-        // cube.rotate(DIRECTION.RIGHT);
       } else if (
         Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
         endX < this.startX
       ) {
         this.swipeDirection = DIRECTION.LEFT;
-        // cube.rotate(DIRECTION.LEFT);
       }
     }
     // INIT
@@ -839,7 +839,6 @@ Cube.prototype = {
       }
     }
     if (this.state === STATE.ACTIVE) {
-      // cube.dom.removeEventListener('transitionend', cube.topLeftSteps);
       this.dom.removeEventListener('transitionend', this.vertHoriLoop);
       if (touchobj) {
         this.dom.addEventListener('touchend', this.activeStateEndHandler);
