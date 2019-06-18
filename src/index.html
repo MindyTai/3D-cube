@@ -3,15 +3,83 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>3D cube</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
   <body>
+    <script>
+      window.ppsOptions = {
+      templatePath: 'http://localhost:3000/'
+      }
+      window.ppsCreatives = window.ppsCreatives || [];
+      window.ppsCreatives.push({
+      creativeId: 'rolling-cube-six-sides',
+      targetId: 'rolling-cube-six-sides',
+      templateKey: 'src',
+      version: '1',
+      width: 600,
+      height: 600,
+      assets: [{
+        "type": "VIDEO",
+        "key": "side1",
+        "src": "./assets/video/assets_9c4406e.mp4"
+      }, {
+        "type": "IMAGE",
+        "key": "side2",
+        "src": "./assets/image/assets_300250_1.png"
+      }, {
+        "type": "IMAGE",
+        "key": "side3",
+        "src": "./assets/image/assets_300250_1.png"
+      }, {
+        "type": "IMAGE",
+        "key": "side4",
+        "src": "./assets/image/assets_300250_1.png"
+      }, {
+        "type": "IMAGE",
+        "key": "side5",
+        "src": "./assets/image/assets_300250_1.png"
+      }, {
+        "type": "IMAGE",
+        "key": "side6",
+        "src": "./assets/image/assets_300250_1.png"
+      }, {
+        "type": "URL",
+        "key": "landingPage1",
+        "content": "https://www.tenmax.io/?utm_source=1"
+      }, {
+        "type": "URL",
+        "key": "landingPage2",
+        "content": "https://www.tenmax.io/?utm_source=2"
+      }, {
+        "type": "URL",
+        "key": "landingPage3",
+        "content": "https://www.tenmax.io/?utm_source=3"
+      }, {
+        "type": "URL",
+        "key": "landingPage4",
+        "content": "https://www.tenmax.io/?utm_source=4"
+      }, {
+        "type": "URL",
+        "key": "landingPage5",
+        "content": "https://www.tenmax.io/?utm_source=5"
+      }, {
+        "type": "URL",
+        "key": "landingPage6",
+        "content": "https://www.tenmax.io/?utm_source=6"
+      }
+      ],
+      customScript: null,
+      defaultAutoplay: true
+      });
+    </script>
     <div class="camera">
       <div class="icon"></div>
     <div class="space">
       <div class="box box1 videoBg" >
-        <video width="600" height="600" loop muted autoplay src="./video/assets_9c4406e.mp4"  class="video" type="video/ mp4"></video>
+        <video width="600" height="600" loop muted autoplay src="./assets/video/assets_9c4406e.mp4"  class="video" type="video/ mp4"></video>
       </div>
       <div class="box box5">2</div>
       <div class="box box4">6</div>

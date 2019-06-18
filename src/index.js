@@ -424,17 +424,15 @@ var STATE = {
 };
 
 function Cube(dom) {
+  this.dom = dom;
   this.stateIdx = 0;
   this.side = 'A';
   this.lastSide = undefined;
   this.lastRotation = undefined;
-  this.dom = dom;
   this.state = STATE.INIT;
   this.dom.style.transform = '';
-
   this.flag = 0;
-  this.mouseFlag = 0;
-  this.nextVal = undefined;
+  this.nextTransformVal = undefined;
   this.startX = undefined;
   this.startY = undefined;
   this.swipeDirection = undefined;
@@ -444,26 +442,15 @@ function Cube(dom) {
   this.isTouchEventSupported = 'ontouchstart' in window;
 
   // animation
-  this.topLeftSteps = this.topLeftSteps.bind(this);
-  // this.vertHoriLoop = this.vertHoriLoop.bind(this);
-  this.dom.addEventListener('transitionend', this.topLeftSteps);
+  // this.topLeftSteps = this.topLeftSteps.bind(this);
+  this.vertHoriLoop = this.vertHoriLoop.bind(this);
+  // this.dom.addEventListener('transitionend', this.topLeftSteps);
   this.dom.addEventListener('transitionend', this.vertHoriLoop);
 
   // choose event
   this.startEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
   this.moveEvent = this.isTouchEventSupported ? 'touchmove' : 'mousemove';
   this.endEvent = this.isTouchEventSupported ? 'touchend' : 'mouseup';
-
-  // mouseup, touchend event
-  this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
-  this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
-  if (this.endEvent === 'mouseup') {
-    document.addEventListener('mouseup', this.topLeftStepsEndHandler);
-    // document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
-  } else {
-    this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
-    // this.dom.addEventListener('touchend', this.vertHoriLoopEndHandler);
-  }
 
   // mousedown, touchstart event
   this.startHandler = this.startHandler.bind(this);
@@ -472,6 +459,17 @@ function Cube(dom) {
   // mousemove, touchmove event
   this.moveHandler = this.moveHandler.bind(this);
   this.dom.addEventListener(this.moveEvent, this.moveHandler);
+
+  // mouseup, touchend event
+  this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
+  this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
+  if (!this.isTouchEventSupported) {
+    // document.addEventListener('mouseup', this.topLeftStepsEndHandler);
+    document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
+  } else {
+    // this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
+    this.dom.addEventListener('touchend', this.vertHoriLoopEndHandler);
+  }
 
   // mouseenter, mouseleave event
   this.mouseLeave = this.mouseLeave.bind(this);
@@ -547,101 +545,61 @@ Cube.prototype = {
   topLeftSteps() {
     if (this.side === 'A') {
       this.rotate('down');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'B') {
       this.rotate('right');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'F') {
       this.rotate('down');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'C') {
       this.rotate('right');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'D') {
       this.rotate('down');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'E') {
       this.rotate('right');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     }
+    this.transformVal = this.dom.style.transform;
+    this.transformValArray.push(this.transformVal);
+    this.turn += 1;
   },
 
   vertHoriLoop() {
     if (this.side === 'A' && this.flag === 0) {
       this.rotate('down');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'B' && this.flag === 0) {
       this.rotate('down');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'C' && this.flag === 0) {
       this.rotate('down');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'D' && this.flag === 0) {
       this.rotate('down');
       this.flag = 1;
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'A' && this.flag === 1) {
       this.rotate('left');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'E' && this.flag === 1) {
       this.rotate('left');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'C' && this.flag === 1) {
       this.rotate('left');
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     } else if (this.side === 'F' && this.flag === 1) {
       this.rotate('left');
       this.flag = 0;
-      this.transformVal = this.dom.style.transform;
-      this.transformValArray.push(this.transformVal);
-      this.turn += 1;
     }
+    this.transformVal = this.dom.style.transform;
+    this.transformValArray.push(this.transformVal);
+    this.turn += 1;
   },
 
   mouseLeave() {
-    if (this.mouseFlag === 0) {
-      this.dom.classList.add('transition');
-      this.dom.style.transform = this.nextVal;
-      // 因為transitionend,所以動畫繼續
-    }
+    this.dom.classList.add('transition');
+    this.dom.style.transform = this.nextTransformVal;
+    // 因為transitionend,所以動畫繼續
   },
 
   mouseEnter() {
-    if (this.mouseFlag === 0) {
-      this.nextVal = this.dom.style.transform;
-      var transformValue = window
-        .getComputedStyle(this.dom)
-        .getPropertyValue('transform');
+    this.nextTransformVal = this.dom.style.transform;
+    var transformValue = window
+      .getComputedStyle(this.dom)
+      .getPropertyValue('transform');
 
-      this.dom.style.transform = transformValue;
-      this.dom.classList.remove('transition');
-    }
+    this.dom.style.transform = transformValue;
+    this.dom.classList.remove('transition');
   },
 
   startHandler(e) {
@@ -719,7 +677,7 @@ Cube.prototype = {
         this.state = STATE.ACTIVE;
         this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
         if (!touchobj) {
-          this.dom.style.transform = this.nextVal;
+          this.dom.style.transform = this.nextTransformVal;
           this.dom.classList.add('transition');
         }
       }
@@ -741,7 +699,7 @@ Cube.prototype = {
         this.state = STATE.ACTIVE;
         this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
         if (!touchobj) {
-          this.dom.style.transform = this.nextVal;
+          this.dom.style.transform = this.nextTransformVal;
           this.dom.classList.add('transition');
         }
       }
@@ -807,7 +765,7 @@ Cube.prototype = {
         this.state = STATE.ACTIVE;
         this.dom.removeEventListener('transitionend', this.vertHoriLoop); // STOP ANIMATION
         if (!touchobj) {
-          this.dom.style.transform = this.nextVal;
+          this.dom.style.transform = this.nextTransformVal;
           this.dom.classList.add('transition');
         }
       }
@@ -829,7 +787,7 @@ Cube.prototype = {
         this.state = STATE.ACTIVE;
         this.dom.removeEventListener('transitionend', this.vertHoriLoop); // STOP ANIMATION
         if (!touchobj) {
-          this.dom.style.transform = this.nextVal;
+          this.dom.style.transform = this.nextTransformVal;
           this.dom.classList.add('transition');
         }
       }
@@ -881,8 +839,10 @@ Cube.prototype = {
   }
 };
 
+function VertHoriLoop() {}
+
 var cubeDom = document.getElementsByClassName('space')[0];
 var cube = new Cube(cubeDom);
 
-cube.topLeftSteps();
-// cube.vertHoriLoop();
+// cube.topLeftSteps();
+cube.vertHoriLoop();
