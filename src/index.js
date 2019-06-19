@@ -441,12 +441,6 @@ function Cube(dom) {
   this.turn = 0;
   this.isTouchEventSupported = 'ontouchstart' in window;
 
-  // animation
-  // this.topLeftSteps = this.topLeftSteps.bind(this);
-  this.vertHoriLoop = this.vertHoriLoop.bind(this);
-  // this.dom.addEventListener('transitionend', this.topLeftSteps);
-  this.dom.addEventListener('transitionend', this.vertHoriLoop);
-
   // choose event
   this.startEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
   this.moveEvent = this.isTouchEventSupported ? 'touchmove' : 'mousemove';
@@ -464,10 +458,10 @@ function Cube(dom) {
   this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
   this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
-    // document.addEventListener('mouseup', this.topLeftStepsEndHandler);
+    document.addEventListener('mouseup', this.topLeftStepsEndHandler);
     document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
   } else {
-    // this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
+    this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
     this.dom.addEventListener('touchend', this.vertHoriLoopEndHandler);
   }
 
@@ -540,50 +534,6 @@ Cube.prototype = {
     if (direction === DIRECTION.DOWN) {
       this.nextSide('down', 'up');
     }
-  },
-
-  topLeftSteps() {
-    if (this.side === 'A') {
-      this.rotate('down');
-    } else if (this.side === 'B') {
-      this.rotate('right');
-    } else if (this.side === 'F') {
-      this.rotate('down');
-    } else if (this.side === 'C') {
-      this.rotate('right');
-    } else if (this.side === 'D') {
-      this.rotate('down');
-    } else if (this.side === 'E') {
-      this.rotate('right');
-    }
-    this.transformVal = this.dom.style.transform;
-    this.transformValArray.push(this.transformVal);
-    this.turn += 1;
-  },
-
-  vertHoriLoop() {
-    if (this.side === 'A' && this.flag === 0) {
-      this.rotate('down');
-    } else if (this.side === 'B' && this.flag === 0) {
-      this.rotate('down');
-    } else if (this.side === 'C' && this.flag === 0) {
-      this.rotate('down');
-    } else if (this.side === 'D' && this.flag === 0) {
-      this.rotate('down');
-      this.flag = 1;
-    } else if (this.side === 'A' && this.flag === 1) {
-      this.rotate('left');
-    } else if (this.side === 'E' && this.flag === 1) {
-      this.rotate('left');
-    } else if (this.side === 'C' && this.flag === 1) {
-      this.rotate('left');
-    } else if (this.side === 'F' && this.flag === 1) {
-      this.rotate('left');
-      this.flag = 0;
-    }
-    this.transformVal = this.dom.style.transform;
-    this.transformValArray.push(this.transformVal);
-    this.turn += 1;
   },
 
   mouseLeave() {
@@ -839,10 +789,72 @@ Cube.prototype = {
   }
 };
 
-function VertHoriLoop() {}
+function VertHoriCube(dom) {
+  Cube.call(this, dom);
+  this.vertHoriLoop = this.vertHoriLoop.bind(this);
+  this.dom.addEventListener('transitionend', this.vertHoriLoop);
+}
+
+VertHoriCube.prototype = Object.create(Cube.prototype);
+VertHoriCube.prototype.constructor = VertHoriCube;
+
+VertHoriCube.prototype.vertHoriLoop = function() {
+  if (this.side === 'A' && this.flag === 0) {
+    this.rotate('down');
+  } else if (this.side === 'B' && this.flag === 0) {
+    this.rotate('down');
+  } else if (this.side === 'C' && this.flag === 0) {
+    this.rotate('down');
+  } else if (this.side === 'D' && this.flag === 0) {
+    this.rotate('down');
+    this.flag = 1;
+  } else if (this.side === 'A' && this.flag === 1) {
+    this.rotate('left');
+  } else if (this.side === 'E' && this.flag === 1) {
+    this.rotate('left');
+  } else if (this.side === 'C' && this.flag === 1) {
+    this.rotate('left');
+  } else if (this.side === 'F' && this.flag === 1) {
+    this.rotate('left');
+    this.flag = 0;
+  }
+  this.transformVal = this.dom.style.transform;
+  this.transformValArray.push(this.transformVal);
+  this.turn += 1;
+};
+
+function TopLeftCube(dom) {
+  Cube.call(this, dom);
+  this.topLeftSteps = this.topLeftSteps.bind(this);
+  this.dom.addEventListener('transitionend', this.topLeftSteps);
+}
+
+TopLeftCube.prototype = Object.create(Cube.prototype);
+TopLeftCube.prototype.constructor = TopLeftCube;
+
+TopLeftCube.prototype.topLeftSteps = function() {
+  if (this.side === 'A') {
+    this.rotate('down');
+  } else if (this.side === 'B') {
+    this.rotate('right');
+  } else if (this.side === 'F') {
+    this.rotate('down');
+  } else if (this.side === 'C') {
+    this.rotate('right');
+  } else if (this.side === 'D') {
+    this.rotate('down');
+  } else if (this.side === 'E') {
+    this.rotate('right');
+  }
+  this.transformVal = this.dom.style.transform;
+  this.transformValArray.push(this.transformVal);
+  this.turn += 1;
+};
 
 var cubeDom = document.getElementsByClassName('space')[0];
-var cube = new Cube(cubeDom);
 
-// cube.topLeftSteps();
-cube.vertHoriLoop();
+// var cube = new VertHoriCube(cubeDom);
+var cube = new TopLeftCube(cubeDom);
+
+cube.topLeftSteps();
+// cube.vertHoriLoop();
