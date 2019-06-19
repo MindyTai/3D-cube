@@ -418,37 +418,29 @@ var DIRECTION = {
   DOWN: 'down'
 };
 
-var STATE = {
-  INIT: 'INIT',
-  ACTIVE: 'ACTIVE'
+var ANIMATION_TYPE = {
+  VH: 'VH',
+  TL: 'TL'
 };
 
-function Cube(dom) {
+function _Cube(dom) {
   this.dom = dom;
   this.stateIdx = 0;
   this.side = 'A';
   this.lastSide = undefined;
   this.lastRotation = undefined;
-  this.state = STATE.INIT;
   this.dom.style.transform = '';
-  this.directionChange = 0;
-  this.nextTransformVal = undefined;
+  this.nextTransformVal = '';
   this.startX = undefined;
   this.startY = undefined;
   this.swipeDirection = undefined;
-  this.transformValArray = ['rotate3d(0, 0, 0, 90deg)'];
-  this.transformVal = 'rotate3d(0, 0, 0, 90deg)';
   this.turn = 0;
   this.isTouchEventSupported = 'ontouchstart' in window;
-  this.endX = undefined;
-  this.endY = undefined;
-  this.deltaX = undefined;
-  this.deltaY = undefined;
 
   this.init();
 }
 
-Cube.prototype = {
+_Cube.prototype = {
   init() {
     // choose event
     this.startEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
@@ -463,36 +455,29 @@ Cube.prototype = {
     this.moveHandler = this.moveHandler.bind(this);
     this.dom.addEventListener(this.moveEvent, this.moveHandler);
 
-    // mouseup, touchend event
-    this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
-    this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
-    if (!this.isTouchEventSupported) {
-      document.addEventListener('mouseup', this.topLeftStepsEndHandler);
-      document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
-    } else {
-      this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
-      this.dom.addEventListener('touchend', this.vertHoriLoopEndHandler);
-    }
-
     // mouseenter, mouseleave event
-    this.mouseLeave = this.mouseLeave.bind(this);
-    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeaveHandler = this.mouseLeaveHandler.bind(this);
+    this.mouseEnterHandler = this.mouseEnterHandler.bind(this);
     if (!this.isTouchEventSupported) {
-      this.dom.addEventListener('mouseleave', this.mouseLeave);
-      this.dom.addEventListener('mouseenter', this.mouseEnter);
+      this.dom.addEventListener('mouseleave', this.mouseLeaveHandler);
+      this.dom.addEventListener('mouseenter', this.mouseEnterHandler);
     }
 
     // 第二次互動後
     this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
   },
 
+  getLastTransform(transform) {
+    const pos = transform.lastIndexOf('rotate3d');
+    if (pos === -1) return '';
+    return transform.substr(0, pos - 1);
+  },
+
   getDegree(index, rotation) {
-    console.log(index + 1, rotation);
-    console.log(States[index].action[rotation]);
     var x = States[index].action[rotation].x;
     var y = States[index].action[rotation].y;
     var z = States[index].action[rotation].z;
-    return 'rotate3d(' + x + ',' + y + ',' + z + ',90deg)';
+    return 'rotate3d(' + x + ',' + y + ',' + z + ', 90deg)';
   },
 
   findIndex() {
@@ -502,7 +487,6 @@ Cube.prototype = {
         this.lastSide === States[i].side[this.lastRotation]
       ) {
         this.stateIdx = i;
-        console.log(this.stateIdx + 1);
         return;
       }
     }
@@ -515,15 +499,19 @@ Cube.prototype = {
   nextSide(direction, lastDirection) {
     this.forceRender();
     this.dom.classList.add('transition');
+
     // 現在是哪一面
     this.lastSide = this.side;
+
     // 轉幾度過去
     this.dom.style.transform = this.dom.style.transform.concat(
       ' ',
       this.getDegree(this.stateIdx, direction)
     );
+
     // 下一面是誰
     this.side = States[this.stateIdx].side[lastDirection];
+
     // 更新 stateIdx/side/lastrotation/lastside
     this.lastRotation = direction;
     this.findIndex();
@@ -531,49 +519,46 @@ Cube.prototype = {
 
   rotate(direction) {
     if (direction === DIRECTION.LEFT) {
-      this.nextSide('left', 'right');
+      this.nextSide(direction, DIRECTION.RIGHT);
     }
     if (direction === DIRECTION.RIGHT) {
-      this.nextSide('right', 'left');
+      this.nextSide(direction, DIRECTION.LEFT);
     }
     if (direction === DIRECTION.UP) {
-      this.nextSide('up', 'down');
+      this.nextSide(direction, DIRECTION.DOWN);
     }
     if (direction === DIRECTION.DOWN) {
-      this.nextSide('down', 'up');
+      this.nextSide(direction, DIRECTION.UP);
     }
   },
 
-  mouseLeave() {
+  mouseLeaveHandler() {
     this.dom.classList.add('transition');
     this.dom.style.transform = this.nextTransformVal;
     // 因為transitionend,所以動畫繼續
   },
 
-  mouseEnter() {
+  mouseEnterHandler() {
     this.nextTransformVal = this.dom.style.transform;
-    var transformValue = window
+    var currentTransformVal = window
       .getComputedStyle(this.dom)
       .getPropertyValue('transform');
 
-    this.dom.style.transform = transformValue;
+    this.dom.style.transform = currentTransformVal;
     this.dom.classList.remove('transition');
   },
 
   startHandler(e) {
-    var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    this.endX = touchobj ? touchobj.pageX : e.clientX;
-    this.endY = touchobj ? touchobj.pageY : e.clientY;
+    this.startX = this.isTouchEventSupported
+      ? e.changedTouches[0].pageX
+      : e.clientX;
+    this.startY = this.isTouchEventSupported
+      ? e.changedTouches[0].pageY
+      : e.clientY;
 
-    this.startX = this.endX;
-    this.startY = this.endY;
-    if (!touchobj) {
-      this.dom.removeEventListener('mouseenter', this.mouseEnter);
-      this.dom.removeEventListener('mouseleave', this.mouseLeave);
-      var transformValue = window
-        .getComputedStyle(this.dom)
-        .getPropertyValue('transform');
-      this.dom.style.transform = transformValue;
+    if (!this.isTouchEventSupported) {
+      this.dom.removeEventListener('mouseenter', this.mouseEnterHandler);
+      this.dom.removeEventListener('mouseleave', this.mouseLeaveHandler);
     }
   },
 
@@ -584,180 +569,31 @@ Cube.prototype = {
     } else return false;
   },
 
-  topLeftStepsEndHandler(e) {
-    var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    this.endX = touchobj ? touchobj.pageX : e.clientX;
-    this.endY = touchobj ? touchobj.pageY : e.clientY;
-    this.deltaX = Math.abs(this.endX - this.startX);
-    this.deltaY = Math.abs(this.endY - this.startY);
-    if (
-      this.startX != null &&
-      this.startX !== this.endX &&
-      this.startY != null &&
-      this.startY !== this.endY
-    ) {
-      if (this.deltaY > this.deltaX && this.endY > this.startY) {
-        this.swipeDirection = DIRECTION.DOWN;
-      } else if (this.deltaY > this.deltaX && this.endY < this.startY) {
-        this.swipeDirection = DIRECTION.UP;
-      } else if (this.deltaY < this.deltaX && this.endX > this.startX) {
-        this.swipeDirection = DIRECTION.RIGHT;
-      } else if (this.deltaY < this.deltaX && this.endX < this.startX) {
-        this.swipeDirection = DIRECTION.LEFT;
-      }
-    }
-
-    if (this.lastRotation === 'down') {
-      if (this.swipeDirection === DIRECTION.UP) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.topLeftSteps);
-        if (touchobj) {
-          this.rotate('up');
-        } else {
-          this.dom.style.transform = this.transformValArray[this.turn - 1];
-          this.dom.classList.add('transition');
-        }
-      } else if (
-        [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
-          this.swipeDirection
-        )
-      ) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
-        if (!touchobj) {
-          this.dom.style.transform = this.nextTransformVal;
-          this.dom.classList.add('transition');
-        }
-      }
-    } else if (this.lastRotation === 'right') {
-      if (this.swipeDirection === DIRECTION.LEFT) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.topLeftSteps);
-        if (touchobj) {
-          this.rotate('left');
-        } else {
-          this.dom.style.transform = this.transformValArray[this.turn - 2];
-          this.dom.classList.add('transition');
-        }
-      } else if (
-        [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(
-          this.swipeDirection
-        )
-      ) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.topLeftSteps); // STOP ANIMATION
-        if (!touchobj) {
-          this.dom.style.transform = this.nextTransformVal;
-          this.dom.classList.add('transition');
-        }
-      }
-    }
-
-    if (this.state === STATE.ACTIVE) {
-      this.dom.removeEventListener('transitionend', this.topLeftSteps);
-      this.dom.removeEventListener(this.endEvent, this.topLeftStepsEndHandler);
-      this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
-    }
-  },
-
-  vertHoriLoopEndHandler(e) {
-    var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    this.endX = touchobj ? touchobj.pageX : e.clientX;
-    this.endY = touchobj ? touchobj.pageY : e.clientY;
-    this.deltaX = Math.abs(this.endX - this.startX);
-    this.deltaY = Math.abs(this.endY - this.startY);
-
-    if (
-      this.startX != null &&
-      this.startX !== this.endX &&
-      this.startY != null &&
-      this.startY !== this.endY
-    ) {
-      if (this.deltaY > this.deltaX && this.endY > this.startY) {
-        this.swipeDirection = DIRECTION.DOWN;
-      } else if (this.deltaY > this.deltaX && this.endY < this.startY) {
-        this.swipeDirection = DIRECTION.UP;
-      } else if (this.deltaY < this.deltaX && this.endX > this.startX) {
-        this.swipeDirection = DIRECTION.RIGHT;
-      } else if (this.deltaY < this.deltaX && this.endX < this.startX) {
-        this.swipeDirection = DIRECTION.LEFT;
-      }
-    }
-
-    if (this.lastRotation === 'down') {
-      if (this.swipeDirection === DIRECTION.UP) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.vertHoriLoop);
-        if (touchobj) {
-          this.rotate('up');
-        } else {
-          this.dom.style.transform = this.transformValArray[this.turn - 1];
-          this.dom.classList.add('transition');
-        }
-      } else if (
-        [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
-          this.swipeDirection
-        )
-      ) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.vertHoriLoop); // STOP ANIMATION
-        if (!touchobj) {
-          this.dom.style.transform = this.nextTransformVal;
-          this.dom.classList.add('transition');
-        }
-      }
-    } else if (this.lastRotation === 'left') {
-      if (this.swipeDirection === DIRECTION.RIGHT) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.vertHoriLoop);
-        if (touchobj) {
-          this.rotate('right');
-        } else {
-          this.dom.style.transform = this.transformValArray[this.turn - 2];
-          this.dom.classList.add('transition');
-        }
-      } else if (
-        [DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(
-          this.swipeDirection
-        )
-      ) {
-        this.state = STATE.ACTIVE;
-        this.dom.removeEventListener('transitionend', this.vertHoriLoop); // STOP ANIMATION
-        if (!touchobj) {
-          this.dom.style.transform = this.nextTransformVal;
-          this.dom.classList.add('transition');
-        }
-      }
-    }
-    if (this.state === STATE.ACTIVE) {
-      this.dom.removeEventListener('transitionend', this.vertHoriLoop);
-      this.dom.removeEventListener(this.endEvent, this.vertHoriLoopEndHandler);
-      this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
-    }
-  },
-
   activeStateEndHandler(e) {
-    var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    this.endX = touchobj ? touchobj.pageX : e.clientX;
-    this.endY = touchobj ? touchobj.pageY : e.clientY;
-    this.deltaX = Math.abs(this.endX - this.startX);
-    this.deltaY = Math.abs(this.endY - this.startY);
+    var endX = this.isTouchEventSupported
+      ? e.changedTouches[0].pageX
+      : e.clientX;
+    var endY = this.isTouchEventSupported
+      ? e.changedTouches[0].pageY
+      : e.clientY;
+    var deltaX = Math.abs(endX - this.startX);
+    var deltaY = Math.abs(endY - this.startY);
     if (
       this.startX != null &&
-      this.startX !== this.endX &&
+      this.startX !== endX &&
       this.startY != null &&
-      this.startY !== this.endY
+      this.startY !== endY
     ) {
-      if (this.deltaY > this.deltaX && this.endY > this.startY) {
+      if (deltaY > deltaX && endY > this.startY) {
         this.swipeDirection = DIRECTION.DOWN;
         this.rotate(DIRECTION.DOWN);
-      } else if (this.deltaY > this.deltaX && this.endY < this.startY) {
+      } else if (deltaY > deltaX && endY < this.startY) {
         this.swipeDirection = DIRECTION.UP;
         this.rotate(DIRECTION.UP);
-      } else if (this.deltaY < this.deltaX && this.endX > this.startX) {
+      } else if (deltaY < deltaX && endX > this.startX) {
         this.swipeDirection = DIRECTION.RIGHT;
         this.rotate(DIRECTION.RIGHT);
-      } else if (this.deltaY < this.deltaX && this.endX < this.startX) {
+      } else if (deltaY < deltaX && endX < this.startX) {
         this.swipeDirection = DIRECTION.LEFT;
         this.rotate(DIRECTION.LEFT);
       }
@@ -766,75 +602,259 @@ Cube.prototype = {
 };
 
 function VertHoriCube(dom) {
-  Cube.call(this, dom);
-  this.vertHoriLoop = this.vertHoriLoop.bind(this);
-  this.dom.addEventListener('transitionend', this.vertHoriLoop);
+  _Cube.call(this, dom);
+  this.isDirectionChanged = false;
+  this.animation = this.animation.bind(this);
+  this.dom.addEventListener('transitionend', this.animation);
+
+  this.initStateEndHandler = this.initStateEndHandler.bind(this);
+  if (!this.isTouchEventSupported) {
+    document.addEventListener('mouseup', this.initStateEndHandler);
+  } else {
+    this.dom.addEventListener('touchend', this.initStateEndHandler);
+  }
 }
 
-VertHoriCube.prototype = Object.create(Cube.prototype);
+VertHoriCube.prototype = Object.create(_Cube.prototype);
 VertHoriCube.prototype.constructor = VertHoriCube;
 
-VertHoriCube.prototype.vertHoriLoop = function() {
-  if (this.directionChange === 0) {
+VertHoriCube.prototype.animation = function() {
+  if (!this.isDirectionChanged) {
     if (this.side === 'A') {
-      this.rotate('down');
+      this.rotate(DIRECTION.DOWN);
     } else if (this.side === 'B') {
-      this.rotate('down');
+      this.rotate(DIRECTION.DOWN);
     } else if (this.side === 'C') {
-      this.rotate('down');
+      this.rotate(DIRECTION.DOWN);
     } else if (this.side === 'D') {
-      this.rotate('down');
-      this.directionChange = 1;
+      this.rotate(DIRECTION.DOWN);
+      this.isDirectionChanged = true;
     }
-  } else if (this.directionChange === 1) {
+  } else if (this.isDirectionChanged) {
     if (this.side === 'A') {
-      this.rotate('left');
+      this.rotate(DIRECTION.LEFT);
     } else if (this.side === 'E') {
-      this.rotate('left');
+      this.rotate(DIRECTION.LEFT);
     } else if (this.side === 'C') {
-      this.rotate('left');
+      this.rotate(DIRECTION.LEFT);
     } else if (this.side === 'F') {
-      this.rotate('left');
-      this.directionChange = 0;
+      this.rotate(DIRECTION.LEFT);
+      this.isDirectionChanged = false;
     }
   }
-  this.transformVal = this.dom.style.transform;
-  this.transformValArray.push(this.transformVal);
-  this.turn += 1;
+};
+VertHoriCube.prototype.initStateEndHandler = function(e) {
+  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  if (
+    this.startX == null ||
+    this.startX === endX ||
+    this.startY == null ||
+    this.startY === endY
+  ) {
+    return;
+  }
+
+  var deltaX = Math.abs(endX - this.startX);
+  var deltaY = Math.abs(endY - this.startY);
+
+  if (deltaY > deltaX && endY > this.startY) {
+    this.swipeDirection = DIRECTION.DOWN;
+  } else if (deltaY > deltaX && endY < this.startY) {
+    this.swipeDirection = DIRECTION.UP;
+  } else if (deltaY < deltaX && endX > this.startX) {
+    this.swipeDirection = DIRECTION.RIGHT;
+  } else if (deltaY < deltaX && endX < this.startX) {
+    this.swipeDirection = DIRECTION.LEFT;
+  }
+
+  if (this.lastRotation === DIRECTION.DOWN) {
+    if (this.swipeDirection === DIRECTION.UP) {
+      if (this.isTouchEventSupported) {
+        this.rotate(DIRECTION.UP);
+      } else {
+        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+        this.dom.classList.add('transition');
+
+        var _tmpSide = this.side;
+        this.side = this.lastSide;
+        this.lastSide = _tmpSide;
+        this.lastRotation = DIRECTION.UP;
+        this.findIndex();
+      }
+    } else if (
+      [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
+        this.swipeDirection
+      )
+    ) {
+      if (!this.isTouchEventSupported) {
+        this.dom.style.transform = this.nextTransformVal;
+        this.dom.classList.add('transition');
+      }
+    }
+  } else if (this.lastRotation === DIRECTION.LEFT) {
+    if (this.swipeDirection === DIRECTION.RIGHT) {
+      if (this.isTouchEventSupported) {
+        this.rotate(DIRECTION.RIGHT);
+      } else {
+        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+        this.dom.classList.add('transition');
+
+        var __tmpSide = this.side;
+        this.side = this.lastSide;
+        this.lastSide = __tmpSide;
+        this.lastRotation = DIRECTION.RIGHT;
+        this.findIndex();
+      }
+    } else if (
+      [DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(
+        this.swipeDirection
+      )
+    ) {
+      if (!this.isTouchEventSupported) {
+        this.dom.style.transform = this.nextTransformVal;
+        this.dom.classList.add('transition');
+      }
+    }
+  }
+
+  this.dom.removeEventListener('transitionend', this.animation);
+  if (this.isTouchEventSupported) {
+    this.dom.removeEventListener(this.endEvent, this.initStateEndHandler);
+    this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
+  } else {
+    document.removeEventListener(this.endEvent, this.initStateEndHandler);
+    document.addEventListener(this.endEvent, this.activeStateEndHandler);
+  }
 };
 
 function TopLeftCube(dom) {
-  Cube.call(this, dom);
-  this.topLeftSteps = this.topLeftSteps.bind(this);
-  this.dom.addEventListener('transitionend', this.topLeftSteps);
+  _Cube.call(this, dom);
+  this.animation = this.animation.bind(this);
+  this.dom.addEventListener('transitionend', this.animation);
+
+  this.initStateEndHandler = this.initStateEndHandler.bind(this);
+  if (!this.isTouchEventSupported) {
+    document.addEventListener('mouseup', this.initStateEndHandler);
+  } else {
+    this.dom.addEventListener('touchend', this.initStateEndHandler);
+  }
 }
 
-TopLeftCube.prototype = Object.create(Cube.prototype);
+TopLeftCube.prototype = Object.create(_Cube.prototype);
 TopLeftCube.prototype.constructor = TopLeftCube;
 
-TopLeftCube.prototype.topLeftSteps = function() {
+TopLeftCube.prototype.animation = function() {
   if (this.side === 'A') {
-    this.rotate('down');
+    this.rotate(DIRECTION.DOWN);
   } else if (this.side === 'B') {
-    this.rotate('right');
+    this.rotate(DIRECTION.RIGHT);
   } else if (this.side === 'F') {
-    this.rotate('down');
+    this.rotate(DIRECTION.DOWN);
   } else if (this.side === 'C') {
-    this.rotate('right');
+    this.rotate(DIRECTION.RIGHT);
   } else if (this.side === 'D') {
-    this.rotate('down');
+    this.rotate(DIRECTION.DOWN);
   } else if (this.side === 'E') {
-    this.rotate('right');
+    this.rotate(DIRECTION.RIGHT);
   }
-  this.transformVal = this.dom.style.transform;
-  this.transformValArray.push(this.transformVal);
-  this.turn += 1;
 };
 
+TopLeftCube.prototype.initStateEndHandler = function(e) {
+  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  if (
+    this.startX == null ||
+    this.startX === endX ||
+    this.startY == null ||
+    this.startY === endY
+  ) {
+    return;
+  }
+
+  var deltaX = Math.abs(endX - this.startX);
+  var deltaY = Math.abs(endY - this.startY);
+
+  if (deltaY > deltaX && endY > this.startY) {
+    this.swipeDirection = DIRECTION.DOWN;
+  } else if (deltaY > deltaX && endY < this.startY) {
+    this.swipeDirection = DIRECTION.UP;
+  } else if (deltaY < deltaX && endX > this.startX) {
+    this.swipeDirection = DIRECTION.RIGHT;
+  } else if (deltaY < deltaX && endX < this.startX) {
+    this.swipeDirection = DIRECTION.LEFT;
+  }
+
+  if (this.lastRotation === DIRECTION.DOWN) {
+    if (this.swipeDirection === DIRECTION.UP) {
+      if (this.isTouchEventSupported) {
+        this.rotate(DIRECTION.UP);
+      } else {
+        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+        this.dom.classList.add('transition');
+
+        var _tmpSide = this.side;
+        this.side = this.lastSide;
+        this.lastSide = _tmpSide;
+        this.lastRotation = DIRECTION.UP;
+        this.findIndex();
+      }
+    } else if (
+      [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
+        this.swipeDirection
+      )
+    ) {
+      if (!this.isTouchEventSupported) {
+        this.dom.style.transform = this.nextTransformVal;
+        this.dom.classList.add('transition');
+      }
+    }
+  } else if (this.lastRotation === DIRECTION.RIGHT) {
+    if (this.swipeDirection === DIRECTION.LEFT) {
+      if (this.isTouchEventSupported) {
+        this.rotate(DIRECTION.LEFT);
+      } else {
+        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+        this.dom.classList.add('transition');
+
+        var __tmpSide = this.side;
+        this.side = this.lastSide;
+        this.lastSide = __tmpSide;
+        this.lastRotation = DIRECTION.LEFT;
+        this.findIndex();
+      }
+    } else if (
+      [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(
+        this.swipeDirection
+      )
+    ) {
+      if (!this.isTouchEventSupported) {
+        this.dom.style.transform = this.nextTransformVal;
+        this.dom.classList.add('transition');
+      }
+    }
+  }
+
+  this.dom.removeEventListener('transitionend', this.animation);
+  if (this.isTouchEventSupported) {
+    this.dom.removeEventListener(this.endEvent, this.initStateEndHandler);
+    this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
+  } else {
+    document.removeEventListener(this.endEvent, this.initStateEndHandler);
+    document.addEventListener(this.endEvent, this.activeStateEndHandler);
+  }
+};
+
+function Cube(dom, animationType) {
+  if (animationType === ANIMATION_TYPE.TL) {
+    return new TopLeftCube(dom);
+  }
+  if (animationType === ANIMATION_TYPE.VH) {
+    return new VertHoriCube(dom);
+  }
+  throw new Error('INVALID_TYPE');
+}
+
 var cubeDom = document.getElementsByClassName('space')[0];
-
-var cube = new VertHoriCube(cubeDom);
-// var cube = new TopLeftCube(cubeDom);
-
-// cube.topLeftSteps();
-cube.vertHoriLoop();
+var cube = new Cube(cubeDom, ANIMATION_TYPE.VH); // or ANIMATION_TYPE.TL
+cube.animation();
