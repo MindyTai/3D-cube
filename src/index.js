@@ -431,7 +431,7 @@ function Cube(dom) {
   this.lastRotation = undefined;
   this.state = STATE.INIT;
   this.dom.style.transform = '';
-  this.flag = 0;
+  this.directionChange = 0;
   this.nextTransformVal = undefined;
   this.startX = undefined;
   this.startY = undefined;
@@ -440,44 +440,52 @@ function Cube(dom) {
   this.transformVal = 'rotate3d(0, 0, 0, 90deg)';
   this.turn = 0;
   this.isTouchEventSupported = 'ontouchstart' in window;
+  this.endX = undefined;
+  this.endY = undefined;
+  this.deltaX = undefined;
+  this.deltaY = undefined;
 
-  // choose event
-  this.startEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
-  this.moveEvent = this.isTouchEventSupported ? 'touchmove' : 'mousemove';
-  this.endEvent = this.isTouchEventSupported ? 'touchend' : 'mouseup';
-
-  // mousedown, touchstart event
-  this.startHandler = this.startHandler.bind(this);
-  this.dom.addEventListener(this.startEvent, this.startHandler);
-
-  // mousemove, touchmove event
-  this.moveHandler = this.moveHandler.bind(this);
-  this.dom.addEventListener(this.moveEvent, this.moveHandler);
-
-  // mouseup, touchend event
-  this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
-  this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
-  if (!this.isTouchEventSupported) {
-    document.addEventListener('mouseup', this.topLeftStepsEndHandler);
-    document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
-  } else {
-    this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
-    this.dom.addEventListener('touchend', this.vertHoriLoopEndHandler);
-  }
-
-  // mouseenter, mouseleave event
-  this.mouseLeave = this.mouseLeave.bind(this);
-  this.mouseEnter = this.mouseEnter.bind(this);
-  if (!this.isTouchEventSupported) {
-    this.dom.addEventListener('mouseleave', this.mouseLeave);
-    this.dom.addEventListener('mouseenter', this.mouseEnter);
-  }
-
-  // 第二次互動後
-  this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
+  this.init();
 }
 
 Cube.prototype = {
+  init() {
+    // choose event
+    this.startEvent = this.isTouchEventSupported ? 'touchstart' : 'mousedown';
+    this.moveEvent = this.isTouchEventSupported ? 'touchmove' : 'mousemove';
+    this.endEvent = this.isTouchEventSupported ? 'touchend' : 'mouseup';
+
+    // mousedown, touchstart event
+    this.startHandler = this.startHandler.bind(this);
+    this.dom.addEventListener(this.startEvent, this.startHandler);
+
+    // mousemove, touchmove event
+    this.moveHandler = this.moveHandler.bind(this);
+    this.dom.addEventListener(this.moveEvent, this.moveHandler);
+
+    // mouseup, touchend event
+    this.topLeftStepsEndHandler = this.topLeftStepsEndHandler.bind(this);
+    this.vertHoriLoopEndHandler = this.vertHoriLoopEndHandler.bind(this);
+    if (!this.isTouchEventSupported) {
+      document.addEventListener('mouseup', this.topLeftStepsEndHandler);
+      document.addEventListener('mouseup', this.vertHoriLoopEndHandler);
+    } else {
+      this.dom.addEventListener('touchend', this.topLeftStepsEndHandler);
+      this.dom.addEventListener('touchend', this.vertHoriLoopEndHandler);
+    }
+
+    // mouseenter, mouseleave event
+    this.mouseLeave = this.mouseLeave.bind(this);
+    this.mouseEnter = this.mouseEnter.bind(this);
+    if (!this.isTouchEventSupported) {
+      this.dom.addEventListener('mouseleave', this.mouseLeave);
+      this.dom.addEventListener('mouseenter', this.mouseEnter);
+    }
+
+    // 第二次互動後
+    this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
+  },
+
   getDegree(index, rotation) {
     console.log(index + 1, rotation);
     console.log(States[index].action[rotation]);
@@ -554,11 +562,11 @@ Cube.prototype = {
 
   startHandler(e) {
     var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    var endX = touchobj ? touchobj.pageX : e.clientX;
-    var endY = touchobj ? touchobj.pageY : e.clientY;
+    this.endX = touchobj ? touchobj.pageX : e.clientX;
+    this.endY = touchobj ? touchobj.pageY : e.clientY;
 
-    this.startX = endX;
-    this.startY = endY;
+    this.startX = this.endX;
+    this.startY = this.endY;
     if (!touchobj) {
       this.dom.removeEventListener('mouseenter', this.mouseEnter);
       this.dom.removeEventListener('mouseleave', this.mouseLeave);
@@ -578,37 +586,27 @@ Cube.prototype = {
 
   topLeftStepsEndHandler(e) {
     var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    var endX = touchobj ? touchobj.pageX : e.clientX;
-    var endY = touchobj ? touchobj.pageY : e.clientY;
+    this.endX = touchobj ? touchobj.pageX : e.clientX;
+    this.endY = touchobj ? touchobj.pageY : e.clientY;
+    this.deltaX = Math.abs(this.endX - this.startX);
+    this.deltaY = Math.abs(this.endY - this.startY);
     if (
       this.startX != null &&
-      this.startX !== endX &&
+      this.startX !== this.endX &&
       this.startY != null &&
-      this.startY !== endY
+      this.startY !== this.endY
     ) {
-      if (
-        Math.abs(endY - this.startY) > Math.abs(endX - this.startX) &&
-        endY > this.startY
-      ) {
+      if (this.deltaY > this.deltaX && this.endY > this.startY) {
         this.swipeDirection = DIRECTION.DOWN;
-      } else if (
-        Math.abs(endY - this.startY) > Math.abs(endX - this.startX) &&
-        endY < this.startY
-      ) {
+      } else if (this.deltaY > this.deltaX && this.endY < this.startY) {
         this.swipeDirection = DIRECTION.UP;
-      } else if (
-        Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
-        endX > this.startX
-      ) {
+      } else if (this.deltaY < this.deltaX && this.endX > this.startX) {
         this.swipeDirection = DIRECTION.RIGHT;
-      } else if (
-        Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
-        endX < this.startX
-      ) {
+      } else if (this.deltaY < this.deltaX && this.endX < this.startX) {
         this.swipeDirection = DIRECTION.LEFT;
       }
     }
-    // INIT
+
     if (this.lastRotation === 'down') {
       if (this.swipeDirection === DIRECTION.UP) {
         this.state = STATE.ACTIVE;
@@ -664,39 +662,28 @@ Cube.prototype = {
 
   vertHoriLoopEndHandler(e) {
     var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    var endX = touchobj ? touchobj.pageX : e.clientX;
-    var endY = touchobj ? touchobj.pageY : e.clientY;
+    this.endX = touchobj ? touchobj.pageX : e.clientX;
+    this.endY = touchobj ? touchobj.pageY : e.clientY;
+    this.deltaX = Math.abs(this.endX - this.startX);
+    this.deltaY = Math.abs(this.endY - this.startY);
 
     if (
       this.startX != null &&
-      this.startX !== endX &&
+      this.startX !== this.endX &&
       this.startY != null &&
-      this.startY !== endY
+      this.startY !== this.endY
     ) {
-      // swipe down
-      if (
-        Math.abs(endY - this.startY) > Math.abs(endX - this.startX) &&
-        endY > this.startY
-      ) {
+      if (this.deltaY > this.deltaX && this.endY > this.startY) {
         this.swipeDirection = DIRECTION.DOWN;
-      } else if (
-        Math.abs(endY - this.startY) > Math.abs(endX - this.startX) &&
-        endY < this.startY
-      ) {
+      } else if (this.deltaY > this.deltaX && this.endY < this.startY) {
         this.swipeDirection = DIRECTION.UP;
-      } else if (
-        Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
-        endX > this.startX
-      ) {
+      } else if (this.deltaY < this.deltaX && this.endX > this.startX) {
         this.swipeDirection = DIRECTION.RIGHT;
-      } else if (
-        Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
-        endX < this.startX
-      ) {
+      } else if (this.deltaY < this.deltaX && this.endX < this.startX) {
         this.swipeDirection = DIRECTION.LEFT;
       }
     }
-    // INIT
+
     if (this.lastRotation === 'down') {
       if (this.swipeDirection === DIRECTION.UP) {
         this.state = STATE.ACTIVE;
@@ -751,37 +738,26 @@ Cube.prototype = {
 
   activeStateEndHandler(e) {
     var touchobj = e.changedTouches ? e.changedTouches[0] : undefined;
-    var endX = touchobj ? touchobj.pageX : e.clientX;
-    var endY = touchobj ? touchobj.pageY : e.clientY;
+    this.endX = touchobj ? touchobj.pageX : e.clientX;
+    this.endY = touchobj ? touchobj.pageY : e.clientY;
+    this.deltaX = Math.abs(this.endX - this.startX);
+    this.deltaY = Math.abs(this.endY - this.startY);
     if (
       this.startX != null &&
-      this.startX !== endX &&
+      this.startX !== this.endX &&
       this.startY != null &&
-      this.startY !== endY
+      this.startY !== this.endY
     ) {
-      // swipe down
-      if (
-        Math.abs(endY - this.startY) > Math.abs(endX - this.startX) &&
-        endY > this.startY
-      ) {
+      if (this.deltaY > this.deltaX && this.endY > this.startY) {
         this.swipeDirection = DIRECTION.DOWN;
         this.rotate(DIRECTION.DOWN);
-      } else if (
-        Math.abs(endY - this.startY) > Math.abs(endX - this.startX) &&
-        endY < this.startY
-      ) {
+      } else if (this.deltaY > this.deltaX && this.endY < this.startY) {
         this.swipeDirection = DIRECTION.UP;
         this.rotate(DIRECTION.UP);
-      } else if (
-        Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
-        endX > this.startX
-      ) {
+      } else if (this.deltaY < this.deltaX && this.endX > this.startX) {
         this.swipeDirection = DIRECTION.RIGHT;
         this.rotate(DIRECTION.RIGHT);
-      } else if (
-        Math.abs(endY - this.startY) < Math.abs(endX - this.startX) &&
-        endX < this.startX
-      ) {
+      } else if (this.deltaY < this.deltaX && this.endX < this.startX) {
         this.swipeDirection = DIRECTION.LEFT;
         this.rotate(DIRECTION.LEFT);
       }
@@ -799,24 +775,28 @@ VertHoriCube.prototype = Object.create(Cube.prototype);
 VertHoriCube.prototype.constructor = VertHoriCube;
 
 VertHoriCube.prototype.vertHoriLoop = function() {
-  if (this.side === 'A' && this.flag === 0) {
-    this.rotate('down');
-  } else if (this.side === 'B' && this.flag === 0) {
-    this.rotate('down');
-  } else if (this.side === 'C' && this.flag === 0) {
-    this.rotate('down');
-  } else if (this.side === 'D' && this.flag === 0) {
-    this.rotate('down');
-    this.flag = 1;
-  } else if (this.side === 'A' && this.flag === 1) {
-    this.rotate('left');
-  } else if (this.side === 'E' && this.flag === 1) {
-    this.rotate('left');
-  } else if (this.side === 'C' && this.flag === 1) {
-    this.rotate('left');
-  } else if (this.side === 'F' && this.flag === 1) {
-    this.rotate('left');
-    this.flag = 0;
+  if (this.directionChange === 0) {
+    if (this.side === 'A') {
+      this.rotate('down');
+    } else if (this.side === 'B') {
+      this.rotate('down');
+    } else if (this.side === 'C') {
+      this.rotate('down');
+    } else if (this.side === 'D') {
+      this.rotate('down');
+      this.directionChange = 1;
+    }
+  } else if (this.directionChange === 1) {
+    if (this.side === 'A') {
+      this.rotate('left');
+    } else if (this.side === 'E') {
+      this.rotate('left');
+    } else if (this.side === 'C') {
+      this.rotate('left');
+    } else if (this.side === 'F') {
+      this.rotate('left');
+      this.directionChange = 0;
+    }
   }
   this.transformVal = this.dom.style.transform;
   this.transformValArray.push(this.transformVal);
@@ -853,8 +833,8 @@ TopLeftCube.prototype.topLeftSteps = function() {
 
 var cubeDom = document.getElementsByClassName('space')[0];
 
-// var cube = new VertHoriCube(cubeDom);
-var cube = new TopLeftCube(cubeDom);
+var cube = new VertHoriCube(cubeDom);
+// var cube = new TopLeftCube(cubeDom);
 
-cube.topLeftSteps();
-// cube.vertHoriLoop();
+// cube.topLeftSteps();
+cube.vertHoriLoop();
