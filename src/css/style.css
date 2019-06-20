@@ -7,20 +7,23 @@ body {
   overflow: hidden;
   background-size: contain;
 }
+
 .video{
   position: absolute;
-  /* top: -300px; */
-  left: 0px;
-  top: -150px;
+  top: 50%; 
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  width: 100%; 
+  height: 100%; 
+  overflow: hidden;
 }
 
 .camera {
-  width: 100%;
-  height: 100vh;
-  background-color: black;
   position: absolute;
   perspective: 800px;
 }
+
 .icon {
   background-image: url(https://trello-attachments.s3.amazonaws.com/5ceb8c5d12d1522c0ef32fcb/40x40/c7137fc299d108e8892f630d402d92d2/icon-for-six-side.gif);
   background-repeat: no-repeat;
@@ -28,74 +31,67 @@ body {
   width: 40px;
   position: relative;
   margin: auto;
-  z-index: 2;
-  top: 440px;
-  left: -145px; 
+  z-index: 2; 
 }
+
 .space {
-  width: 600px;
-  height: 600px;
   position: relative;
-/*   border: 1px dashed #fff; */
   transform-style: preserve-3d;
   transform-origin: center center;
-  margin: auto;
-  /* animation: HorizontalRotate 6s linear infinite; */
+  /* margin: auto; */
   transition-property: transform;
- 
 }
 
 .transition {
-  transition: transform 1s linear;
+  /* transition: transform 1s linear; */
 }
 
-.space div {
+.box {
+  transform-style: preserve-3d;
   backface-visibility: hidden;
   position: absolute;
-  width: 300px;
-  height: 300px;
   font-size: 50px;
   text-align: center;
   line-height: 300px;
   color: black;
   font-size: 120px;
-}
-
-.box {
-  transform-style: preserve-3d;
+  background-size: contain;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-color:black;
 }
 
 .box1 {
-  transform:translateX(150px) translateY(150px) translateZ(150px);
+  /* transform:translateX(150px) translateY(150px) translateZ(150px); */
 }
 
 .box2 {
    transform-origin: left top;
-   transform: translate(450px) translateY(150px) translateZ(150px) rotateY(90deg);
+   /* transform: translate(450px) translateY(150px) translateZ(150px) rotateY(90deg); */
    background-image: url('../assets/image/assets_300250_1.png');
 }
 
 .box3 {
-  transform: translateX(150px) translateY(150px) translateZ(-150px) rotateY(180deg) rotateZ(270deg);
+  /* transform: translateX(150px) translateY(150px) translateZ(-150px) rotateY(180deg) rotateZ(270deg); */
   background-image: url('../assets/image/assets_300250_1.png');
   
 }
 
 .box4 {
   transform-origin: right top;
-  transform: translateX(-150px) translateY(150px) translateZ(-150px) rotateY(-90deg) rotateZ(-90deg);
+  /* transform: translateX(-150px) translateY(150px) translateZ(-150px) rotateY(-90deg) rotateZ(-90deg); */
   background-image: url('../assets/image/assets_300250_1.png')
 }
 
 .box5 {
   transform-origin: bottom center;
-  transform: translateX(150px) translateY(-150px) translateZ(150px) rotateX(90deg) ;
+  /* transform: translateX(150px) translateY(-150px) translateZ(150px) rotateX(90deg) ; */
   background-image: url('../assets/image/assets_300250_1.png');
 }
 
 .box6 {
   transform-origin: top center;
-  transform: translateX(300px) translateY(450px) translateZ(0px) rotateX(-90deg) rotateZ(-270deg);
+  /* transform: translateX(300px) translateY(450px) translateZ(0px) rotateX(-90deg) rotateZ(-270deg); */
   background-image: url('../assets/image/assets_300250_1.png')
 }
 

@@ -423,7 +423,7 @@ var ANIMATION_TYPE = {
   TL: 'TL'
 };
 
-function _Cube(dom) {
+function _Cube(dom, delayTime, link) {
   this.dom = dom;
   this.stateIdx = 0;
   this.side = 'A';
@@ -436,6 +436,16 @@ function _Cube(dom) {
   this.swipeDirection = undefined;
   this.turn = 0;
   this.isTouchEventSupported = 'ontouchstart' in window;
+  this.timerA = undefined;
+  this.timerB = undefined;
+  this.timerC = undefined;
+  this.timerD = undefined;
+  this.timerE = undefined;
+  this.timerF = undefined;
+  this.timerG = undefined;
+  this.timerH = undefined;
+  this.delayTime = delayTime;
+  this.link = link;
 
   this.init();
 }
@@ -462,9 +472,6 @@ _Cube.prototype = {
       this.dom.addEventListener('mouseleave', this.mouseLeaveHandler);
       this.dom.addEventListener('mouseenter', this.mouseEnterHandler);
     }
-
-    // 第二次互動後
-    this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
   },
 
   getLastTransform(transform) {
@@ -535,7 +542,6 @@ _Cube.prototype = {
   mouseLeaveHandler() {
     this.dom.classList.add('transition');
     this.dom.style.transform = this.nextTransformVal;
-    // 因為transitionend,所以動畫繼續
   },
 
   mouseEnterHandler() {
@@ -567,45 +573,15 @@ _Cube.prototype = {
     if (e.cancelable) {
       e.preventDefault();
     } else return false;
-  },
-
-  activeStateEndHandler(e) {
-    var endX = this.isTouchEventSupported
-      ? e.changedTouches[0].pageX
-      : e.clientX;
-    var endY = this.isTouchEventSupported
-      ? e.changedTouches[0].pageY
-      : e.clientY;
-    var deltaX = Math.abs(endX - this.startX);
-    var deltaY = Math.abs(endY - this.startY);
-    if (
-      this.startX != null &&
-      this.startX !== endX &&
-      this.startY != null &&
-      this.startY !== endY
-    ) {
-      if (deltaY > deltaX && endY > this.startY) {
-        this.swipeDirection = DIRECTION.DOWN;
-        this.rotate(DIRECTION.DOWN);
-      } else if (deltaY > deltaX && endY < this.startY) {
-        this.swipeDirection = DIRECTION.UP;
-        this.rotate(DIRECTION.UP);
-      } else if (deltaY < deltaX && endX > this.startX) {
-        this.swipeDirection = DIRECTION.RIGHT;
-        this.rotate(DIRECTION.RIGHT);
-      } else if (deltaY < deltaX && endX < this.startX) {
-        this.swipeDirection = DIRECTION.LEFT;
-        this.rotate(DIRECTION.LEFT);
-      }
-    }
   }
 };
 
-function VertHoriCube(dom) {
-  _Cube.call(this, dom);
+function VertHoriCube(dom, delayTime, link) {
+  _Cube.call(this, dom, delayTime, link);
   this.isDirectionChanged = false;
   this.animation = this.animation.bind(this);
   this.dom.addEventListener('transitionend', this.animation);
+  this.timers = [];
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
@@ -613,45 +589,184 @@ function VertHoriCube(dom) {
   } else {
     this.dom.addEventListener('touchend', this.initStateEndHandler);
   }
+
+  this.toRightSide = this.toRightSide.bind(this);
+  this.toUpSide = this.toUpSide.bind(this);
+
+  this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
+  this.linkTo = this.linkTo.bind(this);
+
+  this.link = link;
 }
 
 VertHoriCube.prototype = Object.create(_Cube.prototype);
 VertHoriCube.prototype.constructor = VertHoriCube;
 
 VertHoriCube.prototype.animation = function() {
+  var self = this;
   if (!this.isDirectionChanged) {
     if (this.side === 'A') {
-      this.rotate(DIRECTION.DOWN);
+      this.timerA = setTimeout(function() {
+        self.rotate(DIRECTION.DOWN);
+      }, this.delayTime);
+
+      this.timers.push(this.timerA);
     } else if (this.side === 'B') {
-      this.rotate(DIRECTION.DOWN);
+      this.timerB = setTimeout(function() {
+        self.rotate(DIRECTION.DOWN);
+      }, this.delayTime);
+
+      this.timers.push(this.timerB);
     } else if (this.side === 'C') {
-      this.rotate(DIRECTION.DOWN);
+      this.timerC = setTimeout(function() {
+        self.rotate(DIRECTION.DOWN);
+      }, this.delayTime);
+
+      this.timers.push(this.timerC);
     } else if (this.side === 'D') {
-      this.rotate(DIRECTION.DOWN);
+      this.timerD = setTimeout(function() {
+        self.rotate(DIRECTION.DOWN);
+      }, this.delayTime);
+
+      this.timers.push(this.timerD);
       this.isDirectionChanged = true;
     }
   } else if (this.isDirectionChanged) {
     if (this.side === 'A') {
-      this.rotate(DIRECTION.LEFT);
+      this.timerE = setTimeout(function() {
+        self.rotate(DIRECTION.LEFT);
+      }, this.delayTime);
+
+      this.timers.push(this.timerE);
     } else if (this.side === 'E') {
-      this.rotate(DIRECTION.LEFT);
+      this.timerF = setTimeout(function() {
+        self.rotate(DIRECTION.LEFT);
+      }, this.delayTime);
+
+      this.timers.push(this.timerF);
     } else if (this.side === 'C') {
-      this.rotate(DIRECTION.LEFT);
+      this.timerG = setTimeout(function() {
+        self.rotate(DIRECTION.LEFT);
+      }, this.delayTime);
+
+      this.timers.push(this.timerG);
     } else if (this.side === 'F') {
-      this.rotate(DIRECTION.LEFT);
+      this.timerH = setTimeout(function() {
+        self.rotate(DIRECTION.LEFT);
+      }, this.delayTime);
+
       this.isDirectionChanged = false;
+      this.timers.push(this.timerH);
     }
   }
 };
-VertHoriCube.prototype.initStateEndHandler = function(e) {
+
+VertHoriCube.prototype.toRightSide = function() {
+  var __tmpSide = this.side;
+  this.side = this.lastSide;
+  this.lastSide = __tmpSide;
+  this.lastRotation = DIRECTION.RIGHT;
+  this.findIndex();
+};
+
+VertHoriCube.prototype.toUpSide = function() {
+  var _tmpSide = this.side;
+  this.side = this.lastSide;
+  this.lastSide = _tmpSide;
+  this.lastRotation = DIRECTION.UP;
+  this.findIndex();
+};
+
+VertHoriCube.prototype.linkTo = function() {
+  var self = this;
+  if (this.side === 'A') {
+    document
+      .getElementsByClassName('box1')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[0]);
+      });
+  } else if (this.side === 'B') {
+    document
+      .getElementsByClassName('box5')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[1]);
+      });
+  } else if (this.side === 'C') {
+    document
+      .getElementsByClassName('box3')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[2]);
+      });
+  } else if (this.side === 'D') {
+    document
+      .getElementsByClassName('box6')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[3]);
+      });
+  } else if (this.side === 'E') {
+    document
+      .getElementsByClassName('box2')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[4]);
+      });
+  } else if (this.side === 'F') {
+    document
+      .getElementsByClassName('box4')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[5]);
+      });
+  }
+};
+
+VertHoriCube.prototype.activeStateEndHandler = function(e) {
   var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
   var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  var deltaX = Math.abs(endX - this.startX);
+  var deltaY = Math.abs(endY - this.startY);
+
   if (
     this.startX == null ||
     this.startX === endX ||
     this.startY == null ||
     this.startY === endY
   ) {
+    this.linkTo();
+    return;
+  }
+
+  if (
+    this.startX != null &&
+    this.startX !== endX &&
+    this.startY != null &&
+    this.startY !== endY
+  ) {
+    if (deltaY > deltaX && endY > this.startY) {
+      this.swipeDirection = DIRECTION.DOWN;
+      this.rotate(DIRECTION.DOWN);
+    } else if (deltaY > deltaX && endY < this.startY) {
+      this.swipeDirection = DIRECTION.UP;
+      this.rotate(DIRECTION.UP);
+    } else if (deltaY < deltaX && endX > this.startX) {
+      this.swipeDirection = DIRECTION.RIGHT;
+      this.rotate(DIRECTION.RIGHT);
+    } else if (deltaY < deltaX && endX < this.startX) {
+      this.swipeDirection = DIRECTION.LEFT;
+      this.rotate(DIRECTION.LEFT);
+    }
+  }
+};
+
+VertHoriCube.prototype.initStateEndHandler = function(e) {
+  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+
+  if (
+    this.startX == null ||
+    this.startX === endX ||
+    this.startY == null ||
+    this.startY === endY
+  ) {
+    this.linkTo();
     return;
   }
 
@@ -668,6 +783,10 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
+  for (var i = 0; i < this.timers.length; i += 1) {
+    clearTimeout(this.timers[i]);
+  }
+
   if (this.lastRotation === DIRECTION.DOWN) {
     if (this.swipeDirection === DIRECTION.UP) {
       if (this.isTouchEventSupported) {
@@ -675,12 +794,7 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
       } else {
         this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
         this.dom.classList.add('transition');
-
-        var _tmpSide = this.side;
-        this.side = this.lastSide;
-        this.lastSide = _tmpSide;
-        this.lastRotation = DIRECTION.UP;
-        this.findIndex();
+        this.toUpSide();
       }
     } else if (
       [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
@@ -699,12 +813,7 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
       } else {
         this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
         this.dom.classList.add('transition');
-
-        var __tmpSide = this.side;
-        this.side = this.lastSide;
-        this.lastSide = __tmpSide;
-        this.lastRotation = DIRECTION.RIGHT;
-        this.findIndex();
+        this.toRightSide();
       }
     } else if (
       [DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(
@@ -724,14 +833,19 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
   } else {
     document.removeEventListener(this.endEvent, this.initStateEndHandler);
-    document.addEventListener(this.endEvent, this.activeStateEndHandler);
+    this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
   }
 };
 
-function TopLeftCube(dom) {
-  _Cube.call(this, dom);
+function TopLeftCube(dom, delayTime, link) {
+  _Cube.call(this, dom, delayTime, link);
   this.animation = this.animation.bind(this);
   this.dom.addEventListener('transitionend', this.animation);
+  this.toUpSide = this.toUpSide.bind(this);
+  this.toLeftSide = this.toLeftSide.bind(this);
+  this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
+  this.linkTo = this.linkTo.bind(this);
+  this.timers = [];
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
@@ -745,18 +859,142 @@ TopLeftCube.prototype = Object.create(_Cube.prototype);
 TopLeftCube.prototype.constructor = TopLeftCube;
 
 TopLeftCube.prototype.animation = function() {
+  var self = this;
   if (this.side === 'A') {
-    this.rotate(DIRECTION.DOWN);
+    this.timerA = setTimeout(function() {
+      self.rotate(DIRECTION.DOWN);
+    }, this.delayTime);
+
+    this.timers.push(this.timerA);
   } else if (this.side === 'B') {
-    this.rotate(DIRECTION.RIGHT);
+    this.timerB = setTimeout(function() {
+      self.rotate(DIRECTION.RIGHT);
+    }, this.delayTime);
+
+    this.timers.push(this.timerB);
   } else if (this.side === 'F') {
-    this.rotate(DIRECTION.DOWN);
+    this.timerF = setTimeout(function() {
+      self.rotate(DIRECTION.DOWN);
+    }, this.delayTime);
+
+    this.timers.push(this.timerF);
   } else if (this.side === 'C') {
-    this.rotate(DIRECTION.RIGHT);
+    this.timerC = setTimeout(function() {
+      self.rotate(DIRECTION.RIGHT);
+    }, this.delayTime);
+
+    this.timers.push(this.timerC);
   } else if (this.side === 'D') {
-    this.rotate(DIRECTION.DOWN);
+    this.timerD = setTimeout(function() {
+      self.rotate(DIRECTION.DOWN);
+    }, this.delayTime);
+
+    this.timers.push(this.timerD);
   } else if (this.side === 'E') {
-    this.rotate(DIRECTION.RIGHT);
+    this.timerE = setTimeout(function() {
+      self.rotate(DIRECTION.RIGHT);
+    }, this.delayTime);
+
+    this.timers.push(this.timerE);
+  }
+};
+
+TopLeftCube.prototype.toUpSide = function() {
+  this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+  this.dom.classList.add('transition');
+  var _tmpSide = this.side;
+  this.side = this.lastSide;
+  this.lastSide = _tmpSide;
+  this.lastRotation = DIRECTION.UP;
+  this.findIndex();
+};
+
+TopLeftCube.prototype.toLeftSide = function() {
+  this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+  this.dom.classList.add('transition');
+  var __tmpSide = this.side;
+  this.side = this.lastSide;
+  this.lastSide = __tmpSide;
+  this.lastRotation = DIRECTION.LEFT;
+  this.findIndex();
+};
+
+TopLeftCube.prototype.linkTo = function() {
+  var self = this;
+  if (this.side === 'A') {
+    document
+      .getElementsByClassName('box1')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[0]);
+      });
+  } else if (this.side === 'B') {
+    document
+      .getElementsByClassName('box5')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[1]);
+      });
+  } else if (this.side === 'F') {
+    document
+      .getElementsByClassName('box4')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[2]);
+      });
+  } else if (this.side === 'C') {
+    document
+      .getElementsByClassName('box3')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[3]);
+      });
+  } else if (this.side === 'D') {
+    document
+      .getElementsByClassName('box6')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[4]);
+      });
+  } else if (this.side === 'E') {
+    document
+      .getElementsByClassName('box2')[0]
+      .addEventListener('click', function() {
+        window.open(self.link[5]);
+      });
+  }
+};
+
+TopLeftCube.prototype.activeStateEndHandler = function(e) {
+  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  var deltaX = Math.abs(endX - this.startX);
+  var deltaY = Math.abs(endY - this.startY);
+
+  if (
+    this.startX == null ||
+    this.startX === endX ||
+    this.startY == null ||
+    this.startY === endY
+  ) {
+    this.linkTo();
+    return;
+  }
+
+  if (
+    this.startX != null &&
+    this.startX !== endX &&
+    this.startY != null &&
+    this.startY !== endY
+  ) {
+    if (deltaY > deltaX && endY > this.startY) {
+      this.swipeDirection = DIRECTION.DOWN;
+      this.rotate(DIRECTION.DOWN);
+    } else if (deltaY > deltaX && endY < this.startY) {
+      this.swipeDirection = DIRECTION.UP;
+      this.rotate(DIRECTION.UP);
+    } else if (deltaY < deltaX && endX > this.startX) {
+      this.swipeDirection = DIRECTION.RIGHT;
+      this.rotate(DIRECTION.RIGHT);
+    } else if (deltaY < deltaX && endX < this.startX) {
+      this.swipeDirection = DIRECTION.LEFT;
+      this.rotate(DIRECTION.LEFT);
+    }
   }
 };
 
@@ -769,6 +1007,7 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
+    this.linkTo();
     return;
   }
 
@@ -785,19 +1024,16 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
+  for (var i = 0; i < this.timers.length; i += 1) {
+    clearTimeout(this.timers[i]);
+  }
+
   if (this.lastRotation === DIRECTION.DOWN) {
     if (this.swipeDirection === DIRECTION.UP) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.UP);
       } else {
-        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
-        this.dom.classList.add('transition');
-
-        var _tmpSide = this.side;
-        this.side = this.lastSide;
-        this.lastSide = _tmpSide;
-        this.lastRotation = DIRECTION.UP;
-        this.findIndex();
+        this.toUpSide();
       }
     } else if (
       [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
@@ -814,14 +1050,7 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.LEFT);
       } else {
-        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
-        this.dom.classList.add('transition');
-
-        var __tmpSide = this.side;
-        this.side = this.lastSide;
-        this.lastSide = __tmpSide;
-        this.lastRotation = DIRECTION.LEFT;
-        this.findIndex();
+        this.toLeftSide();
       }
     } else if (
       [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(
@@ -841,20 +1070,154 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
   } else {
     document.removeEventListener(this.endEvent, this.initStateEndHandler);
-    document.addEventListener(this.endEvent, this.activeStateEndHandler);
+    this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
   }
 };
 
-function Cube(dom, animationType) {
+function Cube(dom, animationType, size, link, sides, iconPosition, delayTime) {
+  this.dom = dom;
+  this.size = size;
+  this.adjustSize = this.adjustSize.bind(this);
+  this.adjustSize();
+
+  this.sides = sides;
+  this.playSpeed = this.playSpeed.bind(this);
+  this.playSpeed();
+
+  this.iconPosition = iconPosition;
+  this.adjustIconPosition = this.adjustIconPosition.bind(this);
+  this.adjustIconPosition();
+
+  this.delayTime = delayTime;
+
   if (animationType === ANIMATION_TYPE.TL) {
-    return new TopLeftCube(dom);
+    return new TopLeftCube(dom, delayTime, link);
   }
   if (animationType === ANIMATION_TYPE.VH) {
-    return new VertHoriCube(dom);
+    return new VertHoriCube(dom, delayTime, link);
   }
   throw new Error('INVALID_TYPE');
 }
 
+Cube.prototype = {
+  adjustSize() {
+    this.dom.style.width = (parseInt(this.size, 10) * 2).toString() + 'px';
+    this.dom.style.height = (parseInt(this.size, 10) * 2).toString() + 'px';
+
+    for (var i = 0; i < 6; i += 1) {
+      document.getElementsByClassName('box')[i].style.width =
+        parseInt(this.size, 10).toString() + 'px';
+    }
+
+    for (var y = 0; y < 6; y += 1) {
+      document.getElementsByClassName('box')[y].style.height =
+        parseInt(this.size, 10).toString() + 'px';
+    }
+
+    document.getElementsByClassName('box1')[0].style.transform =
+      'translateX(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) translateY(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) translateZ(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px)';
+
+    document.getElementsByClassName('box2')[0].style.transform =
+      'translate(' +
+      (parseInt(this.size, 10) / 2).toString() * 3 +
+      'px) translateY(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) translateZ(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) rotateY(90deg)';
+
+    document.getElementsByClassName('box3')[0].style.transform =
+      'translateX(+' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) translateY(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) translateZ(' +
+      -(parseInt(this.size, 10) / 2).toString() +
+      'px) rotateY(180deg) rotateZ(270deg)';
+
+    document.getElementsByClassName('box4')[0].style.transform =
+      'translateX(' +
+      -(parseInt(this.size, 10) / 2).toString() +
+      'px) translateY(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) translateZ(' +
+      -(parseInt(this.size, 10) / 2).toString() +
+      'px) rotateY(-90deg) rotateZ(-90deg)';
+
+    document.getElementsByClassName('box5')[0].style.transform =
+      'translateX(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) translateY(' +
+      -(parseInt(this.size, 10) / 2).toString() +
+      'px) translateZ(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) rotateX(90deg)';
+
+    document.getElementsByClassName('box6')[0].style.transform =
+      'translateX(' +
+      parseInt(this.size, 10) +
+      'px) translateY(' +
+      (parseInt(this.size, 10) / 2) * 3 +
+      'px) translateZ(' +
+      0 +
+      'px) rotateX(-90deg) rotateZ(-270deg)';
+  },
+  playSpeed() {
+    document.styleSheets[0].cssRules[6].style.transition =
+      'transform ' + 1 / this.sides + 's linear';
+  },
+  adjustIconPosition() {
+    this.positions = ['leftDown', 'leftTop', 'rightDown', 'rightTop'];
+    console.log(this.iconPosition);
+    if (this.iconPosition === this.positions[0]) {
+      console.log('dog');
+      document.getElementsByClassName('icon')[0].style.top =
+        (parseInt(this.size, 10) * 1.5).toString() + 'px';
+      document.getElementsByClassName('icon')[0].style.left =
+        -(parseInt(this.size, 10) * 0.4).toString() + 'px';
+    } else if (this.iconPosition === this.positions[1]) {
+      document.getElementsByClassName('icon')[0].style.top =
+        parseInt(this.size, 10).toString() * 0.7 + 'px';
+
+      document.getElementsByClassName('icon')[0].style.left =
+        -(parseInt(this.size, 10) / 2).toString() * 0.595 + 'px';
+    } else if (this.iconPosition === this.positions[2]) {
+      document.getElementsByClassName('icon')[0].style.top =
+        parseInt(this.size, 10).toString() * 1.5 + 'px';
+
+      document.getElementsByClassName('icon')[0].style.left =
+        (parseInt(this.size, 10) * 0.4).toString() + 'px';
+    } else if (this.iconPosition === this.positions[3]) {
+      document.getElementsByClassName('icon')[0].style.top =
+        parseInt(this.size, 10).toString() * 0.7 + 'px';
+
+      document.getElementsByClassName('icon')[0].style.left =
+        parseInt(this.size, 10).toString() * 0.43 + 'px';
+    }
+  }
+};
+
 var cubeDom = document.getElementsByClassName('space')[0];
-var cube = new Cube(cubeDom, ANIMATION_TYPE.VH); // or ANIMATION_TYPE.TL
+var cube = new Cube(
+  cubeDom,
+  ANIMATION_TYPE.VH,
+  '300px',
+  [
+    'https://www.tenmax.io/?utm_source=1',
+    'https://www.tenmax.io/?utm_source=2',
+    'https://www.tenmax.io/?utm_source=3',
+    'https://www.tenmax.io/?utm_source=4',
+    'https://www.tenmax.io/?utm_source=5',
+    'https://www.tenmax.io/?utm_source=6'
+  ],
+  2,
+  'leftTop',
+  1000
+); // or ANIMATION_TYPE.TL
 cube.animation();
