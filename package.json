@@ -1,0 +1,19 @@
+{
+  "name": "ppstudio-template-sdk",
+  "version": "1.0.0",
+  "description": "SDK for develop ppstudio template",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ./src",
+    "start": "npx browser-sync start --server --files \"src\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@tenmax-gitlab.tenmax:10022/rtb/ppstudio-template-sdk.git"
+  },
+  "author": "Fin Chen",
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  }
+}

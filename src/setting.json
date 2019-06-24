@@ -1,0 +1,816 @@
+[
+  {
+    "id": "mobile_rolling_cube",
+    "safeArea": "",
+    "fields": [
+      {
+        "key": "size",
+        "type": "SIZE"
+      },
+      {
+        "key": "side1",
+        "type": "VIDEO",
+        "validations": {
+          "aspectRatio": [
+            [
+              [
+                16,
+                9
+              ]
+            ],
+            0.05
+          ],
+          "required": true,
+          "maxFileSize": [
+            5242880
+          ]
+        },
+        "locales": {
+          "zh-TW": "第一頁影片檔案",
+          "en": "Front Page Video File"
+        }
+      },
+      {
+        "key": "side2",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "上方圖片檔案",
+          "en": "Top Image File"
+        }
+      },
+      {
+        "key": "side3",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "後方圖片檔案",
+          "en": "Back Image File"
+        }
+      },
+      {
+        "key": "side4",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "下方圖片檔案",
+          "en": "Bottom Image File"
+        }
+      },
+      {
+        "key": "landingPage",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        }
+      },
+      {
+        "key": "rotateDirection",
+        "type": "RADIO",
+        "locales": {
+          "zh-TW": "旋轉方向",
+          "en": "Rotate Direction"
+        },
+        "isParameter": true,
+        "defaultValue": "upSideDown",
+        "validations": {},
+        "options": [
+          {
+            "value": "upSideDown",
+            "locales": {
+              "zh-TW": "由上往下旋轉",
+              "en": "From Top to Bottom"
+            }
+          },
+          {
+            "value": "bottomTop",
+            "locales": {
+              "zh-TW": "由下往上旋轉",
+              "en": "From Bottom To Top"
+            }
+          }
+        ]
+      },
+      {
+        "key": "rotateDelay",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面停留秒數",
+          "en": "Delay seconds perpage"
+        },
+        "defaultValue": "1.5",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      },
+      {
+        "key": "rotateSpeed",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面旋轉的速度（秒）",
+          "en": "Rotate Speed (Second)"
+        },
+        "defaultValue": "0.8",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      }
+    ],
+    "ui_width": 300,
+    "ui_height": 250,
+    "ad_size": {
+      "zh-TW": "根據設定",
+      "en": "By Creative Setting"
+    },
+    "dfp_size": {
+      "zh-TW": "建議同廣告尺寸",
+      "en": "As Creative Size"
+    },
+    "sample": {
+      "name": "行動內文3D魔術方塊",
+      "assets": [
+        {
+          "key": "side1",
+          "type": "VIDEO",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/9c4406e.mp4"
+        },
+        {
+          "key": "side2",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/300250_1.jpg"
+        },
+        {
+          "key": "side3",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/300250_2.jpg"
+        },
+        {
+          "key": "side4",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/300250_3.jpg"
+        },
+        {
+          "key": "landingPage",
+          "type": "URL",
+          "content": "https://www.tenmax.io"
+        },
+        {
+          "key": "__PARAMETERS__",
+          "type": "OBJECT",
+          "content": "{}"
+        }
+      ]
+    }
+  },
+  {
+    "id": "desktop_rolling_cube",
+    "safeArea": "",
+    "fields": [
+      {
+        "key": "size",
+        "type": "SIZE"
+      },
+      {
+        "key": "side1",
+        "type": "VIDEO",
+        "validations": {
+          "aspectRatio": [
+            [
+              [
+                16,
+                9
+              ]
+            ],
+            0.05
+          ],
+          "required": true,
+          "maxFileSize": [
+            5242880
+          ]
+        },
+        "locales": {
+          "zh-TW": "第一頁影片檔案",
+          "en": "Front Page Video File"
+        }
+      },
+      {
+        "key": "side2",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "上方圖片檔案",
+          "en": "Top Image File"
+        }
+      },
+      {
+        "key": "side3",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "後方圖片檔案",
+          "en": "Back Image File"
+        }
+      },
+      {
+        "key": "side4",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "下方圖片檔案",
+          "en": "Bottom Image File"
+        }
+      },
+      {
+        "key": "landingPage",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        }
+      },
+      {
+        "key": "rotateDirection",
+        "type": "RADIO",
+        "locales": {
+          "zh-TW": "旋轉方向",
+          "en": "Rotate Direction"
+        },
+        "isParameter": true,
+        "defaultValue": "upSideDown",
+        "validations": {},
+        "options": [
+          {
+            "value": "upSideDown",
+            "locales": {
+              "zh-TW": "由上往下旋轉",
+              "en": "From Top to Bottom"
+            }
+          },
+          {
+            "value": "bottomTop",
+            "locales": {
+              "zh-TW": "由下往上旋轉",
+              "en": "From Bottom To Top"
+            }
+          }
+        ]
+      },
+      {
+        "key": "rotateDelay",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面停留秒數",
+          "en": "Delay seconds perpage"
+        },
+        "defaultValue": "1.5",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      },
+      {
+        "key": "rotateSpeed",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面旋轉的速度（秒）",
+          "en": "Rotate Speed (Second)"
+        },
+        "defaultValue": "0.8",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      }
+    ],
+    "ui_width": 970,
+    "ui_height": 250,
+    "ad_size": {
+      "zh-TW": "根據設定",
+      "en": "By Creative Setting"
+    },
+    "dfp_size": {
+      "zh-TW": "建議同廣告尺寸",
+      "en": "As Creative Size"
+    },
+    "sample": {
+      "name": "桌機3D魔術方塊",
+      "assets": [
+        {
+          "key": "side1",
+          "type": "VIDEO",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/front.mp4"
+        },
+        {
+          "key": "side2",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/top.png"
+        },
+        {
+          "key": "side3",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/back.png"
+        },
+        {
+          "key": "side4",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/bottom.png"
+        },
+        {
+          "key": "landingPage",
+          "type": "URL",
+          "content": "https://www.tenmax.io"
+        },
+        {
+          "key": "__PARAMETERS__",
+          "type": "OBJECT",
+          "content": "{}"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mobile_rolling_cube_multi_landing",
+    "safeArea": "",
+    "fields": [
+      {
+        "key": "size",
+        "type": "SIZE"
+      },
+      {
+        "key": "side1",
+        "type": "VIDEO",
+        "validations": {
+          "aspectRatio": [
+            [
+              [
+                16,
+                9
+              ]
+            ],
+            0.05
+          ],
+          "required": true,
+          "maxFileSize": [
+            5242880
+          ]
+        },
+        "locales": {
+          "zh-TW": "第一頁影片檔案",
+          "en": "Front Page Video File"
+        }
+      },
+      {
+        "key": "landingPage",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        }
+      },
+      {
+        "key": "side2",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "上方圖片檔案",
+          "en": "Top Image File"
+        }
+      },
+      {
+        "key": "landingPage2",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        },
+        "locales": {
+          "zh-TW": "上方圖檔點擊網址",
+          "en": "Top Image Landing Page"
+        }
+      },
+      {
+        "key": "side3",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "後方圖片檔案",
+          "en": "Back Image File"
+        }
+      },
+      {
+        "key": "landingPage3",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        },
+        "locales": {
+          "zh-TW": "後方圖檔點擊網址",
+          "en": "Back Image Landing Page"
+        }
+      },
+      {
+        "key": "side4",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "下方圖片檔案",
+          "en": "Bottom Image File"
+        }
+      },
+      {
+        "key": "landingPage4",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        },
+        "locales": {
+          "zh-TW": "下方圖檔點擊網址",
+          "en": "Bottom Image Landing Page"
+        }
+      },
+      {
+        "key": "rotateDirection",
+        "type": "RADIO",
+        "locales": {
+          "zh-TW": "旋轉方向",
+          "en": "Rotate Direction"
+        },
+        "isParameter": true,
+        "defaultValue": "upSideDown",
+        "validations": {},
+        "options": [
+          {
+            "value": "upSideDown",
+            "locales": {
+              "zh-TW": "由上往下旋轉",
+              "en": "From Top to Bottom"
+            }
+          },
+          {
+            "value": "bottomTop",
+            "locales": {
+              "zh-TW": "由下往上旋轉",
+              "en": "From Bottom To Top"
+            }
+          }
+        ]
+      },
+      {
+        "key": "rotateDelay",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面停留秒數",
+          "en": "Delay seconds perpage"
+        },
+        "defaultValue": "1.5",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      },
+      {
+        "key": "rotateSpeed",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面旋轉的速度（秒）",
+          "en": "Rotate Speed (Second)"
+        },
+        "defaultValue": "0.8",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      }
+    ],
+    "ui_width": 300,
+    "ui_height": 250,
+    "ad_size": {
+      "zh-TW": "根據設定",
+      "en": "By Creative Setting"
+    },
+    "dfp_size": {
+      "zh-TW": "建議同廣告尺寸",
+      "en": "As Creative Size"
+    },
+    "sample": {
+      "name": "行動內文3D魔術方塊",
+      "assets": [
+        {
+          "key": "side1",
+          "type": "VIDEO",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/9c4406e.mp4"
+        },
+        {
+          "key": "side2",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/300250_1.jpg"
+        },
+        {
+          "key": "side3",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/300250_2.jpg"
+        },
+        {
+          "key": "side4",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/300250_3.jpg"
+        },
+        {
+          "key": "landingPage",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=1"
+        },
+        {
+          "key": "landingPage2",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=2"
+        },
+        {
+          "key": "landingPage3",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=3"
+        },
+        {
+          "key": "landingPage4",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=4"
+        },
+        {
+          "key": "__PARAMETERS__",
+          "type": "OBJECT",
+          "content": "{}"
+        }
+      ]
+    }
+  },
+  {
+    "id": "desktop_rolling_cube_multi_landing",
+    "safeArea": "",
+    "fields": [
+      {
+        "key": "size",
+        "type": "SIZE"
+      },
+      {
+        "key": "side1",
+        "type": "VIDEO",
+        "validations": {
+          "aspectRatio": [
+            [
+              [
+                16,
+                9
+              ]
+            ],
+            0.05
+          ],
+          "required": true,
+          "maxFileSize": [
+            5242880
+          ]
+        },
+        "locales": {
+          "zh-TW": "第一頁影片檔案",
+          "en": "Front Page Video File"
+        }
+      },
+      {
+        "key": "landingPage",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        }
+      },
+      {
+        "key": "side2",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "上方圖片檔案",
+          "en": "Top Image File"
+        }
+      },
+      {
+        "key": "landingPage2",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        },
+        "locales": {
+          "zh-TW": "上方圖檔點擊網址",
+          "en": "Top Image Landing Page"
+        }
+      },
+      {
+        "key": "side3",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "後方圖片檔案",
+          "en": "Back Image File"
+        }
+      },
+      {
+        "key": "landingPage3",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        },
+        "locales": {
+          "zh-TW": "後方圖檔點擊網址",
+          "en": "Back Image Landing Page"
+        }
+      },
+      {
+        "key": "side4",
+        "type": "IMAGE",
+        "validations": {
+          "maxFileSize": [
+            2097152
+          ]
+        },
+        "locales": {
+          "zh-TW": "下方圖片檔案",
+          "en": "Bottom Image File"
+        }
+      },
+      {
+        "key": "landingPage4",
+        "type": "URL",
+        "validations": {
+          "required": true,
+          "validURL": true
+        },
+        "locales": {
+          "zh-TW": "下方圖檔點擊網址",
+          "en": "Bottom Image Landing Page"
+        }
+      },
+      {
+        "key": "rotateDirection",
+        "type": "RADIO",
+        "locales": {
+          "zh-TW": "旋轉方向",
+          "en": "Rotate Direction"
+        },
+        "isParameter": true,
+        "defaultValue": "upSideDown",
+        "validations": {},
+        "options": [
+          {
+            "value": "upSideDown",
+            "locales": {
+              "zh-TW": "由上往下旋轉",
+              "en": "From Top to Bottom"
+            }
+          },
+          {
+            "value": "bottomTop",
+            "locales": {
+              "zh-TW": "由下往上旋轉",
+              "en": "From Bottom To Top"
+            }
+          }
+        ]
+      },
+      {
+        "key": "rotateDelay",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面停留秒數",
+          "en": "Delay seconds perpage"
+        },
+        "defaultValue": "1.5",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      },
+      {
+        "key": "rotateSpeed",
+        "type": "TEXT",
+        "locales": {
+          "zh-TW": "每面旋轉的速度（秒）",
+          "en": "Rotate Speed (Second)"
+        },
+        "defaultValue": "0.8",
+        "isParameter": true,
+        "validations": {
+          "isNumber": true
+        }
+      }
+    ],
+    "ui_width": 970,
+    "ui_height": 250,
+    "ad_size": {
+      "zh-TW": "根據設定",
+      "en": "By Creative Setting"
+    },
+    "dfp_size": {
+      "zh-TW": "建議同廣告尺寸",
+      "en": "As Creative Size"
+    },
+    "sample": {
+      "name": "桌機3D魔術方塊",
+      "assets": [
+        {
+          "key": "side1",
+          "type": "VIDEO",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/front.mp4"
+        },
+        {
+          "key": "side2",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/top.png"
+        },
+        {
+          "key": "side3",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/back.png"
+        },
+        {
+          "key": "side4",
+          "type": "IMAGE",
+          "src": "https://tenmaxsgads.blob.core.windows.net/creative-sample/desktop-cube/bottom.png"
+        },
+        {
+          "key": "landingPage",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=1"
+        },
+        {
+          "key": "landingPage2",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=2"
+        },
+        {
+          "key": "landingPage3",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=3"
+        },
+        {
+          "key": "landingPage4",
+          "type": "URL",
+          "content": "https://www.tenmax.io/?utm_source=4"
+        },
+        {
+          "key": "__PARAMETERS__",
+          "type": "OBJECT",
+          "content": "{}"
+        }
+      ]
+    }
+  }
+]
