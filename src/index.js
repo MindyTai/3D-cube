@@ -550,7 +550,23 @@ _Cube.prototype = {
       .getComputedStyle(this.dom)
       .getPropertyValue('transform');
 
-    this.dom.style.transform = currentTransformVal;
+    if (this.side === 'C' && this.lastSide === 'F') {
+      var postVal = currentTransformVal
+        .split('(')[1]
+        .match(/-?[\d.]+(e-\d+)?/g);
+      var angle = Math.round(
+        Math.atan2(postVal[9], postVal[10]) * (180 / Math.PI)
+      );
+      angle -= 90;
+
+      var lastTransform = this.getLastTransform(this.nextTransformVal);
+      var realTransform =
+        lastTransform + 'rotate3d(0 , 1 ,0 ,' + angle + 'deg)';
+      this.dom.style.transform = realTransform;
+    } else {
+      this.dom.style.transform = currentTransformVal;
+    }
+
     this.dom.classList.remove('transition');
   },
 
@@ -1257,7 +1273,7 @@ var cube = new Cube(
     'https://www.tenmax.io/?utm_source=5',
     'https://www.tenmax.io/?utm_source=6'
   ],
-  2,
+  1,
   'rightTop',
   1000
 ); // or ANIMATION_TYPE.TL
