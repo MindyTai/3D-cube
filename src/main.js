@@ -437,6 +437,8 @@ function _Cube(dom, delayTime) {
   this.turn = 0;
   this.isTouchEventSupported = 'ontouchstart' in window;
   this.timers = [];
+  this.interacted = false;
+  this.lastTime = (new Date()).getTime();
   this.delayTime = delayTime;
 
 
@@ -462,8 +464,8 @@ _Cube.prototype = {
     this.mouseLeaveHandler = this.mouseLeaveHandler.bind(this);
     this.mouseEnterHandler = this.mouseEnterHandler.bind(this);
     if (!this.isTouchEventSupported) {
-      this.dom.addEventListener('mouseleave', this.mouseLeaveHandler);
-      this.dom.addEventListener('mouseenter', this.mouseEnterHandler);
+      // this.dom.addEventListener('mouseleave', this.mouseLeaveHandler);
+      // this.dom.addEventListener('mouseenter', this.mouseEnterHandler);
     }
   },
 
@@ -538,13 +540,28 @@ _Cube.prototype = {
   },
 
   mouseEnterHandler() {
-    this.clearAllTimeout();
     this.nextTransformVal = this.dom.style.transform;
     var currentTransformVal = window
       .getComputedStyle(this.dom)
       .getPropertyValue('transform');
 
-    this.dom.style.transform = currentTransformVal;
+    if (this.side === 'C' && this.lastSide === 'F') {
+      var postVal = currentTransformVal
+        .split('(')[1]
+        .match(/-?[\d.]+(e-\d+)?/g);
+      var angle = Math.round(
+        Math.atan2(postVal[9], postVal[10]) * (180 / Math.PI)
+      );
+      angle -= 90;
+
+      var lastTransform = this.getLastTransform(this.nextTransformVal);
+      var realTransform =
+        lastTransform + 'rotate3d(0 , 1 ,0 ,' + angle + 'deg)';
+      this.dom.style.transform = realTransform;
+    } else {
+      this.dom.style.transform = currentTransformVal;
+    }
+
     this.dom.classList.remove('transition');
   },
 
@@ -557,8 +574,8 @@ _Cube.prototype = {
       : e.clientY;
 
     if (!this.isTouchEventSupported) {
-      this.dom.removeEventListener('mouseenter', this.mouseEnterHandler);
-      this.dom.removeEventListener('mouseleave', this.mouseLeaveHandler);
+      // this.dom.removeEventListener('mouseenter', this.mouseEnterHandler);
+      // this.dom.removeEventListener('mouseleave', this.mouseLeaveHandler);
     }
   },
 
@@ -570,13 +587,14 @@ _Cube.prototype = {
   },
 
   clearAllTimeout() {
-    for (var i = 0; i < this.timers.length; i += 1) {
-      clearTimeout(this.timers[i]);
-    }
+    // for (var i = 0; i < this.timers.length; i += 1) {
+    //   clearTimeout(this.timers[i]);
+    // }
+    this.interacted = true;
   }
 };
 
-function VertHoriCube(dom, delayTime) {
+function VertHoriCube(dom, delayTime, roundTime) {
   _Cube.call(this, dom, delayTime);
   this.isDirectionChanged = false;
   this.animation = this.animation.bind(this);
@@ -593,67 +611,51 @@ function VertHoriCube(dom, delayTime) {
   this.toUpSide = this.toUpSide.bind(this);
 
   this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
-
-
+  this.roundTime = roundTime;
 }
 
 VertHoriCube.prototype = Object.create(_Cube.prototype);
 VertHoriCube.prototype.constructor = VertHoriCube;
 
 VertHoriCube.prototype.animation = function() {
-  console.log('??', this);
   var self = this;
   var id;
-  if (!this.isDirectionChanged) {
-    if (this.side === 'A') {
-      id = setTimeout(function() {
-        self.rotate(DIRECTION.DOWN);
-      }, this.delayTime);
-      this.timers.push(id);
-    } else if (this.side === 'B') {
-      id = setTimeout(function() {
-        self.rotate(DIRECTION.DOWN);
-      }, this.delayTime);
-      this.timers.push(id);
-    } else if (this.side === 'C') {
-      id = setTimeout(function() {
-        self.rotate(DIRECTION.DOWN);
-      }, this.delayTime);
-      this.timers.push(id);
-    } else if (this.side === 'D') {
-      id = setTimeout(function() {
-        self.rotate(DIRECTION.DOWN);
-      }, this.delayTime);
-      this.timers.push(id);
-      this.isDirectionChanged = true;
-    }
-    return;
-  }
+  console.log('cat');
+  var currentTime = (new Date()).getTime();
+  var deltaTime = currentTime - this.lastTime;
 
-  if (this.isDirectionChanged) {
-    if (this.side === 'A') {
-      id = setTimeout(function() {
+  if (deltaTime >= this.delayTime && !this.interacted) {
+    if (!this.isDirectionChanged) {
+      if (this.side === 'A') {
+        console.log('A');
+        self.rotate(DIRECTION.DOWN);
+      } else if (this.side === 'B') {
+        console.log('B');
+        self.rotate(DIRECTION.DOWN);
+      } else if (this.side === 'C') {
+        console.log('C');
+        self.rotate(DIRECTION.DOWN);
+      } else if (this.side === 'D') {  
+        console.log('D');
+        self.rotate(DIRECTION.DOWN);
+        this.isDirectionChanged = true;
+      }
+    } else if (this.isDirectionChanged) {
+      if (this.side === 'A') {
+        self.rotate(DIRECTION.LEFT); 
+      } else if (this.side === 'E') {
+        self.rotate(DIRECTION.LEFT); 
+      } else if (this.side === 'C') {
         self.rotate(DIRECTION.LEFT);
-      }, this.delayTime);
-      this.timers.push(id);
-    } else if (this.side === 'E') {
-      id = setTimeout(function() {
+      } else if (this.side === 'F') {
         self.rotate(DIRECTION.LEFT);
-      }, this.delayTime);
-      this.timers.push(id);
-    } else if (this.side === 'C') {
-      id = setTimeout(function() {
-        self.rotate(DIRECTION.LEFT);
-      }, this.delayTime);
-      this.timers.push(id);
-    } else if (this.side === 'F') {
-      id = setTimeout(function() {
-        self.rotate(DIRECTION.LEFT);
-      }, this.delayTime);
-      this.timers.push(id);
-      this.isDirectionChanged = false;
+        this.isDirectionChanged = false;
+      }
     }
+    this.lastTime = currentTime;
   }
+ 
+  setTimeout(this.animation, this.roundTime)
 };
 
 VertHoriCube.prototype.toRightSide = function() {
@@ -721,7 +723,6 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
- 
     return;
   }
 
@@ -745,9 +746,10 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.UP);
       } else {
-        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
-        this.dom.classList.add('transition');
-        this.toUpSide();
+        // this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+        // this.dom.classList.add('transition');
+        // this.toUpSide();
+        this.rotate(DIRECTION.UP);
       }
     } else if (
       [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
@@ -755,8 +757,8 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
       )
     ) {
       if (!this.isTouchEventSupported) {
-        this.dom.style.transform = this.nextTransformVal;
-        this.dom.classList.add('transition');
+        // this.dom.style.transform = this.nextTransformVal;
+        // this.dom.classList.add('transition');
       }
     }
   } else if (this.lastRotation === DIRECTION.LEFT) {
@@ -764,9 +766,10 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.RIGHT);
       } else {
-        this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
-        this.dom.classList.add('transition');
-        this.toRightSide();
+        // this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+        // this.dom.classList.add('transition');
+        // this.toRightSide();
+        this.rotate(DIRECTION.RIGHT);
       }
     } else if (
       [DIRECTION.LEFT, DIRECTION.DOWN, DIRECTION.UP].includes(
@@ -774,8 +777,8 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
       )
     ) {
       if (!this.isTouchEventSupported) {
-        this.dom.style.transform = this.nextTransformVal;
-        this.dom.classList.add('transition');
+        // this.dom.style.transform = this.nextTransformVal;
+        // this.dom.classList.add('transition');
       }
     }
   }
@@ -790,13 +793,14 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
   }
 };
 
-function TopLeftCube(dom, delayTime) {
+function TopLeftCube(dom, delayTime, roundTime) {
   _Cube.call(this, dom, delayTime);
   this.animation = this.animation.bind(this);
-  this.dom.addEventListener('transitionend', this.animation);
+  // this.dom.addEventListener('transitionend', this.animation);
   this.toUpSide = this.toUpSide.bind(this);
   this.toLeftSide = this.toLeftSide.bind(this);
   this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
+  this.roundTime = roundTime;
 
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
@@ -811,39 +815,39 @@ TopLeftCube.prototype = Object.create(_Cube.prototype);
 TopLeftCube.prototype.constructor = TopLeftCube;
 
 TopLeftCube.prototype.animation = function() {
+  console.log('cat');
   var id;
   var self = this;
-  if (this.side === 'A') {
-    id = setTimeout(function() {
-      self.rotate(DIRECTION.DOWN);
-    }, this.delayTime);
-    this.timers.push(id);
-  } else if (this.side === 'B') {
-    id = setTimeout(function() {
-      self.rotate(DIRECTION.RIGHT);
-    }, this.delayTime);
-    this.timers.push(id);
-  } else if (this.side === 'F') {
-    id = setTimeout(function() {
-      self.rotate(DIRECTION.DOWN);
-    }, this.delayTime);
-    this.timers.push(id);
-  } else if (this.side === 'C') {
-    id = setTimeout(function() {
-      self.rotate(DIRECTION.RIGHT);
-    }, this.delayTime);
-    this.timers.push(id);
-  } else if (this.side === 'D') {
-    id = setTimeout(function() {
-      self.rotate(DIRECTION.DOWN);
-    }, this.delayTime);
-    this.timers.push(id);
-  } else if (this.side === 'E') {
-    id = setTimeout(function() {
-      self.rotate(DIRECTION.RIGHT);
-    }, this.delayTime);
-    this.timers.push(id);
+  var currentTime = (new Date()).getTime();
+  var deltaTime = currentTime - this.lastTime;
+
+  if (deltaTime >= this.delayTime && !this.interacted) {
+    if (this.side === 'A') {
+      console.log('A');
+        self.rotate(DIRECTION.DOWN);
+    } else if (this.side === 'B') {
+      console.log('B');
+        self.rotate(DIRECTION.RIGHT);
+    } else if (this.side === 'F') {
+      console.log('F');
+        self.rotate(DIRECTION.DOWN);
+    } else if (this.side === 'C') {
+      console.log('C');
+        self.rotate(DIRECTION.RIGHT);
+    } else if (this.side === 'D') {
+      console.log('D');
+        self.rotate(DIRECTION.DOWN);
+    } else if (this.side === 'E') {
+      console.log('E');
+        self.rotate(DIRECTION.RIGHT);
+    }
+
+    this.lastTime = currentTime;
   }
+
+  
+  setTimeout(this.animation, this.roundTime)
+  // this.timers.push(id);
 };
 
 TopLeftCube.prototype.toUpSide = function() {
@@ -880,7 +884,6 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
-   
     return;
   }
 
@@ -939,7 +942,8 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.UP);
       } else {
-        this.toUpSide();
+        // this.toUpSide();
+        this.rotate(DIRECTION.UP);
       }
     } else if (
       [DIRECTION.DOWN, DIRECTION.LEFT, DIRECTION.RIGHT].includes(
@@ -947,8 +951,8 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
       )
     ) {
       if (!this.isTouchEventSupported) {
-        this.dom.style.transform = this.nextTransformVal;
-        this.dom.classList.add('transition');
+        // this.dom.style.transform = this.nextTransformVal;
+        // this.dom.classList.add('transition');
       }
     }
   } else if (this.lastRotation === DIRECTION.RIGHT) {
@@ -956,7 +960,8 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.LEFT);
       } else {
-        this.toLeftSide();
+        // this.toLeftSide();
+        this.rotate(DIRECTION.LEFT);
       }
     } else if (
       [DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.UP].includes(
@@ -964,8 +969,8 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
       )
     ) {
       if (!this.isTouchEventSupported) {
-        this.dom.style.transform = this.nextTransformVal;
-        this.dom.classList.add('transition');
+        // this.dom.style.transform = this.nextTransformVal;
+        // this.dom.classList.add('transition');
       }
     }
   }
@@ -980,11 +985,13 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
   }
 };
 
-function Cube(dom, animationType, size, sides, iconPosition, delayTime) {
+function Cube(dom, animationType, size, sides, iconPosition, delayTime, roundTime) {
   this.dom = dom;
   this.size = size;
+  this.roundTime = roundTime;
   this.adjustTLSize = this.adjustTLSize.bind(this);
   this.adjustVHSize = this.adjustVHSize.bind(this);
+
 
   this.sides = sides;
   this.playSpeed = this.playSpeed.bind(this);
@@ -1000,12 +1007,11 @@ function Cube(dom, animationType, size, sides, iconPosition, delayTime) {
 
   if (animationType === ANIMATION_TYPE.TL) {
     this.adjustTLSize();
-    return new TopLeftCube(dom, delayTime);
+    return new TopLeftCube(dom, delayTime, roundTime);
   }
   if (animationType === ANIMATION_TYPE.VH) {
-    console.log('1111');
     this.adjustVHSize();
-    return new VertHoriCube(dom, delayTime);
+    return new VertHoriCube(dom, delayTime, roundTime);
   }
   throw new Error('INVALID_TYPE');
 }
@@ -1116,7 +1122,6 @@ Cube.prototype = {
       'px) rotateX(-90deg) rotateY(0deg) rotateZ(-360deg)';
   },
   playSpeed() {
-    console.log(document.styleSheets[0]);
     document.styleSheets[1].cssRules[8].style.transition =
       'transform ' + 1 / this.sides + 's linear';
   },
@@ -1150,23 +1155,6 @@ Cube.prototype = {
   }
 };
 
-// function loadExternalJS$(helpers) {
-//   var http = helpers.http;
-//   var externalJS = [
-//     // 'https://ads-cdn.tenmax.io/code/TweenMax.2.1.2.min.js',
-//     // 'https://ads-cdn.tenmax.io/code/TweenMax/utils/Draggable.min.js',
-//     // 'https://ads-cdn.tenmax.io/code/TweenMax/plugins/ThrowPropsPlugin.min.js',
-//     './src/abc.js'
-//   ];
-//   return http.loadJS$(externalJS[0])
-//              .then(function() {
-//                return http.loadJS$(externalJS[1]);
-//              })
-//              .then(function() {
-//                return http.loadJS$(externalJS[2]);
-//              });
-// }
-
 module.exports = function(element, assets, helpers) {
   var cubeParam = {
     id: helpers.uuid.v4(),
@@ -1181,19 +1169,20 @@ module.exports = function(element, assets, helpers) {
   cubeParam.animationType = parameters.animationType || 'VH';
   cubeParam.size = size ? size + 'px' : '300px';
   cubeParam.sides = parameters.sides ? parameters.sides : 1;
-  cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'leftTop';
-  cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 1000;
+  cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'rightDown';
+  cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 2000;
+  cubeParam.roundTime = parameters.roundTime ? parameters.roundTime : 1000;
 
   cubeParam.creativeInfo = {
     creativeId: this.creative.creativeId,
     width: creativeWidth,
     height: creativeHeight
   };
+
   element.style.width = creativeWidth + 'px';
   element.style.height = creativeHeight + 'px';
   element.style.backgroundColor = 'rgba(0,0,0,0)';
-  console.log(creativeWidth);
-  console.log(element);
+ 
   helpers.space.fixedSpaceSize();
 
    var faceAssetArray = [];
@@ -1209,10 +1198,8 @@ module.exports = function(element, assets, helpers) {
    return Promise.all([templateAsset.loaded$, stylesAsset.loaded$])
                 .then(function() {
                   var variables = {};
-                  var allAssetLoaded$ = [];
-                  console.log(cubeParam);
-                  for (var i = 1; i <= 6; i++) {
-                    console.log(i, faceAssetArray);
+                  var allAssetLoaded$ = [];   
+                  for (var i = 1; i <= 6; i++) {           
                     var faceAsset = faceAssetArray[i - 1];
                     var faceWidget = faceAsset.createDefaultWidget();
                     faceWidget.events.pipe(helpers.events);
@@ -1235,11 +1222,7 @@ module.exports = function(element, assets, helpers) {
                   mainCube.setAttribute('id', cubeParam.id);
                   helpers.space.setViewabilityTarget(element);
                   return Promise.all(allAssetLoaded$)
-                                // .then(function() {
-                                //   return loadExternalJS$(helpers);
-                                // })
                                 .then(function() {
-                                  // console.log(cubeParam);
                                   return new Cube(
                                     mainCube,
                                     cubeParam.animationType,
@@ -1247,6 +1230,7 @@ module.exports = function(element, assets, helpers) {
                                     cubeParam.sides,
                                     cubeParam.iconPosition,
                                     cubeParam.delayTime,
+                                    cubeParam.roundTime
                                   ); // or ANIMATION_TYPE.TL
                                 })
                                 .then(function(cubeElement) {
@@ -1263,7 +1247,10 @@ module.exports = function(element, assets, helpers) {
                                                                            voOptions);
                                     viewabilityObserver.fulfilled$
                                                        .then(function() {
-                                                         // cubeElement.animation();
+                                                        //  cubeElement.dom.addEventListener('transitionend', cubeElement.animation);
+
+                                                        //  cubeElement.dom.addEventListener('transitionend', function() { console.log('AMIMATION') });
+                                                         cubeElement.animation();
                                                          cubeParam.videoPlayer.play();
                                                        });
                                   }
