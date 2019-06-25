@@ -1210,8 +1210,8 @@ Cube.prototype = {
       'px) rotateX(-90deg) rotateY(0deg) rotateZ(-360deg)';
   },
   playSpeed() {
-    console.log(document.styleSheets[0]);
-    document.styleSheets[0].cssRules[8].style.transition =
+    console.log(document.styleSheets[1]);
+    document.styleSheets[1].cssRules[8].style.transition =
       'transform ' + 1 / this.sides + 's linear';
   },
   adjustIconPosition() {
@@ -1264,10 +1264,10 @@ Cube.prototype = {
 module.exports = function(element, assets, helpers) {
   var cubeParam = {
     id: helpers.uuid.v4(),
-   
-  };
-  
-  var templateAsset = assets.get('template');
+
+   };
+
+   var templateAsset = assets.get('template');
   var stylesAsset = assets.get('styles');
   var parameters = assets.parameters;
   var creativeWidth = this.creative.width;
@@ -1277,8 +1277,8 @@ module.exports = function(element, assets, helpers) {
   cubeParam.sides = parameters.sides ? parameters.sides : 2;
   cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'leftTop';
   cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 1000;
-  
-  cubeParam.creativeInfo = {
+
+   cubeParam.creativeInfo = {
     creativeId: this.creative.creativeId,
     width: creativeWidth,
     height: creativeHeight
@@ -1290,7 +1290,7 @@ module.exports = function(element, assets, helpers) {
   console.log(element.style);
   helpers.space.fixedSpaceSize();
 
-  var faceAssetArray = [];
+   var faceAssetArray = [];
   var landingPageArray = [];
   for (var i = 1; i <= 6; i++) {
     var faceAsset = assets.get('face' + i);
@@ -1300,7 +1300,7 @@ module.exports = function(element, assets, helpers) {
   }
   landingPageArray = landingPageArray.reverse();
 
-  return Promise.all([templateAsset.loaded$, stylesAsset.loaded$])
+   return Promise.all([templateAsset.loaded$, stylesAsset.loaded$])
                 .then(function() {
                   var variables = {};
                   var allAssetLoaded$ = [];
@@ -1325,7 +1325,7 @@ module.exports = function(element, assets, helpers) {
                     variables['anchor'+i] = anchorWidget;
                   }
                   helpers.template.render(element, templateAsset, variables);
-                  var mainCube = element.querySelector('div.camera');
+                  var mainCube = element.querySelector('div.space');
                   mainCube.setAttribute('id', cubeParam.id);
                   helpers.space.setViewabilityTarget(element);
                   return Promise.all(allAssetLoaded$)
@@ -1335,7 +1335,7 @@ module.exports = function(element, assets, helpers) {
                                 .then(function() {
                                   // console.log(cubeParam);
                                   return new Cube(
-                                    element,
+                                    mainCube,
                                     cubeParam.animationType,
                                     cubeParam.size,
                                     [
@@ -1372,5 +1372,4 @@ module.exports = function(element, assets, helpers) {
                                 });
                 });
 };
-
 

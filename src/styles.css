@@ -3,35 +3,55 @@ body {
   padding: 0;
 }
 
-.videoBg {
+.videoBg{
   overflow: hidden;
   background-size: contain;
 }
 
-.video {
+.video{
   position: absolute;
-  top: 50%;
+  top: 50%; 
   left: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
-  width: 100%;
-  height: 100%;
+  width: 100%; 
+  height: 100%; 
   overflow: hidden;
 }
 
 .camera {
   position: relative;
   perspective: 1000px;
+
+}
+
+#safe-area {
+  text-align: center;
+  /* width: 450px;
+  height: 450px; */
+  left: 0;
+  position: absolute;
+  right: 0;
+  margin: auto;
+  /* top: -75px; */
+}
+
+
+#icon-space {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 .icon {
-  /* background-image: url(https://trello-attachments.s3.amazonaws.com/5ceb8c5d12d1522c0ef32fcb/40x40/c7137fc299d108e8892f630d402d92d2/icon-for-six-side.gif); */
+  background-image: url(https://trello-attachments.s3.amazonaws.com/5ceb8c5d12d1522c0ef32fcb/40x40/c7137fc299d108e8892f630d402d92d2/icon-for-six-side.gif);
   background-repeat: no-repeat;
   height: 40px;
   width: 40px;
-  position: relative;
-  margin: auto;
-  z-index: 2;
+  position: absolute;
+  z-index: 2; 
 }
 
 .space {
@@ -39,9 +59,11 @@ body {
   transform-style: preserve-3d;
   transform-origin: center center;
   transition-property: transform;
+  margin: auto;
 }
 
 .transition {
+ 
 }
 
 .box {
@@ -56,7 +78,7 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: black;
+  background-color:black;
 }
 
 .box1 {
@@ -64,25 +86,32 @@ body {
 }
 
 .box2 {
-  transform-origin: left top;
-  /* transform: translate(450px) translateY(150px) translateZ(150px) rotateY(90deg); */
+   transform-origin: left top;
+   /* transform: translate(450px) translateY(150px) translateZ(150px) rotateY(90deg); */
+   background-image: url('./assets/assets_300250_1.png');
 }
 
 .box3 {
   /* transform: translateX(150px) translateY(150px) translateZ(-150px) rotateY(180deg) rotateZ(270deg); */
+  background-image: url('./assets/assets_300250_1.png');
+  
 }
 
 .box4 {
   transform-origin: right top;
   /* transform: translateX(-150px) translateY(150px) translateZ(-150px) rotateY(-90deg) rotateZ(-90deg); */
+  background-image: url('./assets/assets_300250_1.png')
 }
 
 .box5 {
   transform-origin: bottom center;
   /* transform: translateX(150px) translateY(-150px) translateZ(150px) rotateX(90deg) ; */
+  background-image: url('./assets/assets_300250_1.png');
 }
 
 .box6 {
   transform-origin: top center;
   /* transform: translateX(300px) translateY(450px) translateZ(0px) rotateX(-90deg) rotateZ(-270deg); */
+  background-image: url('./assets/assets_300250_1.png')
 }
+
