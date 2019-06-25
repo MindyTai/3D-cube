@@ -1077,8 +1077,8 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
 function Cube(dom, animationType, size, link, sides, iconPosition, delayTime) {
   this.dom = dom;
   this.size = size;
-  this.adjustSize = this.adjustSize.bind(this);
-  this.adjustSize();
+  this.adjustTLSize = this.adjustTLSize.bind(this);
+  this.adjustVHSize = this.adjustVHSize.bind(this);
 
   this.sides = sides;
   this.playSpeed = this.playSpeed.bind(this);
@@ -1091,18 +1091,21 @@ function Cube(dom, animationType, size, link, sides, iconPosition, delayTime) {
   this.delayTime = delayTime;
 
   if (animationType === ANIMATION_TYPE.TL) {
+    this.adjustTLSize();
     return new TopLeftCube(dom, delayTime, link);
   }
   if (animationType === ANIMATION_TYPE.VH) {
+    console.log('1111');
+    this.adjustVHSize();
     return new VertHoriCube(dom, delayTime, link);
   }
   throw new Error('INVALID_TYPE');
 }
 
 Cube.prototype = {
-  adjustSize() {
-    this.dom.style.width = (parseInt(this.size, 10) * 2).toString() + 'px';
-    this.dom.style.height = (parseInt(this.size, 10) * 2).toString() + 'px';
+  adjustTLSize() {
+    this.dom.style.width = parseInt(this.size, 10).toString() + 'px';
+    this.dom.style.height = parseInt(this.size, 10).toString() + 'px';
 
     for (var i = 0; i < 6; i += 1) {
       document.getElementsByClassName('box')[i].style.width =
@@ -1115,60 +1118,97 @@ Cube.prototype = {
     }
 
     document.getElementsByClassName('box1')[0].style.transform =
-      'translateX(' +
-      (parseInt(this.size, 10) / 2).toString() +
-      'px) translateY(' +
-      (parseInt(this.size, 10) / 2).toString() +
-      'px) translateZ(' +
+      'translateX(0px) translateY(0px) translateZ(' +
       (parseInt(this.size, 10) / 2).toString() +
       'px)';
 
     document.getElementsByClassName('box2')[0].style.transform =
-      'translate(' +
-      (parseInt(this.size, 10) / 2).toString() * 3 +
-      'px) translateY(' +
-      (parseInt(this.size, 10) / 2).toString() +
-      'px) translateZ(' +
+      'translateX(' +
+      parseInt(this.size, 10).toString() +
+      'px) translateY(0px) translateZ(' +
       (parseInt(this.size, 10) / 2).toString() +
       'px) rotateY(90deg)';
 
     document.getElementsByClassName('box3')[0].style.transform =
-      'translateX(+' +
-      (parseInt(this.size, 10) / 2).toString() +
-      'px) translateY(' +
-      (parseInt(this.size, 10) / 2).toString() +
-      'px) translateZ(' +
+      'translateX(0px) translateY(0px) translateZ(' +
       -(parseInt(this.size, 10) / 2).toString() +
-      'px) rotateY(180deg) rotateZ(270deg)';
+      'px) rotateY(180deg) rotateZ(180deg)';
 
     document.getElementsByClassName('box4')[0].style.transform =
       'translateX(' +
-      -(parseInt(this.size, 10) / 2).toString() +
-      'px) translateY(' +
+      -parseInt(this.size, 10).toString() +
+      'px) translateY(0px) translateZ(' +
       (parseInt(this.size, 10) / 2).toString() +
-      'px) translateZ(' +
-      -(parseInt(this.size, 10) / 2).toString() +
-      'px) rotateY(-90deg) rotateZ(-90deg)';
+      'px) rotateX(0deg) rotateY(-90deg) rotateZ(-360deg)';
 
     document.getElementsByClassName('box5')[0].style.transform =
-      'translateX(' +
-      (parseInt(this.size, 10) / 2).toString() +
-      'px) translateY(' +
-      -(parseInt(this.size, 10) / 2).toString() +
+      'translateX(0px) translateY(' +
+      -parseInt(this.size, 10).toString() +
       'px) translateZ(' +
       (parseInt(this.size, 10) / 2).toString() +
       'px) rotateX(90deg)';
 
     document.getElementsByClassName('box6')[0].style.transform =
-      'translateX(' +
+      'translateX(0px) translateY(' +
       parseInt(this.size, 10) +
-      'px) translateY(' +
-      (parseInt(this.size, 10) / 2) * 3 +
       'px) translateZ(' +
-      0 +
-      'px) rotateX(-90deg) rotateZ(-270deg)';
+      parseInt(this.size, 10) / 2 +
+      'px) rotateX(-90deg) rotateY(0deg) rotateZ(-360deg)';
+  },
+  adjustVHSize() {
+    this.dom.style.width = parseInt(this.size, 10).toString() + 'px';
+    this.dom.style.height = parseInt(this.size, 10).toString() + 'px';
+
+    for (var i = 0; i < 6; i += 1) {
+      document.getElementsByClassName('box')[i].style.width =
+        parseInt(this.size, 10).toString() + 'px';
+    }
+
+    for (var y = 0; y < 6; y += 1) {
+      document.getElementsByClassName('box')[y].style.height =
+        parseInt(this.size, 10).toString() + 'px';
+    }
+
+    document.getElementsByClassName('box1')[0].style.transform =
+      'translateX(0px) translateY(0px) translateZ(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px)';
+
+    document.getElementsByClassName('box2')[0].style.transform =
+      'translateX(' +
+      parseInt(this.size, 10).toString() +
+      'px) translateY(0px) translateZ(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) rotateY(90deg)';
+
+    document.getElementsByClassName('box3')[0].style.transform =
+      'translateX(0px) translateY(0px) translateZ(' +
+      -(parseInt(this.size, 10) / 2).toString() +
+      'px) rotateY(180deg) rotateZ(180deg)';
+
+    document.getElementsByClassName('box4')[0].style.transform =
+      'translateX(' +
+      -parseInt(this.size, 10).toString() +
+      'px) translateY(0px) translateZ(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) rotateX(0deg) rotateY(-90deg) rotateZ(-360deg)';
+
+    document.getElementsByClassName('box5')[0].style.transform =
+      'translateX(0px) translateY(' +
+      -parseInt(this.size, 10).toString() +
+      'px) translateZ(' +
+      (parseInt(this.size, 10) / 2).toString() +
+      'px) rotateX(90deg)';
+
+    document.getElementsByClassName('box6')[0].style.transform =
+      'translateX(0px) translateY(' +
+      parseInt(this.size, 10) +
+      'px) translateZ(' +
+      parseInt(this.size, 10) / 2 +
+      'px) rotateX(-90deg) rotateY(0deg) rotateZ(-360deg)';
   },
   playSpeed() {
+    console.log(document.styleSheets[0]);
     document.styleSheets[0].cssRules[6].style.transition =
       'transform ' + 1 / this.sides + 's linear';
   },
@@ -1206,7 +1246,7 @@ Cube.prototype = {
 var cubeDom = document.getElementsByClassName('space')[0];
 var cube = new Cube(
   cubeDom,
-  ANIMATION_TYPE.VH,
+  ANIMATION_TYPE.TL,
   '300px',
   [
     'https://www.tenmax.io/?utm_source=1',
