@@ -25,13 +25,32 @@ body {
 
 }
 
+#safe-area {
+  text-align: center;
+  /* width: 450px;
+  height: 450px; */
+  left: 0;
+  position: absolute;
+  right: 0;
+  margin: auto;
+  /* top: -75px; */
+}
+
+
+#icon-space {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
 .icon {
-  /* background-image: url(https://trello-attachments.s3.amazonaws.com/5ceb8c5d12d1522c0ef32fcb/40x40/c7137fc299d108e8892f630d402d92d2/icon-for-six-side.gif); */
+  background-image: url(https://trello-attachments.s3.amazonaws.com/5ceb8c5d12d1522c0ef32fcb/40x40/c7137fc299d108e8892f630d402d92d2/icon-for-six-side.gif);
   background-repeat: no-repeat;
   height: 40px;
   width: 40px;
-  position: relative;
-  margin: auto;
+  position: absolute;
   z-index: 2; 
 }
 

@@ -1088,6 +1088,8 @@ function Cube(dom, animationType, size, link, sides, iconPosition, delayTime) {
   this.adjustIconPosition = this.adjustIconPosition.bind(this);
   this.adjustIconPosition();
 
+  this.adjustSafeAreaSize();
+
   this.delayTime = delayTime;
 
   if (animationType === ANIMATION_TYPE.TL) {
@@ -1132,14 +1134,14 @@ Cube.prototype = {
     document.getElementsByClassName('box3')[0].style.transform =
       'translateX(0px) translateY(0px) translateZ(' +
       -(parseInt(this.size, 10) / 2).toString() +
-      'px) rotateY(180deg) rotateZ(180deg)';
+      'px) rotateY(180deg) rotateZ(270deg)';
 
     document.getElementsByClassName('box4')[0].style.transform =
       'translateX(' +
       -parseInt(this.size, 10).toString() +
       'px) translateY(0px) translateZ(' +
-      (parseInt(this.size, 10) / 2).toString() +
-      'px) rotateX(0deg) rotateY(-90deg) rotateZ(-360deg)';
+      -(parseInt(this.size, 10) / 2).toString() +
+      'px) rotateX(0deg) rotateY(-90deg) rotateZ(-450deg)';
 
     document.getElementsByClassName('box5')[0].style.transform =
       'translateX(0px) translateY(' +
@@ -1149,11 +1151,11 @@ Cube.prototype = {
       'px) rotateX(90deg)';
 
     document.getElementsByClassName('box6')[0].style.transform =
-      'translateX(0px) translateY(' +
+      'translateX(' +
+      parseInt(this.size, 10) * 0.5 +
+      'px) translateY(' +
       parseInt(this.size, 10) +
-      'px) translateZ(' +
-      parseInt(this.size, 10) / 2 +
-      'px) rotateX(-90deg) rotateY(0deg) rotateZ(-360deg)';
+      'px) translateZ(0px) rotateX(-90deg) rotateY(0deg) rotateZ(-270deg)';
   },
   adjustVHSize() {
     this.dom.style.width = parseInt(this.size, 10).toString() + 'px';
@@ -1209,37 +1211,36 @@ Cube.prototype = {
   },
   playSpeed() {
     console.log(document.styleSheets[0]);
-    document.styleSheets[0].cssRules[6].style.transition =
+    document.styleSheets[0].cssRules[8].style.transition =
       'transform ' + 1 / this.sides + 's linear';
   },
   adjustIconPosition() {
     this.positions = ['leftDown', 'leftTop', 'rightDown', 'rightTop'];
-    console.log(this.iconPosition);
+    document.getElementById('icon-space').style.width =
+      parseInt(this.size, 10) + 'px';
+    document.getElementById('icon-space').style.height =
+      parseInt(this.size, 10) + 'px';
     if (this.iconPosition === this.positions[0]) {
-      console.log('dog');
-      document.getElementsByClassName('icon')[0].style.top =
-        (parseInt(this.size, 10) * 1.5).toString() + 'px';
-      document.getElementsByClassName('icon')[0].style.left =
-        -(parseInt(this.size, 10) * 0.4).toString() + 'px';
+      document.getElementsByClassName('icon')[0].style.bottom = '10px';
+      document.getElementsByClassName('icon')[0].style.left = '10px';
     } else if (this.iconPosition === this.positions[1]) {
-      document.getElementsByClassName('icon')[0].style.top =
-        parseInt(this.size, 10).toString() * 0.7 + 'px';
-
-      document.getElementsByClassName('icon')[0].style.left =
-        -(parseInt(this.size, 10) / 2).toString() * 0.595 + 'px';
+      document.getElementsByClassName('icon')[0].style.top = '10px';
+      document.getElementsByClassName('icon')[0].style.left = '10px';
     } else if (this.iconPosition === this.positions[2]) {
-      document.getElementsByClassName('icon')[0].style.top =
-        parseInt(this.size, 10).toString() * 1.5 + 'px';
-
-      document.getElementsByClassName('icon')[0].style.left =
-        (parseInt(this.size, 10) * 0.4).toString() + 'px';
+      document.getElementsByClassName('icon')[0].style.right = '10px';
+      document.getElementsByClassName('icon')[0].style.bottom = '10px';
     } else if (this.iconPosition === this.positions[3]) {
-      document.getElementsByClassName('icon')[0].style.top =
-        parseInt(this.size, 10).toString() * 0.7 + 'px';
-
-      document.getElementsByClassName('icon')[0].style.left =
-        parseInt(this.size, 10).toString() * 0.43 + 'px';
+      document.getElementsByClassName('icon')[0].style.right = '10px';
+      document.getElementsByClassName('icon')[0].style.top = '10px';
     }
+  },
+  adjustSafeAreaSize() {
+    document.getElementById('safe-area').style.width =
+      parseInt(this.size, 10) * 1.5 + 'px';
+    document.getElementById('safe-area').style.height =
+      parseInt(this.size, 10) * 1.5 + 'px';
+    document.getElementById('safe-area').style.top =
+      -(parseInt(this.size, 10) * 1.5 - parseInt(this.size, 10)) * 0.5 + 'px';
   }
 };
 
@@ -1247,7 +1248,7 @@ var cubeDom = document.getElementsByClassName('space')[0];
 var cube = new Cube(
   cubeDom,
   ANIMATION_TYPE.TL,
-  '300px',
+  '500px',
   [
     'https://www.tenmax.io/?utm_source=1',
     'https://www.tenmax.io/?utm_source=2',
@@ -1257,7 +1258,7 @@ var cube = new Cube(
     'https://www.tenmax.io/?utm_source=6'
   ],
   2,
-  'leftTop',
+  'rightTop',
   1000
 ); // or ANIMATION_TYPE.TL
 cube.animation();
