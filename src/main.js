@@ -423,7 +423,7 @@ var ANIMATION_TYPE = {
   TL: 'TL'
 };
 
-function _Cube(dom, delayTime, link) {
+function _Cube(dom, delayTime) {
   this.dom = dom;
   this.stateIdx = 0;
   this.side = 'A';
@@ -436,16 +436,9 @@ function _Cube(dom, delayTime, link) {
   this.swipeDirection = undefined;
   this.turn = 0;
   this.isTouchEventSupported = 'ontouchstart' in window;
-  this.timerA = undefined;
-  this.timerB = undefined;
-  this.timerC = undefined;
-  this.timerD = undefined;
-  this.timerE = undefined;
-  this.timerF = undefined;
-  this.timerG = undefined;
-  this.timerH = undefined;
+  this.timers = [];
   this.delayTime = delayTime;
-  this.link = link;
+
 
   this.init();
 }
@@ -545,6 +538,7 @@ _Cube.prototype = {
   },
 
   mouseEnterHandler() {
+    this.clearAllTimeout();
     this.nextTransformVal = this.dom.style.transform;
     var currentTransformVal = window
       .getComputedStyle(this.dom)
@@ -573,15 +567,20 @@ _Cube.prototype = {
     if (e.cancelable) {
       e.preventDefault();
     } else return false;
+  },
+
+  clearAllTimeout() {
+    for (var i = 0; i < this.timers.length; i += 1) {
+      clearTimeout(this.timers[i]);
+    }
   }
 };
 
-function VertHoriCube(dom, delayTime, link) {
-  _Cube.call(this, dom, delayTime, link);
+function VertHoriCube(dom, delayTime) {
+  _Cube.call(this, dom, delayTime);
   this.isDirectionChanged = false;
   this.animation = this.animation.bind(this);
   this.dom.addEventListener('transitionend', this.animation);
-  this.timers = [];
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
@@ -594,69 +593,65 @@ function VertHoriCube(dom, delayTime, link) {
   this.toUpSide = this.toUpSide.bind(this);
 
   this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
-  this.linkTo = this.linkTo.bind(this);
 
-  this.link = link;
+
 }
 
 VertHoriCube.prototype = Object.create(_Cube.prototype);
 VertHoriCube.prototype.constructor = VertHoriCube;
 
 VertHoriCube.prototype.animation = function() {
+  console.log('??', this);
   var self = this;
+  var id;
   if (!this.isDirectionChanged) {
     if (this.side === 'A') {
-      this.timerA = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.DOWN);
       }, this.delayTime);
-
-      this.timers.push(this.timerA);
+      this.timers.push(id);
     } else if (this.side === 'B') {
-      this.timerB = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.DOWN);
       }, this.delayTime);
-
-      this.timers.push(this.timerB);
+      this.timers.push(id);
     } else if (this.side === 'C') {
-      this.timerC = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.DOWN);
       }, this.delayTime);
-
-      this.timers.push(this.timerC);
+      this.timers.push(id);
     } else if (this.side === 'D') {
-      this.timerD = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.DOWN);
       }, this.delayTime);
-
-      this.timers.push(this.timerD);
+      this.timers.push(id);
       this.isDirectionChanged = true;
     }
-  } else if (this.isDirectionChanged) {
+    return;
+  }
+
+  if (this.isDirectionChanged) {
     if (this.side === 'A') {
-      this.timerE = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.LEFT);
       }, this.delayTime);
-
-      this.timers.push(this.timerE);
+      this.timers.push(id);
     } else if (this.side === 'E') {
-      this.timerF = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.LEFT);
       }, this.delayTime);
-
-      this.timers.push(this.timerF);
+      this.timers.push(id);
     } else if (this.side === 'C') {
-      this.timerG = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.LEFT);
       }, this.delayTime);
-
-      this.timers.push(this.timerG);
+      this.timers.push(id);
     } else if (this.side === 'F') {
-      this.timerH = setTimeout(function() {
+      id = setTimeout(function() {
         self.rotate(DIRECTION.LEFT);
       }, this.delayTime);
-
+      this.timers.push(id);
       this.isDirectionChanged = false;
-      this.timers.push(this.timerH);
     }
   }
 };
@@ -677,46 +672,6 @@ VertHoriCube.prototype.toUpSide = function() {
   this.findIndex();
 };
 
-VertHoriCube.prototype.linkTo = function() {
-  var self = this;
-  if (this.side === 'A') {
-    document
-      .getElementsByClassName('box1')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[0]);
-      });
-  } else if (this.side === 'B') {
-    document
-      .getElementsByClassName('box5')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[1]);
-      });
-  } else if (this.side === 'C') {
-    document
-      .getElementsByClassName('box3')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[2]);
-      });
-  } else if (this.side === 'D') {
-    document
-      .getElementsByClassName('box6')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[3]);
-      });
-  } else if (this.side === 'E') {
-    document
-      .getElementsByClassName('box2')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[4]);
-      });
-  } else if (this.side === 'F') {
-    document
-      .getElementsByClassName('box4')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[5]);
-      });
-  }
-};
 
 VertHoriCube.prototype.activeStateEndHandler = function(e) {
   var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
@@ -730,7 +685,7 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
-    this.linkTo();
+ 
     return;
   }
 
@@ -766,7 +721,7 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
-    this.linkTo();
+ 
     return;
   }
 
@@ -783,9 +738,7 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
-  for (var i = 0; i < this.timers.length; i += 1) {
-    clearTimeout(this.timers[i]);
-  }
+  this.clearAllTimeout();
 
   if (this.lastRotation === DIRECTION.DOWN) {
     if (this.swipeDirection === DIRECTION.UP) {
@@ -837,15 +790,14 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
   }
 };
 
-function TopLeftCube(dom, delayTime, link) {
-  _Cube.call(this, dom, delayTime, link);
+function TopLeftCube(dom, delayTime) {
+  _Cube.call(this, dom, delayTime);
   this.animation = this.animation.bind(this);
   this.dom.addEventListener('transitionend', this.animation);
   this.toUpSide = this.toUpSide.bind(this);
   this.toLeftSide = this.toLeftSide.bind(this);
   this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
-  this.linkTo = this.linkTo.bind(this);
-  this.timers = [];
+
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
@@ -859,43 +811,38 @@ TopLeftCube.prototype = Object.create(_Cube.prototype);
 TopLeftCube.prototype.constructor = TopLeftCube;
 
 TopLeftCube.prototype.animation = function() {
+  var id;
   var self = this;
   if (this.side === 'A') {
-    this.timerA = setTimeout(function() {
+    id = setTimeout(function() {
       self.rotate(DIRECTION.DOWN);
     }, this.delayTime);
-
-    this.timers.push(this.timerA);
+    this.timers.push(id);
   } else if (this.side === 'B') {
-    this.timerB = setTimeout(function() {
+    id = setTimeout(function() {
       self.rotate(DIRECTION.RIGHT);
     }, this.delayTime);
-
-    this.timers.push(this.timerB);
+    this.timers.push(id);
   } else if (this.side === 'F') {
-    this.timerF = setTimeout(function() {
+    id = setTimeout(function() {
       self.rotate(DIRECTION.DOWN);
     }, this.delayTime);
-
-    this.timers.push(this.timerF);
+    this.timers.push(id);
   } else if (this.side === 'C') {
-    this.timerC = setTimeout(function() {
+    id = setTimeout(function() {
       self.rotate(DIRECTION.RIGHT);
     }, this.delayTime);
-
-    this.timers.push(this.timerC);
+    this.timers.push(id);
   } else if (this.side === 'D') {
-    this.timerD = setTimeout(function() {
+    id = setTimeout(function() {
       self.rotate(DIRECTION.DOWN);
     }, this.delayTime);
-
-    this.timers.push(this.timerD);
+    this.timers.push(id);
   } else if (this.side === 'E') {
-    this.timerE = setTimeout(function() {
+    id = setTimeout(function() {
       self.rotate(DIRECTION.RIGHT);
     }, this.delayTime);
-
-    this.timers.push(this.timerE);
+    this.timers.push(id);
   }
 };
 
@@ -919,46 +866,7 @@ TopLeftCube.prototype.toLeftSide = function() {
   this.findIndex();
 };
 
-TopLeftCube.prototype.linkTo = function() {
-  var self = this;
-  if (this.side === 'A') {
-    document
-      .getElementsByClassName('box1')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[0]);
-      });
-  } else if (this.side === 'B') {
-    document
-      .getElementsByClassName('box5')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[1]);
-      });
-  } else if (this.side === 'F') {
-    document
-      .getElementsByClassName('box4')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[2]);
-      });
-  } else if (this.side === 'C') {
-    document
-      .getElementsByClassName('box3')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[3]);
-      });
-  } else if (this.side === 'D') {
-    document
-      .getElementsByClassName('box6')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[4]);
-      });
-  } else if (this.side === 'E') {
-    document
-      .getElementsByClassName('box2')[0]
-      .addEventListener('click', function() {
-        window.open(self.link[5]);
-      });
-  }
-};
+
 
 TopLeftCube.prototype.activeStateEndHandler = function(e) {
   var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
@@ -972,7 +880,7 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
-    this.linkTo();
+   
     return;
   }
 
@@ -1007,7 +915,7 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
-    this.linkTo();
+  
     return;
   }
 
@@ -1024,9 +932,7 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
-  for (var i = 0; i < this.timers.length; i += 1) {
-    clearTimeout(this.timers[i]);
-  }
+  this.clearAllTimeout();
 
   if (this.lastRotation === DIRECTION.DOWN) {
     if (this.swipeDirection === DIRECTION.UP) {
@@ -1074,7 +980,7 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
   }
 };
 
-function Cube(dom, animationType, size, link, sides, iconPosition, delayTime) {
+function Cube(dom, animationType, size, sides, iconPosition, delayTime) {
   this.dom = dom;
   this.size = size;
   this.adjustTLSize = this.adjustTLSize.bind(this);
@@ -1094,12 +1000,12 @@ function Cube(dom, animationType, size, link, sides, iconPosition, delayTime) {
 
   if (animationType === ANIMATION_TYPE.TL) {
     this.adjustTLSize();
-    return new TopLeftCube(dom, delayTime, link);
+    return new TopLeftCube(dom, delayTime);
   }
   if (animationType === ANIMATION_TYPE.VH) {
     console.log('1111');
     this.adjustVHSize();
-    return new VertHoriCube(dom, delayTime, link);
+    return new VertHoriCube(dom, delayTime);
   }
   throw new Error('INVALID_TYPE');
 }
@@ -1210,7 +1116,7 @@ Cube.prototype = {
       'px) rotateX(-90deg) rotateY(0deg) rotateZ(-360deg)';
   },
   playSpeed() {
-    console.log(document.styleSheets[1]);
+    console.log(document.styleSheets[0]);
     document.styleSheets[1].cssRules[8].style.transition =
       'transform ' + 1 / this.sides + 's linear';
   },
@@ -1271,8 +1177,9 @@ module.exports = function(element, assets, helpers) {
   var parameters = assets.parameters;
   var creativeWidth = this.creative.width;
   var creativeHeight = this.creative.height;
+  var size = Math.min(creativeHeight, creativeWidth);
   cubeParam.animationType = parameters.animationType || 'VH';
-  cubeParam.size = parameters.size ? parameters.size : '400px';
+  cubeParam.size = size ? size + 'px' : '300px';
   cubeParam.sides = parameters.sides ? parameters.sides : 1;
   cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'leftTop';
   cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 1000;
@@ -1337,14 +1244,6 @@ module.exports = function(element, assets, helpers) {
                                     mainCube,
                                     cubeParam.animationType,
                                     cubeParam.size,
-                                    [
-                                      'https://www.tenmax.io/?utm_source=1',
-                                      'https://www.tenmax.io/?utm_source=2',
-                                      'https://www.tenmax.io/?utm_source=3',
-                                      'https://www.tenmax.io/?utm_source=4',
-                                      'https://www.tenmax.io/?utm_source=5',
-                                      'https://www.tenmax.io/?utm_source=6'
-                                    ],
                                     cubeParam.sides,
                                     cubeParam.iconPosition,
                                     cubeParam.delayTime,
@@ -1355,8 +1254,8 @@ module.exports = function(element, assets, helpers) {
                                     visibilityThreshold: 0.5,
                                     timeoutThreshold: 300
                                   };
-                                  cubeElement.animation();
                                   if (element.classList.contains('preview')) {
+                                    // cubeElement.animation();
                                     cubeParam.videoPlayer.play();
                                   } else {
                                     var viewabilityObserver = new helpers.visibility
@@ -1364,7 +1263,7 @@ module.exports = function(element, assets, helpers) {
                                                                            voOptions);
                                     viewabilityObserver.fulfilled$
                                                        .then(function() {
-                                                         cubeElement.startRotate();
+                                                         // cubeElement.animation();
                                                          cubeParam.videoPlayer.play();
                                                        });
                                   }
