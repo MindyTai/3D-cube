@@ -1264,21 +1264,20 @@ Cube.prototype = {
 module.exports = function(element, assets, helpers) {
   var cubeParam = {
     id: helpers.uuid.v4(),
-
    };
 
-   var templateAsset = assets.get('template');
+  var templateAsset = assets.get('template');
   var stylesAsset = assets.get('styles');
   var parameters = assets.parameters;
   var creativeWidth = this.creative.width;
   var creativeHeight = this.creative.height;
   cubeParam.animationType = parameters.animationType || 'VH';
-  cubeParam.size = parameters.size ? parameters.size : '300px';
-  cubeParam.sides = parameters.sides ? parameters.sides : 2;
+  cubeParam.size = parameters.size ? parameters.size : '400px';
+  cubeParam.sides = parameters.sides ? parameters.sides : 1;
   cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'leftTop';
   cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 1000;
 
-   cubeParam.creativeInfo = {
+  cubeParam.creativeInfo = {
     creativeId: this.creative.creativeId,
     width: creativeWidth,
     height: creativeHeight
@@ -1287,7 +1286,7 @@ module.exports = function(element, assets, helpers) {
   element.style.height = creativeHeight + 'px';
   element.style.backgroundColor = 'rgba(0,0,0,0)';
   console.log(creativeWidth);
-  console.log(element.style);
+  console.log(element);
   helpers.space.fixedSpaceSize();
 
    var faceAssetArray = [];

@@ -19,6 +19,11 @@ body {
   overflow: hidden;
 }
 
+#tenmax-video-player.video_container video{
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .camera {
   position: relative;
   perspective: 1000px;
