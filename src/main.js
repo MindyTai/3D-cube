@@ -500,19 +500,15 @@ _Cube.prototype = {
   nextSide(direction, lastDirection) {
     this.forceRender();
     this.dom.classList.add('transition');
-
     // 現在是哪一面
     this.lastSide = this.side;
-
     // 轉幾度過去
     this.dom.style.transform = this.dom.style.transform.concat(
       ' ',
       this.getDegree(this.stateIdx, direction)
     );
-
     // 下一面是誰
     this.side = States[this.stateIdx].side[lastDirection];
-
     // 更新 stateIdx/side/lastrotation/lastside
     this.lastRotation = direction;
     this.findIndex();
@@ -680,6 +676,8 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
+    this.startX = undefined;
+    this.startY = undefined;
     return;
   }
 
@@ -703,6 +701,8 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
       this.rotate(DIRECTION.LEFT);
     }
   }
+  this.startX = undefined;
+  this.startY = undefined;
 };
 
 VertHoriCube.prototype.initStateEndHandler = function(e) {
@@ -863,6 +863,8 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
+    this.startX = undefined;
+    this.startY = undefined;
     return;
   }
 
@@ -886,6 +888,8 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
       this.rotate(DIRECTION.LEFT);
     }
   }
+  this.startX = undefined;
+  this.startY = undefined;
 };
 
 TopLeftCube.prototype.initStateEndHandler = function(e) {
@@ -1153,7 +1157,7 @@ module.exports = function(element, assets, helpers) {
   var creativeWidth = this.creative.width;
   var creativeHeight = this.creative.height;
   var size = Math.min(creativeHeight, creativeWidth);
-  cubeParam.animationType = parameters.animationType || 'VH';
+  cubeParam.animationType = parameters.animationType || 'TL';
   cubeParam.size = size ? size + 'px' : '400px';
   cubeParam.sides = parameters.sides ? parameters.sides : 2;
   cubeParam.iconPosition = parameters.iconPosition
@@ -1161,7 +1165,6 @@ module.exports = function(element, assets, helpers) {
     : 'rightTop';
   cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 2000;
   cubeParam.roundTime = 1 / cubeParam.sides;
-  console.log(cubeParam.roundTime);
 
   cubeParam.creativeInfo = {
     creativeId: this.creative.creativeId,
