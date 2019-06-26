@@ -74,15 +74,12 @@ body {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   position: absolute;
-  font-size: 50px;
-  text-align: center;
-  line-height: 300px;
-  color: black;
-  font-size: 120px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+}
+
+.box img{
+  object-fit: contain;
   background-color:black;
+  user-select: none;
 }
 
 .box1 {

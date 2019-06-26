@@ -438,9 +438,8 @@ function _Cube(dom, delayTime) {
   this.isTouchEventSupported = 'ontouchstart' in window;
   this.timers = [];
   this.interacted = false;
-  this.lastTime = (new Date()).getTime();
+  this.lastTime = new Date().getTime();
   this.delayTime = delayTime;
-
 
   this.init();
 }
@@ -620,7 +619,7 @@ VertHoriCube.prototype.constructor = VertHoriCube;
 VertHoriCube.prototype.animation = function() {
   var self = this;
   var id;
-  var currentTime = (new Date()).getTime();
+  var currentTime = new Date().getTime();
   var deltaTime = currentTime - this.lastTime;
 
   if (deltaTime >= this.delayTime && !this.interacted) {
@@ -631,15 +630,15 @@ VertHoriCube.prototype.animation = function() {
         self.rotate(DIRECTION.DOWN);
       } else if (this.side === 'C') {
         self.rotate(DIRECTION.DOWN);
-      } else if (this.side === 'D') {  
+      } else if (this.side === 'D') {
         self.rotate(DIRECTION.DOWN);
         this.isDirectionChanged = true;
       }
     } else if (this.isDirectionChanged) {
       if (this.side === 'A') {
-        self.rotate(DIRECTION.LEFT); 
+        self.rotate(DIRECTION.LEFT);
       } else if (this.side === 'E') {
-        self.rotate(DIRECTION.LEFT); 
+        self.rotate(DIRECTION.LEFT);
       } else if (this.side === 'C') {
         self.rotate(DIRECTION.LEFT);
       } else if (this.side === 'F') {
@@ -649,7 +648,7 @@ VertHoriCube.prototype.animation = function() {
     }
     this.lastTime = currentTime;
   }
-  setTimeout(this.animation, this.roundTime)
+  setTimeout(this.animation, this.roundTime);
 };
 
 VertHoriCube.prototype.toRightSide = function() {
@@ -667,7 +666,6 @@ VertHoriCube.prototype.toUpSide = function() {
   this.lastRotation = DIRECTION.UP;
   this.findIndex();
 };
-
 
 VertHoriCube.prototype.activeStateEndHandler = function(e) {
   var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
@@ -795,7 +793,6 @@ function TopLeftCube(dom, delayTime, roundTime) {
   this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
   this.roundTime = roundTime;
 
-
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
     document.addEventListener('mouseup', this.initStateEndHandler);
@@ -809,29 +806,28 @@ TopLeftCube.prototype.constructor = TopLeftCube;
 
 TopLeftCube.prototype.animation = function() {
   var self = this;
-  var currentTime = (new Date()).getTime();
+  var currentTime = new Date().getTime();
   var deltaTime = currentTime - this.lastTime;
 
   if (deltaTime >= this.delayTime && !this.interacted) {
     if (this.side === 'A') {
-        self.rotate(DIRECTION.DOWN);
+      self.rotate(DIRECTION.DOWN);
     } else if (this.side === 'B') {
-        self.rotate(DIRECTION.RIGHT);
+      self.rotate(DIRECTION.RIGHT);
     } else if (this.side === 'F') {
-        self.rotate(DIRECTION.DOWN);
+      self.rotate(DIRECTION.DOWN);
     } else if (this.side === 'C') {
-        self.rotate(DIRECTION.RIGHT);
+      self.rotate(DIRECTION.RIGHT);
     } else if (this.side === 'D') {
-        self.rotate(DIRECTION.DOWN);
+      self.rotate(DIRECTION.DOWN);
     } else if (this.side === 'E') {
-        self.rotate(DIRECTION.RIGHT);
+      self.rotate(DIRECTION.RIGHT);
     }
 
     this.lastTime = currentTime;
   }
 
-  
-  setTimeout(this.animation, this.roundTime)
+  setTimeout(this.animation, this.roundTime);
 };
 
 TopLeftCube.prototype.toUpSide = function() {
@@ -853,8 +849,6 @@ TopLeftCube.prototype.toLeftSide = function() {
   this.lastRotation = DIRECTION.LEFT;
   this.findIndex();
 };
-
-
 
 TopLeftCube.prototype.activeStateEndHandler = function(e) {
   var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
@@ -902,7 +896,6 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
-  
     return;
   }
 
@@ -969,13 +962,20 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
   }
 };
 
-function Cube(dom, animationType, size, sides, iconPosition, delayTime, roundTime) {
+function Cube(
+  dom,
+  animationType,
+  size,
+  sides,
+  iconPosition,
+  delayTime,
+  roundTime
+) {
   this.dom = dom;
   this.size = size;
-  this.roundTime = roundTime;
+  // this.roundTime = roundTime;
   this.adjustTLSize = this.adjustTLSize.bind(this);
   this.adjustVHSize = this.adjustVHSize.bind(this);
-
 
   this.sides = sides;
   this.playSpeed = this.playSpeed.bind(this);
@@ -1111,7 +1111,8 @@ Cube.prototype = {
   },
   adjustIconPosition() {
     this.positions = ['leftDown', 'leftTop', 'rightDown', 'rightTop'];
-    document.getElementById('box').style.transform = 'translate3d(0px, 0px,'+ (-parseInt(this.size, 10).toString()/2) +'px)';
+    document.getElementById('box').style.transform =
+      'translate3d(0px, 0px,' + -parseInt(this.size, 10).toString() / 2 + 'px)';
     document.getElementById('icon-space').style.width =
       parseInt(this.size, 10) + 'px';
     document.getElementById('icon-space').style.height =
@@ -1135,17 +1136,15 @@ Cube.prototype = {
       parseInt(this.size, 10) + 90 + 'px';
     document.getElementById('safe-area').style.height =
       parseInt(this.size, 10) + 90 + 'px';
-    document.getElementById('safe-area').style.top =
-      '-45px' ;
-    document.getElementById('safe-area').style.left =
-      '-45px' ;
+    document.getElementById('safe-area').style.top = '-45px';
+    document.getElementById('safe-area').style.left = '-45px';
   }
 };
 
 module.exports = function(element, assets, helpers) {
   var cubeParam = {
-    id: helpers.uuid.v4(),
-   };
+    id: helpers.uuid.v4()
+  };
 
   var templateAsset = assets.get('template');
   var stylesAsset = assets.get('styles');
@@ -1156,9 +1155,12 @@ module.exports = function(element, assets, helpers) {
   cubeParam.animationType = parameters.animationType || 'VH';
   cubeParam.size = size ? size + 'px' : '400px';
   cubeParam.sides = parameters.sides ? parameters.sides : 2;
-  cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'rightTop';
+  cubeParam.iconPosition = parameters.iconPosition
+    ? parameters.iconPosition
+    : 'rightTop';
   cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 2000;
-  cubeParam.roundTime = 6 / this.sides;
+  cubeParam.roundTime = 1 / cubeParam.sides;
+  console.log(cubeParam.roundTime);
 
   cubeParam.creativeInfo = {
     creativeId: this.creative.creativeId,
@@ -1169,10 +1171,10 @@ module.exports = function(element, assets, helpers) {
   element.style.width = creativeWidth + 'px';
   element.style.height = creativeHeight + 'px';
   element.style.backgroundColor = 'rgba(0,0,0,0)';
- 
+
   helpers.space.fixedSpaceSize();
 
-   var faceAssetArray = [];
+  var faceAssetArray = [];
   var landingPageArray = [];
   for (var i = 1; i <= 6; i++) {
     var faceAsset = assets.get('face' + i);
@@ -1182,65 +1184,68 @@ module.exports = function(element, assets, helpers) {
   }
   landingPageArray = landingPageArray.reverse();
 
-   return Promise.all([templateAsset.loaded$, stylesAsset.loaded$])
-                .then(function() {
-                  var variables = {};
-                  var allAssetLoaded$ = [];   
-                  for (var i = 1; i <= 6; i++) {           
-                    var faceAsset = faceAssetArray[i - 1];
-                    var faceWidget = faceAsset.createDefaultWidget();
-                    faceWidget.events.pipe(helpers.events);
-                    if(i === 1){
-                      cubeParam.videoPlayer = faceWidget;
-                    }
-                    else{
-                      faceWidget.element.style.width = creativeWidth + 'px';
-                      faceWidget.element.style.height = creativeHeight + 'px';
-                    }
-                    allAssetLoaded$.push(faceAsset.loaded$);
-                    var anchorAsset = landingPageArray[i - 1];
-                    var anchorWidget = anchorAsset.createDefaultWidget();
-                    anchorWidget.events.pipe(helpers.events);
-                    variables['content'+i] = faceWidget;
-                    variables['anchor'+i] = anchorWidget;
-                  }
-                  helpers.template.render(element, templateAsset, variables);
-                  var mainCube = element.querySelector('div.space');
-                  mainCube.setAttribute('id', cubeParam.id);
-                  helpers.space.setViewabilityTarget(element);
-                  return Promise.all(allAssetLoaded$)
-                                .then(function() {
-                                  return new Cube(
-                                    mainCube,
-                                    cubeParam.animationType,
-                                    cubeParam.size,
-                                    cubeParam.sides,
-                                    cubeParam.iconPosition,
-                                    cubeParam.delayTime,
-                                    cubeParam.roundTime
-                                  ); // or ANIMATION_TYPE.TL
-                                })
-                                .then(function(cubeElement) {
-                                  var voOptions = {
-                                    visibilityThreshold: 0.5,
-                                    timeoutThreshold: 300
-                                  };
-                                  if (element.classList.contains('preview')) {
-                                    // cubeElement.animation();
-                                    cubeParam.videoPlayer.play();
-                                  } else {
-                                    var viewabilityObserver = new helpers.visibility
-                                                                         .ViewabilityObserver(element,
-                                                                           voOptions);
-                                    viewabilityObserver.fulfilled$
-                                                       .then(function() {
-                                                         cubeElement.animation();
-                                                         cubeParam.videoPlayer.play();
-                                                         document.getElementsByClassName('ppstudio')[0].style.margin = "45px";
-                                                       
-                                                       });
-                                  }
-                                });
-                });
+  return Promise.all([templateAsset.loaded$, stylesAsset.loaded$]).then(
+    function() {
+      var variables = {};
+      var allAssetLoaded$ = [];
+      for (var i = 1; i <= 6; i++) {
+        var faceAsset = faceAssetArray[i - 1];
+        var faceWidget = faceAsset.createDefaultWidget();
+        faceWidget.events.pipe(helpers.events);
+        if (i === 1) {
+          cubeParam.videoPlayer = faceWidget;
+        } else {
+          faceWidget.element.style.width = creativeWidth + 'px';
+          faceWidget.element.style.height = creativeHeight + 'px';
+        }
+        allAssetLoaded$.push(faceAsset.loaded$);
+        var anchorAsset = landingPageArray[i - 1];
+        var anchorWidget = anchorAsset.createDefaultWidget();
+        anchorWidget.events.pipe(helpers.events);
+        variables['content' + i] = faceWidget;
+        variables['anchor' + i] = anchorWidget;
+      }
+      helpers.template.render(element, templateAsset, variables);
+      var mainCube = element.querySelector('div.space');
+      mainCube.setAttribute('id', cubeParam.id);
+      helpers.space.setViewabilityTarget(element);
+      return Promise.all(allAssetLoaded$)
+        .then(function() {
+          return new Cube(
+            mainCube,
+            cubeParam.animationType,
+            cubeParam.size,
+            cubeParam.sides,
+            cubeParam.iconPosition,
+            cubeParam.delayTime,
+            cubeParam.roundTime
+          ); // or ANIMATION_TYPE.TL
+        })
+        .then(function(cubeElement) {
+          var voOptions = {
+            visibilityThreshold: 0.5,
+            timeoutThreshold: 300
+          };
+          if (element.classList.contains('preview')) {
+            // cubeElement.animation();
+            cubeParam.videoPlayer.play();
+          } else {
+            var viewabilityObserver = new helpers.visibility.ViewabilityObserver(
+              element,
+              voOptions
+            );
+            viewabilityObserver.fulfilled$.then(function() {
+              cubeElement.animation();
+              cubeParam.videoPlayer.play();
+              document.getElementsByClassName('ppstudio')[0].style.margin =
+                '45px';
+              var imgDOMs = document.getElementsByTagName('img');
+              for (var j = 0; j < imgDOMs.length; j += 1) {
+                imgDOMs[j].setAttribute('draggable', 'false');
+              }
+            });
+          }
+        });
+    }
+  );
 };
-
