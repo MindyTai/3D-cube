@@ -620,23 +620,18 @@ VertHoriCube.prototype.constructor = VertHoriCube;
 VertHoriCube.prototype.animation = function() {
   var self = this;
   var id;
-  console.log('cat');
   var currentTime = (new Date()).getTime();
   var deltaTime = currentTime - this.lastTime;
 
   if (deltaTime >= this.delayTime && !this.interacted) {
     if (!this.isDirectionChanged) {
       if (this.side === 'A') {
-        console.log('A');
         self.rotate(DIRECTION.DOWN);
       } else if (this.side === 'B') {
-        console.log('B');
         self.rotate(DIRECTION.DOWN);
       } else if (this.side === 'C') {
-        console.log('C');
         self.rotate(DIRECTION.DOWN);
       } else if (this.side === 'D') {  
-        console.log('D');
         self.rotate(DIRECTION.DOWN);
         this.isDirectionChanged = true;
       }
@@ -654,7 +649,6 @@ VertHoriCube.prototype.animation = function() {
     }
     this.lastTime = currentTime;
   }
- 
   setTimeout(this.animation, this.roundTime)
 };
 
@@ -687,7 +681,6 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === endY
   ) {
- 
     return;
   }
 
@@ -815,30 +808,22 @@ TopLeftCube.prototype = Object.create(_Cube.prototype);
 TopLeftCube.prototype.constructor = TopLeftCube;
 
 TopLeftCube.prototype.animation = function() {
-  console.log('cat');
-  var id;
   var self = this;
   var currentTime = (new Date()).getTime();
   var deltaTime = currentTime - this.lastTime;
 
   if (deltaTime >= this.delayTime && !this.interacted) {
     if (this.side === 'A') {
-      console.log('A');
         self.rotate(DIRECTION.DOWN);
     } else if (this.side === 'B') {
-      console.log('B');
         self.rotate(DIRECTION.RIGHT);
     } else if (this.side === 'F') {
-      console.log('F');
         self.rotate(DIRECTION.DOWN);
     } else if (this.side === 'C') {
-      console.log('C');
         self.rotate(DIRECTION.RIGHT);
     } else if (this.side === 'D') {
-      console.log('D');
         self.rotate(DIRECTION.DOWN);
     } else if (this.side === 'E') {
-      console.log('E');
         self.rotate(DIRECTION.RIGHT);
     }
 
@@ -847,7 +832,6 @@ TopLeftCube.prototype.animation = function() {
 
   
   setTimeout(this.animation, this.roundTime)
-  // this.timers.push(id);
 };
 
 TopLeftCube.prototype.toUpSide = function() {
@@ -1122,11 +1106,12 @@ Cube.prototype = {
       'px) rotateX(-90deg) rotateY(0deg) rotateZ(-360deg)';
   },
   playSpeed() {
-    document.styleSheets[1].cssRules[8].style.transition =
+    document.styleSheets[1].cssRules[10].style.transition =
       'transform ' + 1 / this.sides + 's linear';
   },
   adjustIconPosition() {
     this.positions = ['leftDown', 'leftTop', 'rightDown', 'rightTop'];
+    document.getElementById('box').style.transform = 'translate3d(0px, 0px,'+ (-parseInt(this.size, 10).toString()/2) +'px)';
     document.getElementById('icon-space').style.width =
       parseInt(this.size, 10) + 'px';
     document.getElementById('icon-space').style.height =
@@ -1147,11 +1132,13 @@ Cube.prototype = {
   },
   adjustSafeAreaSize() {
     document.getElementById('safe-area').style.width =
-      parseInt(this.size, 10) * 1.5 + 'px';
+      parseInt(this.size, 10) + 90 + 'px';
     document.getElementById('safe-area').style.height =
-      parseInt(this.size, 10) * 1.5 + 'px';
+      parseInt(this.size, 10) + 90 + 'px';
     document.getElementById('safe-area').style.top =
-      -(parseInt(this.size, 10) * 1.5 - parseInt(this.size, 10)) * 0.5 + 'px';
+      '-45px' ;
+    document.getElementById('safe-area').style.left =
+      '-45px' ;
   }
 };
 
@@ -1167,11 +1154,11 @@ module.exports = function(element, assets, helpers) {
   var creativeHeight = this.creative.height;
   var size = Math.min(creativeHeight, creativeWidth);
   cubeParam.animationType = parameters.animationType || 'VH';
-  cubeParam.size = size ? size + 'px' : '300px';
-  cubeParam.sides = parameters.sides ? parameters.sides : 1;
-  cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'rightDown';
+  cubeParam.size = size ? size + 'px' : '400px';
+  cubeParam.sides = parameters.sides ? parameters.sides : 2;
+  cubeParam.iconPosition = parameters.iconPosition ? parameters.iconPosition : 'rightTop';
   cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 2000;
-  cubeParam.roundTime = parameters.roundTime ? parameters.roundTime : 1000;
+  cubeParam.roundTime = 6 / this.sides;
 
   cubeParam.creativeInfo = {
     creativeId: this.creative.creativeId,
@@ -1247,11 +1234,10 @@ module.exports = function(element, assets, helpers) {
                                                                            voOptions);
                                     viewabilityObserver.fulfilled$
                                                        .then(function() {
-                                                        //  cubeElement.dom.addEventListener('transitionend', cubeElement.animation);
-
-                                                        //  cubeElement.dom.addEventListener('transitionend', function() { console.log('AMIMATION') });
                                                          cubeElement.animation();
                                                          cubeParam.videoPlayer.play();
+                                                         document.getElementsByClassName('ppstudio')[0].style.margin = "45px";
+                                                       
                                                        });
                                   }
                                 });
