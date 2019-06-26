@@ -565,6 +565,7 @@ _Cube.prototype = {
   },
 
   startHandler(e) {
+    e.preventDefault();
     this.startX = this.isTouchEventSupported
       ? e.changedTouches[0].pageX
       : e.clientX;
@@ -780,7 +781,7 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
   } else {
     document.removeEventListener(this.endEvent, this.initStateEndHandler);
-    this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
+    document.addEventListener(this.endEvent, this.activeStateEndHandler);
   }
 };
 
@@ -958,7 +959,7 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
   } else {
     document.removeEventListener(this.endEvent, this.initStateEndHandler);
-    this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
+    document.addEventListener(this.endEvent, this.activeStateEndHandler);
   }
 };
 
