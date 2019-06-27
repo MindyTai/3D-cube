@@ -580,13 +580,6 @@ _Cube.prototype = {
     if (e.cancelable) {
       e.preventDefault();
     } else return false;
-  },
-
-  clearAllTimeout() {
-    // for (var i = 0; i < this.timers.length; i += 1) {
-    //   clearTimeout(this.timers[i]);
-    // }
-    this.interacted = true;
   }
 };
 
@@ -594,7 +587,6 @@ function VertHoriCube(dom, delayTime, roundTime) {
   _Cube.call(this, dom, delayTime);
   this.isDirectionChanged = false;
   this.animation = this.animation.bind(this);
-  this.dom.addEventListener('transitionend', this.animation);
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
@@ -615,7 +607,6 @@ VertHoriCube.prototype.constructor = VertHoriCube;
 
 VertHoriCube.prototype.animation = function() {
   var self = this;
-  var id;
   var currentTime = new Date().getTime();
   var deltaTime = currentTime - this.lastTime;
 
@@ -649,6 +640,8 @@ VertHoriCube.prototype.animation = function() {
 };
 
 VertHoriCube.prototype.toRightSide = function() {
+  this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+  this.dom.classList.add('transition');
   var __tmpSide = this.side;
   this.side = this.lastSide;
   this.lastSide = __tmpSide;
@@ -657,6 +650,8 @@ VertHoriCube.prototype.toRightSide = function() {
 };
 
 VertHoriCube.prototype.toUpSide = function() {
+  this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
+  this.dom.classList.add('transition');
   var _tmpSide = this.side;
   this.side = this.lastSide;
   this.lastSide = _tmpSide;
@@ -731,16 +726,13 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
-  this.clearAllTimeout();
+  this.interacted = true;
 
   if (this.lastRotation === DIRECTION.DOWN) {
     if (this.swipeDirection === DIRECTION.UP) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.UP);
       } else {
-        // this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
-        // this.dom.classList.add('transition');
-        // this.toUpSide();
         this.rotate(DIRECTION.UP);
       }
     } else if (
@@ -758,8 +750,6 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
       if (this.isTouchEventSupported) {
         this.rotate(DIRECTION.RIGHT);
       } else {
-        // this.dom.style.transform = this.getLastTransform(this.nextTransformVal);
-        // this.dom.classList.add('transition');
         // this.toRightSide();
         this.rotate(DIRECTION.RIGHT);
       }
@@ -775,7 +765,6 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
     }
   }
 
-  this.dom.removeEventListener('transitionend', this.animation);
   if (this.isTouchEventSupported) {
     this.dom.removeEventListener(this.endEvent, this.initStateEndHandler);
     this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
@@ -788,7 +777,6 @@ VertHoriCube.prototype.initStateEndHandler = function(e) {
 function TopLeftCube(dom, delayTime, roundTime) {
   _Cube.call(this, dom, delayTime);
   this.animation = this.animation.bind(this);
-  // this.dom.addEventListener('transitionend', this.animation);
   this.toUpSide = this.toUpSide.bind(this);
   this.toLeftSide = this.toLeftSide.bind(this);
   this.activeStateEndHandler = this.activeStateEndHandler.bind(this);
@@ -827,7 +815,6 @@ TopLeftCube.prototype.animation = function() {
 
     this.lastTime = currentTime;
   }
-
   setTimeout(this.animation, this.roundTime);
 };
 
@@ -917,7 +904,7 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
-  this.clearAllTimeout();
+  this.interacted = true;
 
   if (this.lastRotation === DIRECTION.DOWN) {
     if (this.swipeDirection === DIRECTION.UP) {
@@ -957,7 +944,6 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
     }
   }
 
-  this.dom.removeEventListener('transitionend', this.animation);
   if (this.isTouchEventSupported) {
     this.dom.removeEventListener(this.endEvent, this.initStateEndHandler);
     this.dom.addEventListener(this.endEvent, this.activeStateEndHandler);
@@ -978,7 +964,6 @@ function Cube(
 ) {
   this.dom = dom;
   this.size = size;
-  // this.roundTime = roundTime;
   this.adjustTLSize = this.adjustTLSize.bind(this);
   this.adjustVHSize = this.adjustVHSize.bind(this);
 
