@@ -419,8 +419,8 @@ var DIRECTION = {
 };
 
 var ANIMATION_TYPE = {
-  VH: 'VH',
-  TL: 'TL'
+  VH: 'VH', // vert-hori-loop
+  TL: 'TL' // top-left-steps
 };
 
 function _Cube(dom, delayTime) {
@@ -564,7 +564,7 @@ _Cube.prototype = {
   },
 
   startHandler(e) {
-    if(!this.isTouchEventSupported){
+    if (!this.isTouchEventSupported) {
       e.preventDefault();
     }
     this.startX = this.isTouchEventSupported
@@ -587,11 +587,14 @@ _Cube.prototype = {
     } else return false;
   },
 
-  preventClick(e){
-    var distance = Math.sqrt(Math.pow((this.startX-this.endX),2) + Math.pow((this.startY-this.endY),2));
+  preventClick(e) {
+    var distance = Math.sqrt(
+      Math.pow(this.startX - this.endX, 2) +
+        Math.pow(this.startY - this.endY, 2)
+    );
     var assets = document.querySelectorAll('.asset');
 
-    if( distance > 5){
+    if (distance > 5) {
       e.preventDefault();
       e.stopPropagation();
       this.startX = undefined;
@@ -611,7 +614,7 @@ function VertHoriCube(dom, delayTime, roundTime) {
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
     var assets = document.querySelectorAll('.asset');
-    for(var i = 0; i < assets.length; i+=1){
+    for (var i = 0; i < assets.length; i += 1) {
       assets[i].addEventListener('click', this.preventClick);
     }
     document.addEventListener('mouseup', this.initStateEndHandler);
@@ -634,7 +637,7 @@ VertHoriCube.prototype.animation = function() {
   var currentTime = new Date().getTime();
   var deltaTime = currentTime - this.lastTime;
 
-  if (deltaTime >= this.delayTime && !this.interacted) {
+  if (deltaTime >= this.delayTime * 1000 && !this.interacted) {
     if (!this.isDirectionChanged) {
       if (this.side === 'A') {
         self.rotate(DIRECTION.DOWN);
@@ -660,7 +663,7 @@ VertHoriCube.prototype.animation = function() {
     }
     this.lastTime = currentTime;
   }
-  setTimeout(this.animation, this.roundTime);
+  setTimeout(this.animation, this.roundTime * 1000);
 };
 
 VertHoriCube.prototype.toRightSide = function() {
@@ -684,8 +687,12 @@ VertHoriCube.prototype.toUpSide = function() {
 };
 
 VertHoriCube.prototype.activeStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
 
   var deltaX = Math.abs(this.endX - this.startX);
   var deltaY = Math.abs(this.endY - this.startY);
@@ -694,7 +701,7 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
     this.startX == null ||
     this.startX === this.endX ||
     this.startY == null ||
-    this.startY ===this.endY
+    this.startY === this.endY
   ) {
     return;
   }
@@ -719,12 +726,15 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
       this.rotate(DIRECTION.LEFT);
     }
   }
- 
 };
 
 VertHoriCube.prototype.initStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
 
   if (
     this.startX == null ||
@@ -807,7 +817,7 @@ function TopLeftCube(dom, delayTime, roundTime) {
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
     var assets = document.querySelectorAll('.asset');
-    for(var i = 0; i < assets.length; i+=1){
+    for (var i = 0; i < assets.length; i += 1) {
       assets[i].addEventListener('click', this.preventClick);
     }
     document.addEventListener('mouseup', this.initStateEndHandler);
@@ -824,7 +834,7 @@ TopLeftCube.prototype.animation = function() {
   var currentTime = new Date().getTime();
   var deltaTime = currentTime - this.lastTime;
 
-  if (deltaTime >= this.delayTime && !this.interacted) {
+  if (deltaTime >= this.delayTime * 1000 && !this.interacted) {
     if (this.side === 'A') {
       self.rotate(DIRECTION.DOWN);
     } else if (this.side === 'B') {
@@ -841,7 +851,7 @@ TopLeftCube.prototype.animation = function() {
 
     this.lastTime = currentTime;
   }
-  setTimeout(this.animation, this.roundTime);
+  setTimeout(this.animation, this.roundTime * 1000);
 };
 
 TopLeftCube.prototype.toUpSide = function() {
@@ -865,9 +875,13 @@ TopLeftCube.prototype.toLeftSide = function() {
 };
 
 TopLeftCube.prototype.activeStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
- 
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
+
   var deltaX = Math.abs(this.endX - this.startX);
   var deltaY = Math.abs(this.endY - this.startY);
 
@@ -877,7 +891,6 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === this.endY
   ) {
-  
     return;
   }
 
@@ -901,12 +914,15 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
       this.rotate(DIRECTION.LEFT);
     }
   }
-
 };
 
 TopLeftCube.prototype.initStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
   if (
     this.startX == null ||
     this.startX === this.endX ||
@@ -978,21 +994,13 @@ TopLeftCube.prototype.initStateEndHandler = function(e) {
   }
 };
 
-function Cube(
-  dom,
-  animationType,
-  size,
-  sides,
-  iconPosition,
-  delayTime,
-  roundTime
-) {
+function Cube(dom, animationType, size, iconPosition, delayTime, roundTime) {
   this.dom = dom;
   this.size = size;
   this.adjustTLSize = this.adjustTLSize.bind(this);
   this.adjustVHSize = this.adjustVHSize.bind(this);
 
-  this.sides = sides;
+  this.roundTime = roundTime;
   this.playSpeed = this.playSpeed.bind(this);
   this.playSpeed();
 
@@ -1008,11 +1016,19 @@ function Cube(
     this.adjustTLSize();
     return new TopLeftCube(dom, delayTime, roundTime);
   }
+
   if (animationType === ANIMATION_TYPE.VH) {
     this.adjustVHSize();
     return new VertHoriCube(dom, delayTime, roundTime);
   }
-  throw new Error('INVALID_TYPE');
+
+  if (
+    animationType !== ANIMATION_TYPE.TL ||
+    animationType !== ANIMATION_TYPE.VH
+  ) {
+    this.adjustTLSize();
+    return new TopLeftCube(dom, delayTime, roundTime);
+  }
 }
 
 Cube.prototype = {
@@ -1122,7 +1138,7 @@ Cube.prototype = {
   },
   playSpeed() {
     document.styleSheets[1].cssRules[10].style.transition =
-      'transform ' + 1 / this.sides + 's linear';
+      'transform ' + this.roundTime + 's linear';
   },
   adjustIconPosition() {
     this.positions = ['leftDown', 'leftTop', 'rightDown', 'rightTop'];
@@ -1142,6 +1158,9 @@ Cube.prototype = {
       document.getElementsByClassName('icon')[0].style.right = '10px';
       document.getElementsByClassName('icon')[0].style.bottom = '10px';
     } else if (this.iconPosition === this.positions[3]) {
+      document.getElementsByClassName('icon')[0].style.right = '10px';
+      document.getElementsByClassName('icon')[0].style.top = '10px';
+    } else {
       document.getElementsByClassName('icon')[0].style.right = '10px';
       document.getElementsByClassName('icon')[0].style.top = '10px';
     }
@@ -1167,14 +1186,20 @@ module.exports = function(element, assets, helpers) {
   var creativeWidth = this.creative.width;
   var creativeHeight = this.creative.height;
   var size = Math.min(creativeHeight, creativeWidth);
-  cubeParam.animationType = parameters.animationType || 'VH';
+  // 自動翻轉方式
+  cubeParam.animationType = parameters.animationType
+    ? parameters.animationType
+    : 'TL';
+  // 素材尺寸
   cubeParam.size = size ? size + 'px' : '400px';
-  cubeParam.sides = parameters.sides ? parameters.sides : 2;
+  // 每一面旋轉的速度（秒）
+  cubeParam.roundTime = parameters.roundTime ? parameters.roundTime : 1;
+  // 停留時間(每頁)
+  cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 1;
+  // 提示icon位置（左上、左下、右上、右下，預設為右上）
   cubeParam.iconPosition = parameters.iconPosition
     ? parameters.iconPosition
     : 'rightTop';
-  cubeParam.delayTime = parameters.delayTime ? parameters.delayTime : 2000;
-  cubeParam.roundTime = 1 / cubeParam.sides;
 
   cubeParam.creativeInfo = {
     creativeId: this.creative.creativeId,
@@ -1229,7 +1254,6 @@ module.exports = function(element, assets, helpers) {
             mainCube,
             cubeParam.animationType,
             cubeParam.size,
-            cubeParam.sides,
             cubeParam.iconPosition,
             cubeParam.delayTime,
             cubeParam.roundTime
