@@ -564,7 +564,7 @@ _Cube.prototype = {
   },
 
   startHandler(e) {
-    if (!this.isTouchEventSupported) {
+    if(!this.isTouchEventSupported){
       e.preventDefault();
     }
     this.startX = this.isTouchEventSupported
@@ -587,14 +587,11 @@ _Cube.prototype = {
     } else return false;
   },
 
-  preventClick(e) {
-    var distance = Math.sqrt(
-      Math.pow(this.startX - this.endX, 2) +
-        Math.pow(this.startY - this.endY, 2)
-    );
+  preventClick(e){
+    var distance = Math.sqrt(Math.pow((this.startX-this.endX),2) + Math.pow((this.startY-this.endY),2));
     var assets = document.querySelectorAll('.asset');
 
-    if (distance > 5) {
+    if( distance > 5){
       e.preventDefault();
       e.stopPropagation();
       this.startX = undefined;
@@ -614,7 +611,7 @@ function VertHoriCube(dom, delayTime, roundTime) {
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
     var assets = document.querySelectorAll('.asset');
-    for (var i = 0; i < assets.length; i += 1) {
+    for(var i = 0; i < assets.length; i+=1){
       assets[i].addEventListener('click', this.preventClick);
     }
     document.addEventListener('mouseup', this.initStateEndHandler);
@@ -687,12 +684,8 @@ VertHoriCube.prototype.toUpSide = function() {
 };
 
 VertHoriCube.prototype.activeStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported
-    ? e.changedTouches[0].pageX
-    : e.clientX;
-  this.endY = this.isTouchEventSupported
-    ? e.changedTouches[0].pageY
-    : e.clientY;
+  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
 
   var deltaX = Math.abs(this.endX - this.startX);
   var deltaY = Math.abs(this.endY - this.startY);
@@ -701,7 +694,7 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
     this.startX == null ||
     this.startX === this.endX ||
     this.startY == null ||
-    this.startY === this.endY
+    this.startY ===this.endY
   ) {
     return;
   }
@@ -726,15 +719,12 @@ VertHoriCube.prototype.activeStateEndHandler = function(e) {
       this.rotate(DIRECTION.LEFT);
     }
   }
+ 
 };
 
 VertHoriCube.prototype.initStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported
-    ? e.changedTouches[0].pageX
-    : e.clientX;
-  this.endY = this.isTouchEventSupported
-    ? e.changedTouches[0].pageY
-    : e.clientY;
+  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
 
   if (
     this.startX == null ||
@@ -817,7 +807,7 @@ function TopLeftCube(dom, delayTime, roundTime) {
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
     var assets = document.querySelectorAll('.asset');
-    for (var i = 0; i < assets.length; i += 1) {
+    for(var i = 0; i < assets.length; i+=1){
       assets[i].addEventListener('click', this.preventClick);
     }
     document.addEventListener('mouseup', this.initStateEndHandler);
@@ -875,13 +865,9 @@ TopLeftCube.prototype.toLeftSide = function() {
 };
 
 TopLeftCube.prototype.activeStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported
-    ? e.changedTouches[0].pageX
-    : e.clientX;
-  this.endY = this.isTouchEventSupported
-    ? e.changedTouches[0].pageY
-    : e.clientY;
-
+  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+ 
   var deltaX = Math.abs(this.endX - this.startX);
   var deltaY = Math.abs(this.endY - this.startY);
 
@@ -891,6 +877,7 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
     this.startY == null ||
     this.startY === this.endY
   ) {
+  
     return;
   }
 
@@ -914,15 +901,12 @@ TopLeftCube.prototype.activeStateEndHandler = function(e) {
       this.rotate(DIRECTION.LEFT);
     }
   }
+
 };
 
 TopLeftCube.prototype.initStateEndHandler = function(e) {
-  this.endX = this.isTouchEventSupported
-    ? e.changedTouches[0].pageX
-    : e.clientX;
-  this.endY = this.isTouchEventSupported
-    ? e.changedTouches[0].pageY
-    : e.clientY;
+  this.endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
+  this.endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
   if (
     this.startX == null ||
     this.startX === this.endX ||
