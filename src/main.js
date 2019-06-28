@@ -440,6 +440,8 @@ function _Cube(dom, delayTime) {
   this.interacted = false;
   this.lastTime = new Date().getTime();
   this.delayTime = delayTime;
+  this.endX = undefined;
+  this.endY = undefined;
 
   this.init();
 }
@@ -466,6 +468,7 @@ _Cube.prototype = {
       // this.dom.addEventListener('mouseleave', this.mouseLeaveHandler);
       // this.dom.addEventListener('mouseenter', this.mouseEnterHandler);
     }
+    this.preventClick = this.preventClick.bind(this);
   },
 
   getLastTransform(transform) {
@@ -561,7 +564,9 @@ _Cube.prototype = {
   },
 
   startHandler(e) {
-    e.preventDefault();
+    if (!this.isTouchEventSupported) {
+      e.preventDefault();
+    }
     this.startX = this.isTouchEventSupported
       ? e.changedTouches[0].pageX
       : e.clientX;
@@ -580,6 +585,24 @@ _Cube.prototype = {
     if (e.cancelable) {
       e.preventDefault();
     } else return false;
+  },
+
+  preventClick(e) {
+    var distance = Math.sqrt(
+      Math.pow(this.startX - this.endX, 2) +
+        Math.pow(this.startY - this.endY, 2)
+    );
+    var assets = document.querySelectorAll('.asset');
+
+    if (distance > 5) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.startX = undefined;
+      this.startY = undefined;
+      return;
+    }
+    this.startX = undefined;
+    this.startY = undefined;
   }
 };
 
@@ -590,6 +613,10 @@ function VertHoriCube(dom, delayTime, roundTime) {
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
+    var assets = document.querySelectorAll('.asset');
+    for (var i = 0; i < assets.length; i += 1) {
+      assets[i].addEventListener('click', this.preventClick);
+    }
     document.addEventListener('mouseup', this.initStateEndHandler);
   } else {
     this.dom.addEventListener('touchend', this.initStateEndHandler);
@@ -660,69 +687,74 @@ VertHoriCube.prototype.toUpSide = function() {
 };
 
 VertHoriCube.prototype.activeStateEndHandler = function(e) {
-  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
-  var deltaX = Math.abs(endX - this.startX);
-  var deltaY = Math.abs(endY - this.startY);
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
+
+  var deltaX = Math.abs(this.endX - this.startX);
+  var deltaY = Math.abs(this.endY - this.startY);
 
   if (
     this.startX == null ||
-    this.startX === endX ||
+    this.startX === this.endX ||
     this.startY == null ||
-    this.startY === endY
+    this.startY === this.endY
   ) {
-    this.startX = undefined;
-    this.startY = undefined;
     return;
   }
 
   if (
     this.startX != null &&
-    this.startX !== endX &&
+    this.startX !== this.endX &&
     this.startY != null &&
-    this.startY !== endY
+    this.startY !== this.endY
   ) {
-    if (deltaY > deltaX && endY > this.startY) {
+    if (deltaY > deltaX && this.endY > this.startY) {
       this.swipeDirection = DIRECTION.DOWN;
       this.rotate(DIRECTION.DOWN);
-    } else if (deltaY > deltaX && endY < this.startY) {
+    } else if (deltaY > deltaX && this.endY < this.startY) {
       this.swipeDirection = DIRECTION.UP;
       this.rotate(DIRECTION.UP);
-    } else if (deltaY < deltaX && endX > this.startX) {
+    } else if (deltaY < deltaX && this.endX > this.startX) {
       this.swipeDirection = DIRECTION.RIGHT;
       this.rotate(DIRECTION.RIGHT);
-    } else if (deltaY < deltaX && endX < this.startX) {
+    } else if (deltaY < deltaX && this.endX < this.startX) {
       this.swipeDirection = DIRECTION.LEFT;
       this.rotate(DIRECTION.LEFT);
     }
   }
-  this.startX = undefined;
-  this.startY = undefined;
 };
 
 VertHoriCube.prototype.initStateEndHandler = function(e) {
-  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
 
   if (
     this.startX == null ||
-    this.startX === endX ||
+    this.startX === this.endX ||
     this.startY == null ||
-    this.startY === endY
+    this.startY === this.endY
   ) {
     return;
   }
 
-  var deltaX = Math.abs(endX - this.startX);
-  var deltaY = Math.abs(endY - this.startY);
+  var deltaX = Math.abs(this.endX - this.startX);
+  var deltaY = Math.abs(this.endY - this.startY);
 
-  if (deltaY > deltaX && endY > this.startY) {
+  if (deltaY > deltaX && this.endY > this.startY) {
     this.swipeDirection = DIRECTION.DOWN;
-  } else if (deltaY > deltaX && endY < this.startY) {
+  } else if (deltaY > deltaX && this.endY < this.startY) {
     this.swipeDirection = DIRECTION.UP;
-  } else if (deltaY < deltaX && endX > this.startX) {
+  } else if (deltaY < deltaX && this.endX > this.startX) {
     this.swipeDirection = DIRECTION.RIGHT;
-  } else if (deltaY < deltaX && endX < this.startX) {
+  } else if (deltaY < deltaX && this.endX < this.startX) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
@@ -784,6 +816,10 @@ function TopLeftCube(dom, delayTime, roundTime) {
 
   this.initStateEndHandler = this.initStateEndHandler.bind(this);
   if (!this.isTouchEventSupported) {
+    var assets = document.querySelectorAll('.asset');
+    for (var i = 0; i < assets.length; i += 1) {
+      assets[i].addEventListener('click', this.preventClick);
+    }
     document.addEventListener('mouseup', this.initStateEndHandler);
   } else {
     this.dom.addEventListener('touchend', this.initStateEndHandler);
@@ -839,68 +875,73 @@ TopLeftCube.prototype.toLeftSide = function() {
 };
 
 TopLeftCube.prototype.activeStateEndHandler = function(e) {
-  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
-  var deltaX = Math.abs(endX - this.startX);
-  var deltaY = Math.abs(endY - this.startY);
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
+
+  var deltaX = Math.abs(this.endX - this.startX);
+  var deltaY = Math.abs(this.endY - this.startY);
 
   if (
     this.startX == null ||
-    this.startX === endX ||
+    this.startX === this.endX ||
     this.startY == null ||
-    this.startY === endY
+    this.startY === this.endY
   ) {
-    this.startX = undefined;
-    this.startY = undefined;
     return;
   }
 
   if (
     this.startX != null &&
-    this.startX !== endX &&
+    this.startX !== this.endX &&
     this.startY != null &&
-    this.startY !== endY
+    this.startY !== this.endY
   ) {
-    if (deltaY > deltaX && endY > this.startY) {
+    if (deltaY > deltaX && this.endY > this.startY) {
       this.swipeDirection = DIRECTION.DOWN;
       this.rotate(DIRECTION.DOWN);
-    } else if (deltaY > deltaX && endY < this.startY) {
+    } else if (deltaY > deltaX && this.endY < this.startY) {
       this.swipeDirection = DIRECTION.UP;
       this.rotate(DIRECTION.UP);
-    } else if (deltaY < deltaX && endX > this.startX) {
+    } else if (deltaY < deltaX && this.endX > this.startX) {
       this.swipeDirection = DIRECTION.RIGHT;
       this.rotate(DIRECTION.RIGHT);
-    } else if (deltaY < deltaX && endX < this.startX) {
+    } else if (deltaY < deltaX && this.endX < this.startX) {
       this.swipeDirection = DIRECTION.LEFT;
       this.rotate(DIRECTION.LEFT);
     }
   }
-  this.startX = undefined;
-  this.startY = undefined;
 };
 
 TopLeftCube.prototype.initStateEndHandler = function(e) {
-  var endX = this.isTouchEventSupported ? e.changedTouches[0].pageX : e.clientX;
-  var endY = this.isTouchEventSupported ? e.changedTouches[0].pageY : e.clientY;
+  this.endX = this.isTouchEventSupported
+    ? e.changedTouches[0].pageX
+    : e.clientX;
+  this.endY = this.isTouchEventSupported
+    ? e.changedTouches[0].pageY
+    : e.clientY;
   if (
     this.startX == null ||
-    this.startX === endX ||
+    this.startX === this.endX ||
     this.startY == null ||
-    this.startY === endY
+    this.startY === this.endY
   ) {
     return;
   }
 
-  var deltaX = Math.abs(endX - this.startX);
-  var deltaY = Math.abs(endY - this.startY);
+  var deltaX = Math.abs(this.endX - this.startX);
+  var deltaY = Math.abs(this.endY - this.startY);
 
-  if (deltaY > deltaX && endY > this.startY) {
+  if (deltaY > deltaX && this.endY > this.startY) {
     this.swipeDirection = DIRECTION.DOWN;
-  } else if (deltaY > deltaX && endY < this.startY) {
+  } else if (deltaY > deltaX && this.endY < this.startY) {
     this.swipeDirection = DIRECTION.UP;
-  } else if (deltaY < deltaX && endX > this.startX) {
+  } else if (deltaY < deltaX && this.endX > this.startX) {
     this.swipeDirection = DIRECTION.RIGHT;
-  } else if (deltaY < deltaX && endX < this.startX) {
+  } else if (deltaY < deltaX && this.endX < this.startX) {
     this.swipeDirection = DIRECTION.LEFT;
   }
 
@@ -1142,7 +1183,7 @@ module.exports = function(element, assets, helpers) {
   var creativeWidth = this.creative.width;
   var creativeHeight = this.creative.height;
   var size = Math.min(creativeHeight, creativeWidth);
-  cubeParam.animationType = parameters.animationType || 'TL';
+  cubeParam.animationType = parameters.animationType || 'VH';
   cubeParam.size = size ? size + 'px' : '400px';
   cubeParam.sides = parameters.sides ? parameters.sides : 2;
   cubeParam.iconPosition = parameters.iconPosition
